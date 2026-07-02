@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rakan Eyad — Mechatronic Engineer</title>
+<meta name="description" content="Rakan Eyad: mechatronic engineer in Sydney. Robotics, embedded systems, control, AI, and full-stack product work. One engineer, six operating modes.">
+<meta name="theme-color" content="#F3F6F2">
+<meta property="og:title" content="Rakan Eyad — Mechatronic Engineer">
+<meta property="og:description" content="Robotics, embedded systems, control, AI, and full-stack product work. One engineer, six operating modes.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sterban0.github.io/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='9' fill='%230E6B49'/%3E%3Ctext x='32' y='43' font-family='Arial,sans-serif' font-size='27' font-weight='800' fill='%23F3F6F2' text-anchor='middle'%3ERE%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F3F6F2;
+  --card:#FBFCFA;
+  --ink:#121A16;
+  --dim:#59665E;
+  --rule:#C9D2CB;
+  --mask:#0E6B49;
+  --mask-soft:#E3EEE7;
+  --copper:#A6641F;
+  --radius:5px;
+  --maxw:1060px;
+  --ease-out:cubic-bezier(.22,1,.36,1);
+  --shadow-1:0 1px 2px rgba(18,26,22,.05);
+  --shadow-2:0 12px 28px -14px rgba(18,26,22,.22), 0 3px 8px rgba(18,26,22,.06);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Source Serif 4", Georgia, serif;
+  font-size:17px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+/* paper grain */
+body::after{
+  content:"";position:fixed;inset:0;z-index:999;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.mono{font-family:"IBM Plex Mono", ui-monospace, monospace}
+a{color:var(--mask);text-decoration:none}
+a:hover{text-decoration:underline}
+::selection{background:var(--mask);color:var(--paper)}
+:focus-visible{outline:2px solid var(--mask);outline-offset:3px;border-radius:2px}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+
+/* ============ masthead ============ */
+header.masthead{
+  border-bottom:2px solid var(--ink);
+  background:
+    radial-gradient(680px 300px at 88% -40%, rgba(14,107,73,.07), transparent 70%),
+    var(--card);
+}
+.mast-top{
+  display:flex;justify-content:space-between;align-items:baseline;
+  padding:14px 0 10px;border-bottom:1px solid var(--rule);
+  font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.06em;
+  color:var(--dim);text-transform:uppercase;flex-wrap:wrap;gap:6px 18px;
+}
+.mast-top .doc{color:var(--ink)}
+.mast-main{display:flex;justify-content:space-between;align-items:flex-end;padding:30px 0 26px;gap:24px;flex-wrap:wrap}
+h1.name{
+  font-family:"Archivo",sans-serif;font-weight:900;
+  font-size:clamp(40px,6.4vw,64px);line-height:.98;letter-spacing:-.015em;
+  text-transform:uppercase;
+}
+.name small{
+  display:block;font-family:"IBM Plex Mono",monospace;font-weight:500;
+  font-size:12.5px;letter-spacing:.14em;color:var(--mask);
+  text-transform:uppercase;margin-top:12px;
+}
+.mast-links{display:flex;flex-direction:column;gap:7px;align-items:flex-end;font-family:"IBM Plex Mono",monospace;font-size:13px}
+.mast-links a{display:inline-flex;align-items:center;gap:8px;color:var(--ink);border-bottom:1px solid var(--rule);padding-bottom:2px;transition:color .2s,border-color .2s}
+.mast-links a:hover{color:var(--mask);text-decoration:none;border-color:var(--mask)}
+.mast-links .dot{width:6px;height:6px;background:var(--mask);border-radius:50%;flex:none}
+
+/* ============ mode selector ============ */
+.selector{
+  position:sticky;top:0;z-index:50;
+  background:rgba(243,246,242,.85);
+  -webkit-backdrop-filter:blur(10px) saturate(1.1);
+  backdrop-filter:blur(10px) saturate(1.1);
+  border-bottom:1px solid var(--rule);
+  transition:box-shadow .25s var(--ease-out);
+}
+.selector.stuck{box-shadow:0 4px 18px -8px rgba(18,26,22,.16)}
+.selector-inner{display:flex;align-items:stretch;gap:0;overflow-x:auto;scrollbar-width:none}
+.selector-inner::-webkit-scrollbar{display:none}
+.sel-label{
+  font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.12em;
+  color:var(--dim);text-transform:uppercase;
+  display:flex;align-items:center;padding:0 18px 0 0;border-right:1px solid var(--rule);
+  white-space:nowrap;flex:none;
+}
+[role="tablist"]{display:flex;flex:none;position:relative}
+button.tab{
+  appearance:none;background:none;border:none;cursor:pointer;
+  font-family:"IBM Plex Mono",monospace;font-size:12.5px;font-weight:500;
+  letter-spacing:.05em;text-transform:uppercase;color:var(--dim);
+  padding:16px 18px;border-right:1px solid var(--rule);
+  white-space:nowrap;transition:color .2s;
+}
+button.tab:hover{color:var(--ink)}
+button.tab[aria-selected="true"]{color:var(--mask);font-weight:600}
+button.tab .num{color:var(--copper);margin-right:7px;font-weight:600}
+.tab-underline{
+  position:absolute;bottom:0;left:0;height:3px;background:var(--mask);
+  width:0;pointer-events:none;
+  transition:transform .35s var(--ease-out),width .35s var(--ease-out);
+}
+
+/* ============ mode brief ============ */
+.brief{padding:60px 0 48px}
+.eyebrow{
+  font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--copper);margin-bottom:16px;
+}
+h2.headline{
+  font-family:"Archivo",sans-serif;font-weight:800;letter-spacing:-.015em;
+  font-size:clamp(30px,4.6vw,46px);line-height:1.06;max-width:19ch;text-wrap:balance;
+}
+.brief p.lede{max-width:62ch;margin-top:20px;font-size:18.5px;color:#2A342E}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
+.chip{
+  font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.04em;
+  padding:5px 11px;border:1px solid var(--rule);border-radius:99px;
+  color:var(--dim);background:var(--card);transition:border-color .2s,color .2s;
+}
+.chip:hover{border-color:var(--mask);color:var(--mask)}
+
+/* ============ sections ============ */
+section{padding:0 0 64px;scroll-margin-top:70px}
+.sec-head{
+  display:flex;align-items:baseline;gap:14px;
+  border-top:2px solid var(--ink);padding-top:12px;margin-bottom:26px;
+}
+.sec-head h3{
+  font-family:"Archivo",sans-serif;font-weight:800;font-size:15px;
+  letter-spacing:.08em;text-transform:uppercase;
+}
+.sec-head .sec-note{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--dim);letter-spacing:.05em;text-transform:uppercase}
+
+/* ============ project cards ============ */
+.projects{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+@media(max-width:760px){.projects{grid-template-columns:1fr}}
+.pcard{
+  background:var(--card);border:1px solid var(--rule);border-radius:var(--radius);
+  padding:22px 22px 20px;display:flex;flex-direction:column;gap:12px;
+  box-shadow:var(--shadow-1);
+  transition:border-color .25s var(--ease-out),transform .25s var(--ease-out),box-shadow .25s var(--ease-out);
+}
+.pcard:hover{border-color:var(--mask);transform:translateY(-3px);box-shadow:var(--shadow-2)}
+.pcard.feature{grid-column:1 / -1}
+.p-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
+.p-title{font-family:"Archivo",sans-serif;font-weight:800;font-size:20px;letter-spacing:-.01em}
+.p-kind{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);white-space:nowrap;padding-top:5px}
+.p-note{
+  font-family:"IBM Plex Mono",monospace;font-size:12px;line-height:1.5;
+  color:var(--mask);background:var(--mask-soft);border-radius:4px;
+  padding:9px 12px;
+}
+.p-note b{font-weight:600}
+.p-desc{font-size:15.5px;color:#2A342E}
+.p-desc .credit{display:block;margin-top:6px;font-size:13.5px;color:var(--dim);font-style:italic}
+.p-metrics{display:flex;flex-wrap:wrap;gap:16px;margin-top:2px}
+.metric{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--dim);font-variant-numeric:tabular-nums}
+.metric b{color:var(--copper);font-weight:600;font-size:13px}
+.p-foot{display:flex;justify-content:space-between;align-items:center;gap:10px 18px;flex-wrap:wrap;border-top:1px solid var(--rule);padding-top:12px;margin-top:auto}
+.p-foot > :last-child{margin-left:auto;text-align:right}
+.p-tags{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--dim);letter-spacing:.02em}
+.p-link{font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;white-space:nowrap}
+.p-link .arr{display:inline-block;transition:transform .2s var(--ease-out)}
+.p-link:hover .arr{transform:translate(2px,-2px)}
+
+/* ============ experience ============ */
+.xp{display:flex;flex-direction:column}
+.xp-row{
+  display:grid;grid-template-columns:190px 1fr;gap:20px;
+  padding:20px 0;border-bottom:1px solid var(--rule);
+}
+@media(max-width:640px){.xp-row{grid-template-columns:1fr;gap:6px}}
+.xp-when{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--dim);padding-top:4px}
+.xp-role{font-family:"Archivo",sans-serif;font-weight:700;font-size:17px}
+.xp-org{color:var(--mask);font-weight:600}
+.xp-body{font-size:15.5px;color:#2A342E;margin-top:6px;max-width:70ch}
+
+/* ============ skills matrix ============ */
+.skills{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:860px){.skills{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.skills{grid-template-columns:1fr}}
+.skill-group{
+  border:1px solid var(--rule);border-radius:var(--radius);background:var(--card);
+  padding:18px;transition:border-color .3s var(--ease-out),background .3s var(--ease-out);
+}
+.skill-group.lit{border-color:var(--mask);background:#F2F8F4}
+.skill-group h4{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:12px;
+}
+.skill-group.lit h4{color:var(--mask)}
+.skill-group.lit h4::before{
+  content:"";display:inline-block;width:6px;height:6px;border-radius:50%;
+  background:var(--mask);margin-right:8px;vertical-align:1px;
+}
+.skill-group ul{list-style:none}
+.skill-group li{
+  font-size:14.5px;padding:5px 0;border-bottom:1px dashed var(--rule);
+}
+.skill-group li:last-child{border-bottom:none}
+
+/* ============ education + footer ============ */
+.edu{border:1px solid var(--rule);border-radius:var(--radius);background:var(--card);padding:22px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:baseline}
+.edu b{font-family:"Archivo",sans-serif;font-weight:800;font-size:17px}
+.edu .mono{font-size:12px;color:var(--dim)}
+footer{border-top:2px solid var(--ink);background:var(--card);margin-top:20px}
+.foot-inner{display:flex;justify-content:space-between;align-items:center;padding:26px 0;flex-wrap:wrap;gap:14px}
+.foot-cta{font-family:"Archivo",sans-serif;font-weight:800;font-size:20px}
+.foot-links{display:flex;gap:22px;font-family:"IBM Plex Mono",monospace;font-size:13px}
+.foot-rev{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;padding:12px 0 18px;border-top:1px solid var(--rule)}
+
+/* ============ motion ============ */
+.fade{animation:fade .4s var(--ease-out) both}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .6s var(--ease-out),transform .6s var(--ease-out)}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion: reduce){.reveal{opacity:1;transform:none}}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.25s}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="mast-top">
+      <span class="doc">Doc. RE-2026 · Engineer datasheet</span>
+      <span>Rev. 07/2026</span>
+      <span>Sydney, Australia</span>
+      <span>Status: <span style="color:var(--mask);font-weight:600">Available 2026</span></span>
+    </div>
+    <div class="mast-main">
+      <h1 class="name">Rakan<br>Eyad
+        <small>Mechatronic engineer — hardware · firmware · control · AI</small>
+      </h1>
+      <nav class="mast-links" aria-label="Contact">
+        <a href="https://github.com/STERBAN0"><span class="dot"></span>github.com/STERBAN0</a>
+        <a href="mailto:rakan132546@gmail.com"><span class="dot"></span>rakan132546@gmail.com</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<div id="stick-sentinel" aria-hidden="true"></div>
+<div class="selector" id="selector">
+  <div class="wrap selector-inner">
+    <span class="sel-label" id="mode-label">Operating mode</span>
+    <div role="tablist" aria-labelledby="mode-label" id="tabs"></div>
+  </div>
+</div>
+
+<main class="wrap">
+  <div class="brief" id="brief"></div>
+
+  <section aria-labelledby="proj-h">
+    <div class="sec-head">
+      <h3 id="proj-h">Featured applications</h3>
+      <span class="sec-note" id="proj-note"></span>
+    </div>
+    <div class="projects" id="projects"></div>
+  </section>
+
+  <section aria-labelledby="xp-h">
+    <div class="sec-head"><h3 id="xp-h">Field history</h3><span class="sec-note">Industry experience</span></div>
+    <div class="xp">
+      <div class="xp-row reveal">
+        <div class="xp-when">Nov 2024 — Jan 2026</div>
+        <div>
+          <div class="xp-role">System Engineer · <span class="xp-org">ALBON</span></div>
+          <p class="xp-body">Developed and integrated hardware, software, and mechanical components for a prototype control system: migrated the architecture from a microcontroller to a Raspberry Pi for real-time data processing, integrated sensor arrays, and engineered the system's electrical junction box to cut power consumption and keep the hardware reliable.</p>
+        </div>
+      </div>
+      <div class="xp-row reveal">
+        <div class="xp-when">Sep 2021 — Nov 2021</div>
+        <div>
+          <div class="xp-role">Engineering Intern · <span class="xp-org">Escape The Room</span></div>
+          <p class="xp-body">Designed mechanical puzzles and implemented engineering concepts in real-world, client-facing products.</p>
+        </div>
+      </div>
+      <div class="xp-row reveal" style="border-bottom:none">
+        <div class="xp-when">May 2021 — Aug 2021</div>
+        <div>
+          <div class="xp-role">Testing Technician Intern · <span class="xp-org">CloudAk</span></div>
+          <p class="xp-body">Supported server system testing and maintenance in data-centre environments.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="sk-h">
+    <div class="sec-head"><h3 id="sk-h">Capability matrix</h3><span class="sec-note" id="sk-note">Groups relevant to this mode are highlighted</span></div>
+    <div class="skills" id="skills"></div>
+  </section>
+
+  <section aria-labelledby="edu-h">
+    <div class="sec-head"><h3 id="edu-h">Qualification</h3></div>
+    <div class="edu reveal">
+      <div>
+        <b>B.E. (Honours), Mechatronic Engineering</b><br>
+        University of Sydney · 2022 — 2026
+      </div>
+      <div class="mono">EWAM 76% — Distinction</div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-inner reveal">
+      <div class="foot-cta">Building something? Let's talk.</div>
+      <div class="foot-links">
+        <a href="mailto:rakan132546@gmail.com">Email</a>
+        <a href="https://github.com/STERBAN0">GitHub</a>
+      </div>
+    </div>
+    <div class="foot-rev">Rakan Eyad · Doc. RE-2026 Rev. 07/2026 · Typeset in Archivo, Source Serif 4 &amp; IBM Plex Mono</div>
+  </div>
+</footer>
+
+<script>
+/* ---------- data ---------- */
+const MODES = {
+  overview:{ n:"01", label:"Overview", eyebrow:"General configuration",
+    headline:"One engineer. Six operating modes.",
+    lede:"I build electromechanical systems end-to-end: the board, the firmware, the control loop, and increasingly the learning system on top. Mechatronic engineering graduate (Honours) from the University of Sydney, with 14 months in industry shipping a prototype control system and two production web apps built solo. Pick a mode above and the page re-configures for the role you're hiring for.",
+    chips:["Hands-on builds","Embedded C/C++","Python · TypeScript","ROS2","Isaac Sim / RL","Full-stack SaaS","Test-driven"],
+    note:"Sorted by overall signal",
+    order:["conjure","rover","tradie","tracking","sdk","fund","fpga","turtlebot","ant61"],
+    skills:[]},
+  robotics:{ n:"02", label:"Robotics", eyebrow:"Mode 02 — Robotics & mechatronics",
+    headline:"Robots that hold up outside the lab.",
+    lede:"From a ROS2 TurtleBot navigating by sensor fusion, to an FPGA-driven assistive robot, to a planetary rover learning to cross Mars terrain in simulation: I've built and programmed robotic platforms across the stack, and spent 14 months in industry integrating one into a working prototype.",
+    chips:["ROS2","Sensor fusion","Path planning","Isaac Sim","Closed-loop control","CAD (Fusion360/SolidWorks)"],
+    note:"Sorted for robotics roles",
+    order:["rover","turtlebot","tracking","fpga","conjure","ant61","sdk"],
+    skills:["robotics"]},
+  embedded:{ n:"03", label:"Embedded / Electronics", eyebrow:"Mode 03 — Embedded systems & electronics",
+    headline:"From board bring-up to firmware that holds.",
+    lede:"I'm comfortable at the bench: microcontrollers and FPGAs, sensor buses, power wiring, and the firmware that ties them together. At ALBON I moved a prototype's architecture from a microcontroller to a Raspberry Pi and built its electrical junction box. My own projects run C/C++, Verilog, and real-time pipelines on tight budgets.",
+    chips:["C/C++","Arduino","FPGA / Verilog","Raspberry Pi","Sensor arrays","Power & wiring","Bench debugging"],
+    note:"Sorted for embedded roles",
+    order:["fpga","tracking","turtlebot","conjure","rover","sdk","ant61"],
+    skills:["embedded"]},
+  control:{ n:"04", label:"Control / GNC", eyebrow:"Mode 04 — Control systems & GNC",
+    headline:"Loops closed. Targets tracked.",
+    lede:"Control theory is where I started: a self-built laser rig that locks onto and tracks moving targets, filtering noisy signals into fast, precise actuation. I'm now extending it to predict where a target will be from its velocity and trajectory. My thesis pairs a classical global planner with a learned local policy, which is GNC thinking applied to modern tools.",
+    chips:["Advanced control","Signal filtering","Sensor calibration","State estimation","A* + learned policies","MATLAB"],
+    note:"Sorted for control & GNC roles",
+    order:["tracking","rover","turtlebot","fpga","conjure","sdk","ant61"],
+    skills:["control"]},
+  ai:{ n:"05", label:"AI / Autonomy", eyebrow:"Mode 05 — AI, RL & autonomy",
+    headline:"Learning systems, with an engineer's ground truth.",
+    lede:"I train and evaluate reinforcement-learning agents in NVIDIA Isaac Sim for my thesis on planetary-rover navigation, and I build real-time computer vision that runs at 60 FPS on a webcam. I've also put an LLM into production: Tradie Text's conversation engine qualifies real customer leads over SMS, with moderation, structured extraction, and cost telemetry. I come to AI from hardware, so I judge a policy by what it does on a physical system rather than by its reward curve. My repos ship with CI, deterministic tests, and CLAUDE.md context files: I work with agentic tools in the loop.",
+    chips:["Reinforcement learning","Isaac Sim / Isaac Lab","SAC / PPO (skrl)","Computer vision","LLMs in production","Evaluation pipelines","AI-native workflow"],
+    note:"Sorted for AI & autonomy roles",
+    order:["rover","conjure","tradie","sdk","turtlebot","tracking","fpga"],
+    skills:["ai"]},
+  software:{ n:"06", label:"Software", eyebrow:"Mode 06 — Software engineering",
+    headline:"Shipped code: tested, profiled, documented.",
+    lede:"My best software is running in production. Tradie Text recovers missed calls for trades businesses with telephony, an LLM conversation engine, and Stripe billing. Conjure's render path went from 162 ms to 2.8 ms a frame after profiling, then became a pip-installable SDK with an event API. FUN.D wires a real Stripe payment flow through a Flask + React stack. I profile before I optimise, test what's deterministic, and document what I build.",
+    chips:["Python","TypeScript","React · Next.js","Flask","Postgres · Supabase","pytest · Vitest · CI","Performance profiling"],
+    note:"Sorted for software roles",
+    order:["tradie","conjure","sdk","fund","rover","turtlebot"],
+    skills:["software"]}
+};
+
+const PROJECTS = {
+  conjure:{
+    title:"Conjure", kind:"Open source · Python",
+    link:"https://github.com/STERBAN0/Conjure",
+    desc:"A real-time engine that watches your hands and face through a webcam and fires anime-style abilities: nine gestures classified with temporal hysteresis, landmarks smoothed with One Euro filters, effects rendered at 60 FPS in a modular pipeline with unit tests and CI.",
+    metrics:[["60","FPS pipeline"],["58×","render speed-up"],["9","gesture abilities"]],
+    tags:"MediaPipe · OpenCV · pygame · pytest",
+    notes:{
+      overview:"<b>Flagship build:</b> vision, signal processing, state machines, and performance work in one shipped project.",
+      robotics:"<b>Robotics:</b> the perception → classification → action pipeline of a robot stack (tracker, gesture engine, router, actuator), under real-time constraints.",
+      embedded:"<b>Embedded:</b> a hard real-time budget on commodity hardware. The 58× speed-up came from allocation discipline, the same instinct firmware demands.",
+      control:"<b>Control:</b> two-stage One Euro + EMA filtering with hysteresis thresholds — classical signal conditioning that keeps a noisy 60 Hz loop stable.",
+      ai:"<b>AI:</b> production computer vision. MediaPipe landmark models wrapped in a tested inference pipeline that degrades gracefully.",
+      software:"<b>Software:</b> profiled a 162 ms/frame render path down to 2.8 ms (58×), verified with a headless smoke-test suite. CI, docs, and a contributor guide included."
+    }},
+  sdk:{
+    title:"Conjure SDK", kind:"Open source · Python",
+    link:"https://github.com/STERBAN0/conjure-sdk",
+    desc:"The Conjure engine extracted into a pip-installable SDK: rendering stripped out, an event-driven API in its place, so anyone can drive a game, stream overlay, or hardware trigger from gestures. Two install tiers (numpy-only or full webcam), webcam-free deterministic tests.",
+    metrics:[["2","install tiers"],["6","lifecycle events"],["0","renderer imports"]],
+    tags:"API design · packaging · event systems",
+    notes:{
+      overview:"<b>Architecture signal:</b> turning a working app into a clean, documented library is a different skill from writing the app.",
+      robotics:"<b>Robotics:</b> the event API (`ability_release` → your code) is exactly how gesture input would drive a physical actuator or robot behaviour.",
+      embedded:"<b>Embedded:</b> the pure tier needs only numpy — the separation you'd want to port the engine's logic to constrained targets.",
+      control:"<b>Control:</b> exposes the continuous signal layer (span, expansion, motion energy) directly, a clean sensor-signal interface for downstream loops.",
+      ai:"<b>AI:</b> an ML system packaged for reuse. Model download scripts, graceful degradation without the face model, deterministic tests around stochastic input.",
+      software:"<b>Software:</b> one-directional data flow, no renderer imports in the engine, semantic events over polling. Deliberate API design, documented."
+    }},
+  rover:{
+    title:"Planetary Rover RL Navigation", kind:"Thesis · Isaac Sim",
+    link:"https://github.com/STERBAN0/RL_for_Rover_Nav_Thesis",
+    desc:"Honours thesis: autonomous navigation and obstacle avoidance for a planetary rover, pairing an A* global planner with a deep-RL local policy trained in NVIDIA Isaac Sim on Mars terrain. My contributions: the fast A* command term and terrain importer for hybrid planning, SAC training configs and refactored skrl models, reward/termination tuning, and a custom evaluation pipeline.<span class='credit'>Built on RLRoverLab (Mortensen &amp; Bøgh, iSpaRo 2024) — extending a large existing research codebase rather than a toy repo.</span>",
+    metrics:[["A*+RL","hybrid planner"],["SAC","training config"],["1000s","parallel envs"]],
+    tags:"Isaac Sim · Isaac Lab · skrl · PyTorch",
+    notes:{
+      overview:"<b>Research depth:</b> classical planning fused with learned control, in a high-fidelity physics simulator.",
+      robotics:"<b>Robotics:</b> a full autonomy stack — terrain analysis, global planning, learned local control, and evaluation on a simulated rover platform.",
+      embedded:"<b>Embedded:</b> simulation-side today, but designed around a real rover's sensors and actuation limits, the constraints an embedded target imposes.",
+      control:"<b>Control & GNC:</b> the guidance-navigation-control decomposition itself. A* guidance, learned navigation policy, low-level control, evaluated end-to-end.",
+      ai:"<b>AI:</b> deep RL at scale. SAC/PPO via skrl, massively parallel Isaac Lab training, reward shaping, and a custom eval pipeline producing result CSVs rather than just training curves.",
+      software:"<b>Software:</b> contributing cleanly inside a large external research codebase: new command terms, refactored models, reproducible experiment configs."
+    }},
+  tradie:{
+    title:"Tradie Text", kind:"Micro-SaaS · in production",
+    link:null, linkNote:"Private repo · walkthrough on request",
+    desc:"A missed-call recovery service for trades businesses. Twilio catches the call a tradie can't answer, an AI SMS conversation qualifies the lead (GPT-4o-mini with moderation and emergency detection), and the result lands on a realtime dashboard with lead scoring. Next.js 15 + TypeScript, Supabase Postgres with row-level security for tenant isolation, Upstash Redis for idempotency and rate limiting, Stripe subscriptions with usage-based billing. Built and hardened solo: CI, Playwright e2e, a threat model, and incident runbooks.",
+    metrics:[["Live","in production"],["276","tests in CI"],["RLS","multi-tenant"]],
+    tags:"Next.js · Supabase · Twilio · OpenAI · Stripe",
+    notes:{
+      overview:"<b>Product range:</b> a complete commercial SaaS (telephony, AI, billing, multi-tenant data) designed, built, and hardened by one person.",
+      ai:"<b>AI:</b> an LLM doing real work — conversation engine with structured lead extraction, moderation, emergency detection, and per-message cost telemetry.",
+      software:"<b>Software:</b> production engineering end-to-end. Webhook signature verification, idempotent queues, rate limits, RLS, CI gates, security docs, runbooks."
+    }},
+  fund:{
+    title:"FUN.D", kind:"Full-stack web app",
+    link:null, linkNote:"Private repo · walkthrough on request",
+    desc:"A crowdfunding platform where users create and fund campaigns. Flask REST API with JWT auth and role-based admin, React 19 + Vite frontend, Stripe Elements payment flow (create → confirm → credit, idempotent), Supabase Postgres and image storage, deployed on Vercel. Taking it to release meant wiring the real payment flow end-to-end, adding migrations, fixing N+1 queries, validating uploads by magic bytes, and standing up a pytest + Vitest CI pipeline.",
+    metrics:[["JWT","auth + roles"],["Stripe","payments"],["2","CI test suites"]],
+    tags:"Flask · React · Stripe · Supabase",
+    notes:{
+      overview:"<b>Full-stack range:</b> the web counterpart to the hardware work — API design, auth, payments, deployment.",
+      ai:"<b>AI:</b> none in the product, and that's the point: knowing when a plain CRUD + payments stack is the right tool.",
+      software:"<b>Software:</b> the unglamorous release work — payment idempotency, migrations, query batching, upload validation, CI on both the Flask and React halves."
+    }},
+  tracking:{
+    title:"Autonomous Target Tracking System", kind:"Personal build · hardware",
+    link:null, linkNote:"Hardware build · demo on request",
+    desc:"A compact, self-built system that uses a laser to autonomously lock onto and track moving targets: control theory, sensor calibration, and signal filtering tuned for rapid actuation and precise pointing. I'm extending it to predictive targeting from target velocity and trajectory.",
+    metrics:[["Live","target lock"],["Predictive","targeting (WIP)"]],
+    tags:"Control theory · actuation · filtering",
+    notes:{
+      overview:"<b>Bench credibility:</b> designed, built, wired, and tuned by hand.",
+      robotics:"<b>Robotics:</b> perception-to-actuation latency is the whole game here. Track, predict, point, in real time on physical hardware.",
+      embedded:"<b>Embedded:</b> built from the bench up — sensors calibrated, signals conditioned, actuators driven on a microcontroller-class budget.",
+      control:"<b>Control:</b> the purest control project on this page. A live tracking loop where filter tuning and loop rate decide whether the target stays locked.",
+      ai:"<b>AI:</b> the predictive-targeting extension is an estimation problem — modelling target motion to lead the actuator.",
+      software:"<b>Software:</b> real-time code where a missed deadline is a missed target. Latency budgets over feature counts."
+    }},
+  fpga:{
+    title:"Assistive Robot (FPGA)", kind:"University build · Verilog",
+    link:null, linkNote:"University build · report on request",
+    desc:"A Bluetooth-controlled assistive robot built on an FPGA in Verilog, following and responding to dynamic commands, with multiple sensors integrated into closed-loop control for autonomous operation.",
+    metrics:[["FPGA","Verilog logic"],["BT","command link"]],
+    tags:"Verilog · FPGA · closed-loop control",
+    notes:{
+      overview:"<b>Hardware range:</b> below the microcontroller — gateware, timing, and digital design.",
+      robotics:"<b>Robotics:</b> a complete robot (comms, sensing, control, actuation) implemented at the hardware-description level.",
+      embedded:"<b>Embedded:</b> the deepest layer of the stack. HDL, sensor interfacing, and control logic in fabric rather than firmware.",
+      control:"<b>Control:</b> closed-loop control implemented in hardware, where the loop is gates and registers rather than a scheduler.",
+      ai:"<b>AI:</b> the actuation substrate learned policies eventually have to live on — useful ground truth for sim-to-real thinking.",
+      software:"<b>Software:</b> Verilog forces the concurrency discipline that makes multithreaded software feel easy afterwards."
+    }},
+  turtlebot:{
+    title:"Autonomous TurtleBot (ROS2)", kind:"University build · ROS2",
+    link:null, linkNote:"University build · report on request",
+    desc:"An autonomous TurtleBot programmed in ROS2 to identify, count, and interact with items via QR codes: sensor fusion and path-finding on a standard research platform.",
+    metrics:[["ROS2","nav stack"],["QR","task logic"]],
+    tags:"ROS2 · sensor fusion · path planning",
+    notes:{
+      overview:"<b>Platform fluency:</b> the industry-standard robotics middleware, used for a complete task pipeline.",
+      robotics:"<b>Robotics:</b> ROS2 nodes, topics, and the fusion/planning stack every robotics team expects you to already speak.",
+      embedded:"<b>Embedded:</b> working against real sensors and actuators through ROS2's hardware interfaces.",
+      control:"<b>Control:</b> path-finding and motion built on fused, imperfect sensor data — planning under uncertainty.",
+      ai:"<b>AI:</b> perception-driven task logic (detect, decide, act), the classical autonomy loop RL policies aim to replace.",
+      software:"<b>Software:</b> distributed pub/sub architecture in practice. Nodes, message contracts, and debugging across process boundaries."
+    }},
+  ant61:{
+    title:"Satellite Refueling Latch (ANT61)", kind:"Industry project · CAD",
+    link:null, linkNote:"Client project · details on request",
+    desc:"A prototype latching mechanism for mechanical autonomous satellite refueling, designed in Fusion360 for space-robotics company ANT61.",
+    metrics:[["Fusion360","mechanism design"]],
+    tags:"CAD · mechanism design · space",
+    notes:{
+      overview:"<b>Mechanical range:</b> proof the CAD skills extend to real client mechanism design.",
+      robotics:"<b>Robotics:</b> end-effector-adjacent mechanism design under space constraints — tolerance, actuation, and reliability with no service calls.",
+      embedded:"<b>Embedded:</b> the mechanical half of electromechanical, what the firmware ultimately moves.",
+      control:"<b>Control:</b> autonomous docking and latching is a precision alignment problem, so the mechanism design is shaped by control feasibility.",
+      ai:"<b>AI:</b> space robotics context that pairs with the rover thesis — autonomy where teleoperation isn't an option.",
+      software:"<b>Software:</b> CAD-to-constraint thinking that keeps simulation models honest."
+    }}
+};
+
+const SKILLS = [
+  {id:"embedded", title:"Firmware & electronics", items:["C / C++ · Arduino","FPGA · Verilog / SystemVerilog","Raspberry Pi · microcontrollers","Sensor integration & calibration","Power wiring & junction boxes","Assembly"]},
+  {id:"robotics", title:"Robotics & simulation", items:["ROS2","NVIDIA Isaac Sim / Isaac Lab","Sensor fusion & path planning","Hardware-in-the-loop simulation","CAD — Fusion360 · SolidWorks","Mechanism design"]},
+  {id:"control", title:"Control & signals", items:["Advanced control systems","Signal processing & filtering","State estimation","GNC fundamentals","MATLAB","Radar & antenna coursework"]},
+  {id:"ai", title:"AI & computer vision", items:["Reinforcement learning (SAC/PPO)","skrl · PyTorch","Computer vision · MediaPipe","LLM integration (OpenAI)","Evaluation pipelines","AI-native / agentic workflows"]},
+  {id:"software", title:"Software engineering", items:["Python · TypeScript","React · Next.js · Flask","Postgres · Supabase · Redis","Stripe · Twilio integration","pytest · Vitest · Playwright · CI","git · GitHub · profiling"]},
+  {id:"transfer", title:"Working style", items:["Test-driven & methodical","Documents thoroughly","Led technical teams to delivery","Client-facing communication","Self-taught: ROS2, FPGA, Isaac","Adaptable across the stack"]}
+];
+
+/* ---------- render ---------- */
+const tabsEl = document.getElementById("tabs");
+const briefEl = document.getElementById("brief");
+const projEl = document.getElementById("projects");
+const projNote = document.getElementById("proj-note");
+const skillsEl = document.getElementById("skills");
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+Object.entries(MODES).forEach(([id,m],i)=>{
+  const b=document.createElement("button");
+  b.className="tab"; b.setAttribute("role","tab"); b.id="tab-"+id;
+  b.setAttribute("aria-selected", i===0 ? "true":"false");
+  b.setAttribute("tabindex", i===0 ? "0":"-1");
+  b.innerHTML=`<span class="num">${m.n}</span>${m.label}`;
+  b.addEventListener("click",()=>switchMode(id));
+  tabsEl.appendChild(b);
+});
+const underline=document.createElement("span");
+underline.className="tab-underline";
+tabsEl.appendChild(underline);
+
+function positionUnderline(){
+  const active=tabsEl.querySelector('[aria-selected="true"]');
+  if(!active) return;
+  underline.style.width=active.offsetWidth+"px";
+  underline.style.transform=`translateX(${active.offsetLeft}px)`;
+}
+
+tabsEl.addEventListener("keydown",e=>{
+  const ids=Object.keys(MODES);
+  const cur=ids.findIndex(id=>document.getElementById("tab-"+id).getAttribute("aria-selected")==="true");
+  let next=null;
+  if(e.key==="ArrowRight") next=(cur+1)%ids.length;
+  if(e.key==="ArrowLeft") next=(cur-1+ids.length)%ids.length;
+  if(e.key==="Home") next=0;
+  if(e.key==="End") next=ids.length-1;
+  if(next!==null){e.preventDefault(); switchMode(ids[next]); document.getElementById("tab-"+ids[next]).focus();}
+});
+
+function renderSkills(lit){
+  skillsEl.innerHTML="";
+  SKILLS.forEach(g=>{
+    const d=document.createElement("div");
+    d.className="skill-group"+(lit.includes(g.id)?" lit":"");
+    d.innerHTML=`<h4>${g.title}</h4><ul>${g.items.map(i=>`<li>${i}</li>`).join("")}</ul>`;
+    skillsEl.appendChild(d);
+  });
+}
+
+function setMode(id, updateHash){
+  const m=MODES[id]; if(!m) return;
+  Object.keys(MODES).forEach(k=>{
+    const t=document.getElementById("tab-"+k);
+    const on = k===id;
+    t.setAttribute("aria-selected", on?"true":"false");
+    t.setAttribute("tabindex", on?"0":"-1");
+  });
+  briefEl.className="brief fade";
+  briefEl.innerHTML=`<div class="eyebrow">${m.eyebrow}</div>
+    <h2 class="headline">${m.headline}</h2>
+    <p class="lede">${m.lede}</p>
+    <div class="chips">${m.chips.map(c=>`<span class="chip">${c}</span>`).join("")}</div>`;
+  projNote.textContent=m.note;
+  projEl.innerHTML="";
+  m.order.forEach((pid,idx)=>{
+    const p=PROJECTS[pid];
+    const card=document.createElement("article");
+    card.className="pcard fade"+(idx===0?" feature":"");
+    card.style.animationDelay=(idx*40)+"ms";
+    card.innerHTML=`
+      <div class="p-top"><div class="p-title">${p.title}</div><div class="p-kind">${p.kind}</div></div>
+      <div class="p-note">${p.notes[id]||p.notes.overview}</div>
+      <p class="p-desc">${p.desc}</p>
+      <div class="p-metrics">${p.metrics.map(([v,l])=>`<span class="metric"><b>${v}</b> ${l}</span>`).join("")}</div>
+      <div class="p-foot"><span class="p-tags">${p.tags}</span>${p.link?`<a class="p-link" href="${p.link}">View source <span class="arr">↗</span></a>`:`<span class="p-tags">${p.linkNote||"Details on request"}</span>`}</div>`;
+    projEl.appendChild(card);
+  });
+  renderSkills(m.skills);
+  positionUnderline();
+  const activeTab=document.getElementById("tab-"+id);
+  if(activeTab.scrollIntoView) activeTab.scrollIntoView({block:"nearest",inline:"nearest"});
+  if(updateHash) history.replaceState(null,"","#"+id);
+  void briefEl.offsetWidth;
+}
+
+function switchMode(id){
+  if(document.startViewTransition && !reducedMotion.matches){
+    try{
+      const t=document.startViewTransition(()=>setMode(id,true));
+      if(t && t.ready) t.ready.catch(()=>{});
+      if(t && t.finished) t.finished.catch(()=>{});
+      return;
+    }catch(e){/* fall through to a plain switch */}
+  }
+  setMode(id,true);
+}
+
+/* sticky selector shadow */
+const selector=document.getElementById("selector");
+const sentinel=document.getElementById("stick-sentinel");
+new IntersectionObserver(([e])=>{
+  selector.classList.toggle("stuck", !e.isIntersecting);
+}).observe(sentinel);
+
+/* scroll reveals */
+const revealIO=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){ e.target.classList.add("in"); revealIO.unobserve(e.target); }
+  });
+},{threshold:.1});
+document.querySelectorAll(".reveal").forEach(el=>revealIO.observe(el));
+
+const initial = location.hash.replace("#","");
+setMode(MODES[initial] ? initial : "overview", false);
+window.addEventListener("resize",positionUnderline);
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(positionUnderline);
+</script>
+</body>
+</html>
