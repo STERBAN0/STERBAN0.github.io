@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rakan Eyad — Mechatronic Engineer</title>
 <meta name="description" content="Rakan Eyad: mechatronic engineer in Sydney. Robotics, embedded systems, control, AI, and full-stack product work. One engineer, six operating modes.">
-<meta name="theme-color" content="#F3F6F2">
+<meta name="theme-color" content="#0E1310">
 <meta property="og:title" content="Rakan Eyad — Mechatronic Engineer">
 <meta property="og:description" content="Robotics, embedded systems, control, AI, and full-stack product work. One engineer, six operating modes.">
 <meta property="og:type" content="website">
@@ -16,19 +16,22 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --paper:#F3F6F2;
-  --card:#FBFCFA;
-  --ink:#121A16;
-  --dim:#59665E;
-  --rule:#C9D2CB;
-  --mask:#0E6B49;
-  --mask-soft:#E3EEE7;
-  --copper:#A6641F;
+  --paper:#0E1310;
+  --paper-rgb:14,19,16;
+  --card:#1B2420;
+  --ink:#EDF1EE;
+  --ink-soft:#D3DCD5;
+  --dim:#9AA79E;
+  --rule:#46594D;
+  --mask:#22AE79;
+  --mask-rgb:34,174,121;
+  --mask-soft:#122A22;
+  --copper:#E8A34D;
   --radius:5px;
   --maxw:1060px;
   --ease-out:cubic-bezier(.22,1,.36,1);
-  --shadow-1:0 1px 2px rgba(18,26,22,.05);
-  --shadow-2:0 12px 28px -14px rgba(18,26,22,.22), 0 3px 8px rgba(18,26,22,.06);
+  --shadow-1:0 1px 2px rgba(0,0,0,.35);
+  --shadow-2:0 12px 28px -14px rgba(0,0,0,.55), 0 3px 8px rgba(0,0,0,.35);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -46,7 +49,7 @@ body{
 }
 /* paper grain */
 body::after{
-  content:"";position:fixed;inset:0;z-index:999;pointer-events:none;opacity:.05;
+  content:"";position:fixed;inset:0;z-index:999;pointer-events:none;opacity:.06;mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 .mono{font-family:"IBM Plex Mono", ui-monospace, monospace}
@@ -60,7 +63,7 @@ a:hover{text-decoration:underline}
 header.masthead{
   border-bottom:2px solid var(--ink);
   background:
-    radial-gradient(680px 300px at 88% -40%, rgba(14,107,73,.07), transparent 70%),
+    radial-gradient(680px 300px at 88% -40%, rgba(var(--mask-rgb),.12), transparent 70%),
     var(--card);
 }
 .mast-top{
@@ -89,13 +92,13 @@ h1.name{
 /* ============ mode selector ============ */
 .selector{
   position:sticky;top:0;z-index:50;
-  background:rgba(243,246,242,.85);
+  background:rgba(var(--paper-rgb),.85);
   -webkit-backdrop-filter:blur(10px) saturate(1.1);
   backdrop-filter:blur(10px) saturate(1.1);
   border-bottom:1px solid var(--rule);
   transition:box-shadow .25s var(--ease-out);
 }
-.selector.stuck{box-shadow:0 4px 18px -8px rgba(18,26,22,.16)}
+.selector.stuck{box-shadow:0 4px 18px -8px rgba(0,0,0,.45)}
 .selector-inner{display:flex;align-items:stretch;gap:0;overflow-x:auto;scrollbar-width:none}
 .selector-inner::-webkit-scrollbar{display:none}
 .sel-label{
@@ -121,6 +124,46 @@ button.tab .num{color:var(--copper);margin-right:7px;font-weight:600}
   transition:transform .35s var(--ease-out),width .35s var(--ease-out);
 }
 
+/* ---- mobile disclosure (hamburger) ---- */
+.menu-toggle{display:none}
+@media(max-width:640px){
+  .selector-inner{overflow-x:visible;position:relative}
+  .menu-toggle{
+    display:flex;align-items:center;justify-content:center;
+    width:44px;height:44px;margin-left:auto;flex:none;
+    background:var(--card);border:1px solid var(--rule);border-radius:var(--radius);
+    cursor:pointer;box-shadow:var(--shadow-1);
+    transition:border-color .2s var(--ease-out),background .2s var(--ease-out);
+  }
+  .menu-toggle:hover{border-color:var(--mask)}
+  .menu-toggle[aria-expanded="true"]{border-color:var(--mask);background:var(--mask-soft)}
+  .menu-toggle svg{overflow:visible}
+  .menu-toggle .bar{
+    stroke:var(--ink);stroke-width:2;stroke-linecap:square;
+    transform-box:fill-box;transform-origin:center;
+    transition:transform .3s var(--ease-out),opacity .2s var(--ease-out);
+  }
+  .menu-toggle[aria-expanded="true"] .bar-top{transform:translateY(5px) rotate(45deg)}
+  .menu-toggle[aria-expanded="true"] .bar-mid{opacity:0}
+  .menu-toggle[aria-expanded="true"] .bar-bot{transform:translateY(-5px) rotate(-45deg)}
+
+  [role="tablist"]{
+    display:none;flex-direction:column;
+    position:absolute;top:100%;left:0;right:0;
+    background:var(--card);border:1px solid var(--rule);border-top:none;
+    border-radius:0 0 var(--radius) var(--radius);
+    box-shadow:var(--shadow-2);max-height:calc(100vh - 140px);overflow-y:auto;
+    z-index:60;
+  }
+  .selector.menu-open [role="tablist"]{display:flex}
+  button.tab{
+    width:100%;text-align:left;min-height:44px;
+    border-right:none;border-bottom:1px solid var(--rule);
+  }
+  button.tab:last-of-type{border-bottom:none}
+  .tab-underline{display:none}
+}
+
 /* ============ mode brief ============ */
 .brief{padding:60px 0 48px}
 .eyebrow{
@@ -131,20 +174,23 @@ h2.headline{
   font-family:"Archivo",sans-serif;font-weight:800;letter-spacing:-.015em;
   font-size:clamp(30px,4.6vw,46px);line-height:1.06;max-width:19ch;text-wrap:balance;
 }
-.brief p.lede{max-width:62ch;margin-top:20px;font-size:18.5px;color:#2A342E}
+.brief p.lede{max-width:62ch;margin-top:20px;font-size:18.5px;color:var(--ink-soft)}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
 .chip{
   font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.04em;
   padding:5px 11px;border:1px solid var(--rule);border-radius:99px;
   color:var(--dim);background:var(--card);transition:border-color .2s,color .2s;
+  display:inline-flex;align-items:center;gap:6px;
 }
 .chip:hover{border-color:var(--mask);color:var(--mask)}
+.ic{width:13px;height:13px;flex:none}
 
 /* ============ sections ============ */
-section{padding:0 0 64px;scroll-margin-top:70px}
+section{padding:48px 0 64px;scroll-margin-top:70px}
 .sec-head{
-  display:flex;align-items:baseline;gap:14px;
-  border-top:2px solid var(--ink);padding-top:12px;margin-bottom:26px;
+  display:flex;align-items:baseline;flex-wrap:wrap;gap:10px 14px;
+  background:var(--card);border:1px solid var(--rule);border-radius:var(--radius);
+  box-shadow:var(--shadow-1);padding:13px 20px;margin:0 0 28px;
 }
 .sec-head h3{
   font-family:"Archivo",sans-serif;font-weight:800;font-size:15px;
@@ -163,7 +209,7 @@ section{padding:0 0 64px;scroll-margin-top:70px}
 }
 .pcard:hover{border-color:var(--mask);transform:translateY(-3px);box-shadow:var(--shadow-2)}
 .pcard.feature{grid-column:1 / -1}
-.p-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
+.p-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:14px}
 .p-title{font-family:"Archivo",sans-serif;font-weight:800;font-size:20px;letter-spacing:-.01em}
 .p-kind{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);white-space:nowrap;padding-top:5px}
 .p-note{
@@ -172,7 +218,7 @@ section{padding:0 0 64px;scroll-margin-top:70px}
   padding:9px 12px;
 }
 .p-note b{font-weight:600}
-.p-desc{font-size:15.5px;color:#2A342E}
+.p-desc{font-size:15.5px;color:var(--ink-soft)}
 .p-desc .credit{display:block;margin-top:6px;font-size:13.5px;color:var(--dim);font-style:italic}
 .p-metrics{display:flex;flex-wrap:wrap;gap:16px;margin-top:2px}
 .metric{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--dim);font-variant-numeric:tabular-nums}
@@ -194,7 +240,7 @@ section{padding:0 0 64px;scroll-margin-top:70px}
 .xp-when{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--dim);padding-top:4px}
 .xp-role{font-family:"Archivo",sans-serif;font-weight:700;font-size:17px}
 .xp-org{color:var(--mask);font-weight:600}
-.xp-body{font-size:15.5px;color:#2A342E;margin-top:6px;max-width:70ch}
+.xp-body{font-size:15.5px;color:var(--ink-soft);margin-top:6px;max-width:70ch}
 
 /* ============ skills matrix ============ */
 .skills{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
@@ -204,7 +250,7 @@ section{padding:0 0 64px;scroll-margin-top:70px}
   border:1px solid var(--rule);border-radius:var(--radius);background:var(--card);
   padding:18px;transition:border-color .3s var(--ease-out),background .3s var(--ease-out);
 }
-.skill-group.lit{border-color:var(--mask);background:#F2F8F4}
+.skill-group.lit{border-color:var(--mask);background:var(--mask-soft)}
 .skill-group h4{
   font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;
   letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:12px;
@@ -217,14 +263,16 @@ section{padding:0 0 64px;scroll-margin-top:70px}
 .skill-group ul{list-style:none}
 .skill-group li{
   font-size:14.5px;padding:5px 0;border-bottom:1px dashed var(--rule);
+  display:flex;align-items:center;gap:8px;
 }
 .skill-group li:last-child{border-bottom:none}
+.skill-group li .ic{color:var(--dim)}
 
 /* ============ education + footer ============ */
 .edu{border:1px solid var(--rule);border-radius:var(--radius);background:var(--card);padding:22px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:baseline}
 .edu b{font-family:"Archivo",sans-serif;font-weight:800;font-size:17px}
 .edu .mono{font-size:12px;color:var(--dim)}
-footer{border-top:2px solid var(--ink);background:var(--card);margin-top:20px}
+footer{background:var(--card);margin-top:56px;box-shadow:0 -1px 0 var(--rule)}
 .foot-inner{display:flex;justify-content:space-between;align-items:center;padding:26px 0;flex-wrap:wrap;gap:14px}
 .foot-cta{font-family:"Archivo",sans-serif;font-weight:800;font-size:20px}
 .foot-links{display:flex;gap:22px;font-family:"IBM Plex Mono",monospace;font-size:13px}
@@ -265,6 +313,13 @@ footer{border-top:2px solid var(--ink);background:var(--card);margin-top:20px}
 <div class="selector" id="selector">
   <div class="wrap selector-inner">
     <span class="sel-label" id="mode-label">Operating mode</span>
+    <button type="button" class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="tabs" aria-label="Toggle mode menu">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+        <line class="bar bar-top" x1="3" y1="7" x2="21" y2="7"></line>
+        <line class="bar bar-mid" x1="3" y1="12" x2="21" y2="12"></line>
+        <line class="bar bar-bot" x1="3" y1="17" x2="21" y2="17"></line>
+      </svg>
+    </button>
     <div role="tablist" aria-labelledby="mode-label" id="tabs"></div>
   </div>
 </div>
@@ -343,14 +398,14 @@ const MODES = {
   overview:{ n:"01", label:"Overview", eyebrow:"General configuration",
     headline:"One engineer. Six operating modes.",
     lede:"I build electromechanical systems end-to-end: the board, the firmware, the control loop, and increasingly the learning system on top. Mechatronic engineering graduate (Honours) from the University of Sydney, with 14 months in industry shipping a prototype control system and two production web apps built solo. Pick a mode above and the page re-configures for the role you're hiring for.",
-    chips:["Hands-on builds","Embedded C/C++","Python · TypeScript","ROS2","Isaac Sim / RL","Full-stack SaaS","Test-driven"],
+    chips:["Hands-on builds","Embedded C/C++","Python / TS","ROS2","Isaac Sim / RL","Full-stack SaaS","Test-driven"],
     note:"Sorted by overall signal",
     order:["conjure","rover","tradie","tracking","sdk","fund","fpga","turtlebot","ant61"],
     skills:[]},
   robotics:{ n:"02", label:"Robotics", eyebrow:"Mode 02 — Robotics & mechatronics",
     headline:"Robots that hold up outside the lab.",
     lede:"From a ROS2 TurtleBot navigating by sensor fusion, to an FPGA-driven assistive robot, to a planetary rover learning to cross Mars terrain in simulation: I've built and programmed robotic platforms across the stack, and spent 14 months in industry integrating one into a working prototype.",
-    chips:["ROS2","Sensor fusion","Path planning","Isaac Sim","Closed-loop control","CAD (Fusion360/SolidWorks)"],
+    chips:["ROS2","Sensor fusion","Path planning","Isaac Sim","Closed-loop control","CAD (Fusion/SW)"],
     note:"Sorted for robotics roles",
     order:["rover","turtlebot","tracking","fpga","conjure","ant61","sdk"],
     skills:["robotics"]},
@@ -364,14 +419,14 @@ const MODES = {
   control:{ n:"04", label:"Control / GNC", eyebrow:"Mode 04 — Control systems & GNC",
     headline:"Loops closed. Targets tracked.",
     lede:"Control theory is where I started: a self-built laser rig that locks onto and tracks moving targets, filtering noisy signals into fast, precise actuation. I'm now extending it to predict where a target will be from its velocity and trajectory. My thesis pairs a classical global planner with a learned local policy, which is GNC thinking applied to modern tools.",
-    chips:["Advanced control","Signal filtering","Sensor calibration","State estimation","A* + learned policies","MATLAB"],
+    chips:["Advanced control","Signal filtering","Sensor calibration","State estimation","A* + RL policy","MATLAB"],
     note:"Sorted for control & GNC roles",
     order:["tracking","rover","turtlebot","fpga","conjure","sdk","ant61"],
     skills:["control"]},
   ai:{ n:"05", label:"AI / Autonomy", eyebrow:"Mode 05 — AI, RL & autonomy",
     headline:"Learning systems, with an engineer's ground truth.",
     lede:"I train and evaluate reinforcement-learning agents in NVIDIA Isaac Sim for my thesis on planetary-rover navigation, and I build real-time computer vision that runs at 60 FPS on a webcam. I've also put an LLM into production: Tradie Text's conversation engine qualifies real customer leads over SMS, with moderation, structured extraction, and cost telemetry. I come to AI from hardware, so I judge a policy by what it does on a physical system rather than by its reward curve. My repos ship with CI, deterministic tests, and CLAUDE.md context files: I work with agentic tools in the loop.",
-    chips:["Reinforcement learning","Isaac Sim / Isaac Lab","SAC / PPO (skrl)","Computer vision","LLMs in production","Evaluation pipelines","AI-native workflow"],
+    chips:["RL","Isaac Sim / Isaac Lab","SAC / PPO (skrl)","Computer vision","LLMs in production","Evaluation pipelines","AI-native workflow"],
     note:"Sorted for AI & autonomy roles",
     order:["rover","conjure","tradie","sdk","turtlebot","tracking","fpga"],
     skills:["ai"]},
@@ -509,12 +564,59 @@ const PROJECTS = {
 
 const SKILLS = [
   {id:"embedded", title:"Firmware & electronics", items:["C / C++ · Arduino","FPGA · Verilog / SystemVerilog","Raspberry Pi · microcontrollers","Sensor integration & calibration","Power wiring & junction boxes","Assembly"]},
-  {id:"robotics", title:"Robotics & simulation", items:["ROS2","NVIDIA Isaac Sim / Isaac Lab","Sensor fusion & path planning","Hardware-in-the-loop simulation","CAD — Fusion360 · SolidWorks","Mechanism design"]},
+  {id:"robotics", title:"Robotics & simulation", items:["ROS2","Isaac Sim / Isaac Lab","Sensor fusion & path planning","HIL simulation","CAD (Fusion/SW)","Mechanism design"]},
   {id:"control", title:"Control & signals", items:["Advanced control systems","Signal processing & filtering","State estimation","GNC fundamentals","MATLAB","Radar & antenna coursework"]},
-  {id:"ai", title:"AI & computer vision", items:["Reinforcement learning (SAC/PPO)","skrl · PyTorch","Computer vision · MediaPipe","LLM integration (OpenAI)","Evaluation pipelines","AI-native / agentic workflows"]},
-  {id:"software", title:"Software engineering", items:["Python · TypeScript","React · Next.js · Flask","Postgres · Supabase · Redis","Stripe · Twilio integration","pytest · Vitest · Playwright · CI","git · GitHub · profiling"]},
-  {id:"transfer", title:"Working style", items:["Test-driven & methodical","Documents thoroughly","Led technical teams to delivery","Client-facing communication","Self-taught: ROS2, FPGA, Isaac","Adaptable across the stack"]}
+  {id:"ai", title:"AI & computer vision", items:["RL (SAC/PPO)","skrl · PyTorch","Computer vision · MediaPipe","LLM integration (OpenAI)","Evaluation pipelines","AI-native / agentic workflows"]},
+  {id:"software", title:"Software engineering", items:["Python / TS","React · Next.js · Flask","Postgres · Supabase · Redis","Stripe · Twilio integration","pytest · Vitest · Playwright · CI","git · GitHub · profiling"]},
+  {id:"transfer", title:"Working style", items:["Test-driven & methodical","Documents thoroughly","Led teams to delivery","Client-facing comms","Self-taught: ROS2, FPGA, Isaac","Adaptable across the stack"]}
 ];
+
+/* ---------- decorative icons (inline SVG, currentColor, no external deps) ---------- */
+/* one glyph per concept, reused across every chip/skill label that shares it */
+const ICONS = {
+  code:`<polyline points="9 8 4 12 9 16"/><polyline points="15 8 20 12 15 16"/>`,
+  chip:`<rect x="7" y="7" width="10" height="10" rx="1.5"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/>`,
+  bot:`<rect x="5" y="9" width="14" height="10" rx="2"/><line x1="12" y1="5" x2="12" y2="9"/><circle cx="12" cy="4" r="1"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/>`,
+  radar:`<circle cx="12" cy="12" r="1.4"/><path d="M8.7 15.3a5 5 0 0 1 0-6.6"/><path d="M15.3 8.7a5 5 0 0 1 0 6.6"/><path d="M5.8 18.2a9 9 0 0 1 0-12.4"/><path d="M18.2 5.8a9 9 0 0 1 0 12.4"/>`,
+  route:`<circle cx="6" cy="6" r="2"/><circle cx="18" cy="18" r="2"/><path d="M8 6h5.5A3.5 3.5 0 0 1 17 9.5a3.5 3.5 0 0 1-3.5 3.5H10a3.5 3.5 0 0 0-3.5 3.5"/>`,
+  cube:`<path d="M12 3 20 7.5v9L12 21 4 16.5v-9Z"/><path d="M4 7.5 12 12l8-4.5"/><path d="M12 12v9"/>`,
+  waveform:`<polyline points="3 12 8 12 10 6 14 18 16 12 21 12"/>`,
+  brain:`<circle cx="12" cy="12" r="2.6"/><circle cx="4.5" cy="6" r="1.4"/><circle cx="19.5" cy="6" r="1.4"/><circle cx="4.5" cy="18" r="1.4"/><circle cx="19.5" cy="18" r="1.4"/><line x1="9.8" y1="10.1" x2="5.6" y2="7"/><line x1="14.2" y1="10.1" x2="18.4" y2="7"/><line x1="9.8" y1="13.9" x2="5.6" y2="17"/><line x1="14.2" y1="13.9" x2="18.4" y2="17"/>`,
+  eye:`<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="2.4"/>`,
+  layers:`<path d="M12 3 21 8 12 13 3 8Z"/><path d="M3 14l9 5 9-5"/>`,
+  database:`<ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.66 3.13 3 7 3s7-1.34 7-3V6"/><path d="M5 12v6c0 1.66 3.13 3 7 3s7-1.34 7-3v-6"/>`,
+  check:`<circle cx="12" cy="12" r="9"/><polyline points="8 12.5 11 15.5 16 9"/>`,
+  tool:`<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/>`,
+  gauge:`<path d="M4 15a8 8 0 1 1 16 0"/><line x1="12" y1="15" x2="15.3" y2="10.7"/><circle cx="12" cy="15" r="1"/>`
+};
+/* label text -> icon id. labels not listed here render as text-only (no clean unambiguous icon) */
+const ICON_FOR = {
+  "Hands-on builds":"tool","Embedded C/C++":"chip","Python / TS":"code","ROS2":"bot",
+  "Isaac Sim / RL":"cube","Full-stack SaaS":"layers","Test-driven":"check",
+  "Sensor fusion":"radar","Path planning":"route","Isaac Sim":"cube","Closed-loop control":"waveform",
+  "CAD (Fusion/SW)":"cube","C/C++":"code","Arduino":"chip","FPGA / Verilog":"chip","Raspberry Pi":"chip",
+  "Sensor arrays":"radar","Power & wiring":"tool","Bench debugging":"tool",
+  "Advanced control":"waveform","Signal filtering":"waveform","Sensor calibration":"radar",
+  "State estimation":"waveform","A* + RL policy":"route","MATLAB":"code",
+  "RL":"brain","Isaac Sim / Isaac Lab":"cube","SAC / PPO (skrl)":"brain","Computer vision":"eye",
+  "LLMs in production":"brain","Evaluation pipelines":"gauge","AI-native workflow":"brain",
+  "Python":"code","TypeScript":"code","React · Next.js":"layers","Flask":"layers",
+  "Postgres · Supabase":"database","pytest · Vitest · CI":"check","Performance profiling":"gauge",
+  "C / C++ · Arduino":"chip","FPGA · Verilog / SystemVerilog":"chip","Raspberry Pi · microcontrollers":"chip",
+  "Sensor integration & calibration":"radar","Power wiring & junction boxes":"tool","Assembly":"chip",
+  "Sensor fusion & path planning":"radar","HIL simulation":"cube","Mechanism design":"cube",
+  "Advanced control systems":"waveform","Signal processing & filtering":"waveform",
+  "GNC fundamentals":"waveform","Radar & antenna coursework":"radar",
+  "RL (SAC/PPO)":"brain","skrl · PyTorch":"brain","Computer vision · MediaPipe":"eye",
+  "LLM integration (OpenAI)":"brain","AI-native / agentic workflows":"brain",
+  "React · Next.js · Flask":"layers","Postgres · Supabase · Redis":"database",
+  "pytest · Vitest · Playwright · CI":"check","Test-driven & methodical":"check"
+};
+function icon(label){
+  const id = ICON_FOR[label];
+  if(!id) return "";
+  return `<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${ICONS[id]}</svg>`;
+}
 
 /* ---------- render ---------- */
 const tabsEl = document.getElementById("tabs");
@@ -530,7 +632,7 @@ Object.entries(MODES).forEach(([id,m],i)=>{
   b.setAttribute("aria-selected", i===0 ? "true":"false");
   b.setAttribute("tabindex", i===0 ? "0":"-1");
   b.innerHTML=`<span class="num">${m.n}</span>${m.label}`;
-  b.addEventListener("click",()=>switchMode(id));
+  b.addEventListener("click",()=>{switchMode(id); closeMobileMenu(true);});
   tabsEl.appendChild(b);
 });
 const underline=document.createElement("span");
@@ -555,12 +657,38 @@ tabsEl.addEventListener("keydown",e=>{
   if(next!==null){e.preventDefault(); switchMode(ids[next]); document.getElementById("tab-"+ids[next]).focus();}
 });
 
+/* ---------- mobile disclosure (hamburger) ---------- */
+const selector=document.getElementById("selector");
+const menuToggle=document.getElementById("menu-toggle");
+const mobileMenuQuery=window.matchMedia("(max-width:640px)");
+
+function openMobileMenu(){
+  selector.classList.add("menu-open");
+  menuToggle.setAttribute("aria-expanded","true");
+}
+function closeMobileMenu(focusToggle){
+  selector.classList.remove("menu-open");
+  menuToggle.setAttribute("aria-expanded","false");
+  if(focusToggle) menuToggle.focus();
+}
+menuToggle.addEventListener("click",()=>{
+  if(selector.classList.contains("menu-open")) closeMobileMenu(false);
+  else openMobileMenu();
+});
+document.addEventListener("click",e=>{
+  if(selector.classList.contains("menu-open") && !selector.contains(e.target)) closeMobileMenu(false);
+});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape" && selector.classList.contains("menu-open")) closeMobileMenu(true);
+});
+mobileMenuQuery.addEventListener("change",e=>{ if(!e.matches) closeMobileMenu(false); });
+
 function renderSkills(lit){
   skillsEl.innerHTML="";
   SKILLS.forEach(g=>{
     const d=document.createElement("div");
     d.className="skill-group"+(lit.includes(g.id)?" lit":"");
-    d.innerHTML=`<h4>${g.title}</h4><ul>${g.items.map(i=>`<li>${i}</li>`).join("")}</ul>`;
+    d.innerHTML=`<h4>${g.title}</h4><ul>${g.items.map(i=>`<li>${icon(i)}<span>${i}</span></li>`).join("")}</ul>`;
     skillsEl.appendChild(d);
   });
 }
@@ -577,7 +705,7 @@ function setMode(id, updateHash){
   briefEl.innerHTML=`<div class="eyebrow">${m.eyebrow}</div>
     <h2 class="headline">${m.headline}</h2>
     <p class="lede">${m.lede}</p>
-    <div class="chips">${m.chips.map(c=>`<span class="chip">${c}</span>`).join("")}</div>`;
+    <div class="chips">${m.chips.map(c=>`<span class="chip">${icon(c)}<span>${c}</span></span>`).join("")}</div>`;
   projNote.textContent=m.note;
   projEl.innerHTML="";
   m.order.forEach((pid,idx)=>{
@@ -614,7 +742,6 @@ function switchMode(id){
 }
 
 /* sticky selector shadow */
-const selector=document.getElementById("selector");
 const sentinel=document.getElementById("stick-sentinel");
 new IntersectionObserver(([e])=>{
   selector.classList.toggle("stuck", !e.isIntersecting);
