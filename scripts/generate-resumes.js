@@ -70,18 +70,11 @@ const PROFILES = [
     skillGroups: ["embedded", "robotics", "control"]
   },
   {
-    file: "Rakan_Eyad_Resume_AI.pdf",
-    title: "AI / Autonomy Engineer",
-    summary: "Mechatronic engineering graduate working in reinforcement learning and computer vision. Trained RL agents in NVIDIA Isaac Sim for planetary rover navigation, built a real-time computer vision pipeline, and shipped an LLM-based conversation engine to production.",
-    projectKeys: ["rover", "conjure", "tradie", "sdk"],
-    skillGroups: ["ai", "software"]
-  },
-  {
-    file: "Rakan_Eyad_Resume_Software.pdf",
-    title: "Software Engineer",
-    summary: "Mechatronic engineering graduate with full-stack software engineering experience. Built a production micro-SaaS with telephony, AI, and billing, a full-stack payments platform, and an open-source Python engine profiled to a 58x speed-up and shipped as an installable SDK.",
-    projectKeys: ["tradie", "fund", "conjure", "sdk"],
-    skillGroups: ["software", "transfer"]
+    file: "Rakan_Eyad_Resume_AI_Software.pdf",
+    title: "AI & Software Engineer",
+    summary: "Mechatronic engineering graduate with software engineering and applied AI experience. Trained reinforcement-learning agents in NVIDIA Isaac Sim for planetary rover navigation, built a real-time computer vision engine and shipped it as an installable SDK, and built a production micro-SaaS with an LLM-based conversation engine, telephony, and billing.",
+    projectKeys: ["rover", "conjure", "tradie", "sdk", "fund"],
+    skillGroups: ["ai", "software", "transfer"]
   }
 ];
 

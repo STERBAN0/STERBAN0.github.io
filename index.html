@@ -875,12 +875,11 @@ function renderSkills(id, m){
 }
 
 /* which generated resume variant (see scripts/generate-resumes.js) suits each mode */
-const RESUME_FOR = {overview:"general",robotics:"hardware",embedded:"hardware",control:"hardware",ai:"ai",software:"software"};
+const RESUME_FOR = {overview:"general",robotics:"hardware",embedded:"hardware",control:"hardware",ai:"aisoftware",software:"aisoftware"};
 const RESUME_FILES = {
   general:"resumes/Rakan_Eyad_Resume.pdf",
   hardware:"resumes/Rakan_Eyad_Resume_Hardware.pdf",
-  ai:"resumes/Rakan_Eyad_Resume_AI.pdf",
-  software:"resumes/Rakan_Eyad_Resume_Software.pdf"
+  aisoftware:"resumes/Rakan_Eyad_Resume_AI_Software.pdf"
 };
 function setMode(id, updateHash){
   const m=MODES[id]; if(!m) return;
