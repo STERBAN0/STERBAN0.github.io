@@ -1,0 +1,14 @@
+{
+  "name": "portfolio-build-tools",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Build-time generators for this static site: tailored PDF résumés (site-data.js -> resumes/) and the social-preview image (assets/og-image.svg -> assets/og-image.png).",
+  "scripts": {
+    "resumes": "node scripts/generate-resumes.js",
+    "og-image": "node scripts/generate-og-image.js"
+  },
+  "devDependencies": {
+    "pdfkit": "^0.19.1",
+    "sharp": "^0.35.3"
+  }
+}
