@@ -135,7 +135,10 @@ button.tab .num{color:var(--copper);margin-right:7px;font-weight:600}
     cursor:pointer;box-shadow:var(--shadow-1);
     transition:border-color .2s var(--ease-out),background .2s var(--ease-out);
   }
-  .menu-toggle:hover{border-color:var(--mask)}
+  /* hover feedback only for devices that truly have a hover pointer (mouse/trackpad) —
+     gating behind (hover:hover) avoids iOS Safari's "stuck hover after tap" quirk,
+     which otherwise leaves the toggle border looking permanently lit after a touch tap */
+  @media(hover:hover){.menu-toggle:hover{border-color:var(--mask)}}
   .menu-toggle[aria-expanded="true"]{border-color:var(--mask);background:var(--mask-soft)}
   .menu-toggle svg{overflow:visible}
   .menu-toggle .bar{
@@ -632,7 +635,15 @@ Object.entries(MODES).forEach(([id,m],i)=>{
   b.setAttribute("aria-selected", i===0 ? "true":"false");
   b.setAttribute("tabindex", i===0 ? "0":"-1");
   b.innerHTML=`<span class="num">${m.n}</span>${m.label}`;
-  b.addEventListener("click",()=>{switchMode(id); closeMobileMenu(true);});
+  b.addEventListener("click",(e)=>{
+    switchMode(id);
+    /* MouseEvent.detail is 0 only for synthetic clicks from keyboard activation
+       (Enter/Space on a focused button); it is >=1 for real pointer/touch taps.
+       Only re-focus (and thus show) the toggle's :focus-visible ring when the
+       tab was actually selected via keyboard — otherwise a touch tap on a tab
+       left the toggle looking permanently "lit" with a lingering focus ring. */
+    closeMobileMenu(e.detail===0);
+  });
   tabsEl.appendChild(b);
 });
 const underline=document.createElement("span");
