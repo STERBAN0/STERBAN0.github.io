@@ -189,11 +189,12 @@ h2.headline{
 .ic{width:13px;height:13px;flex:none}
 
 /* ============ sections ============ */
-section{padding:48px 0 64px;scroll-margin-top:70px}
+section{padding:40px 0 48px;scroll-margin-top:70px}
+@media(max-width:640px){section{padding:28px 0 36px}}
 .sec-head{
-  display:flex;align-items:baseline;flex-wrap:wrap;gap:10px 14px;
-  background:var(--card);border:1px solid var(--rule);border-radius:var(--radius);
-  box-shadow:var(--shadow-1);padding:13px 20px;margin:0 0 28px;
+  display:flex;align-items:baseline;flex-wrap:wrap;gap:8px 14px;
+  border-left:3px solid var(--mask);border-bottom:1px solid var(--rule);
+  padding:0 0 10px 14px;margin:0 0 22px;
 }
 .sec-head h3{
   font-family:"Archivo",sans-serif;font-weight:800;font-size:15px;
@@ -275,7 +276,8 @@ section{padding:48px 0 64px;scroll-margin-top:70px}
 .edu{border:1px solid var(--rule);border-radius:var(--radius);background:var(--card);padding:22px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:baseline}
 .edu b{font-family:"Archivo",sans-serif;font-weight:800;font-size:17px}
 .edu .mono{font-size:12px;color:var(--dim)}
-footer{background:var(--card);margin-top:56px;box-shadow:0 -1px 0 var(--rule)}
+footer{background:var(--card);margin-top:32px;box-shadow:0 -1px 0 var(--rule)}
+@media(max-width:640px){footer{margin-top:24px}}
 .foot-inner{display:flex;justify-content:space-between;align-items:center;padding:26px 0;flex-wrap:wrap;gap:14px}
 .foot-cta{font-family:"Archivo",sans-serif;font-weight:800;font-size:20px}
 .foot-links{display:flex;gap:22px;font-family:"IBM Plex Mono",monospace;font-size:13px}
