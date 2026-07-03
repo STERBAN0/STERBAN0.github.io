@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rakan Eyad — Mechatronic Engineer</title>
 <meta name="description" content="Rakan Eyad: mechatronic engineer in Sydney. Robotics, embedded systems, control, AI, and full-stack product work. One engineer, six operating modes.">
-<meta name="theme-color" content="#F3F6F2">
+<meta name="theme-color" content="#0E1310">
 <meta property="og:title" content="Rakan Eyad — Mechatronic Engineer">
 <meta property="og:description" content="Robotics, embedded systems, control, AI, and full-stack product work. One engineer, six operating modes.">
 <meta property="og:type" content="website">
@@ -16,19 +16,22 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --paper:#F3F6F2;
-  --card:#FBFCFA;
-  --ink:#121A16;
-  --dim:#59665E;
-  --rule:#C9D2CB;
-  --mask:#0E6B49;
-  --mask-soft:#E3EEE7;
-  --copper:#A6641F;
+  --paper:#0E1310;
+  --paper-rgb:14,19,16;
+  --card:#1B2420;
+  --ink:#EDF1EE;
+  --ink-soft:#D3DCD5;
+  --dim:#9AA79E;
+  --rule:#46594D;
+  --mask:#22AE79;
+  --mask-rgb:34,174,121;
+  --mask-soft:#122A22;
+  --copper:#E8A34D;
   --radius:5px;
   --maxw:1060px;
   --ease-out:cubic-bezier(.22,1,.36,1);
-  --shadow-1:0 1px 2px rgba(18,26,22,.05);
-  --shadow-2:0 12px 28px -14px rgba(18,26,22,.22), 0 3px 8px rgba(18,26,22,.06);
+  --shadow-1:0 1px 2px rgba(0,0,0,.35);
+  --shadow-2:0 12px 28px -14px rgba(0,0,0,.55), 0 3px 8px rgba(0,0,0,.35);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -46,7 +49,7 @@ body{
 }
 /* paper grain */
 body::after{
-  content:"";position:fixed;inset:0;z-index:999;pointer-events:none;opacity:.05;
+  content:"";position:fixed;inset:0;z-index:999;pointer-events:none;opacity:.06;mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 .mono{font-family:"IBM Plex Mono", ui-monospace, monospace}
@@ -60,7 +63,7 @@ a:hover{text-decoration:underline}
 header.masthead{
   border-bottom:2px solid var(--ink);
   background:
-    radial-gradient(680px 300px at 88% -40%, rgba(14,107,73,.07), transparent 70%),
+    radial-gradient(680px 300px at 88% -40%, rgba(var(--mask-rgb),.12), transparent 70%),
     var(--card);
 }
 .mast-top{
@@ -89,13 +92,13 @@ h1.name{
 /* ============ mode selector ============ */
 .selector{
   position:sticky;top:0;z-index:50;
-  background:rgba(243,246,242,.85);
+  background:rgba(var(--paper-rgb),.85);
   -webkit-backdrop-filter:blur(10px) saturate(1.1);
   backdrop-filter:blur(10px) saturate(1.1);
   border-bottom:1px solid var(--rule);
   transition:box-shadow .25s var(--ease-out);
 }
-.selector.stuck{box-shadow:0 4px 18px -8px rgba(18,26,22,.16)}
+.selector.stuck{box-shadow:0 4px 18px -8px rgba(0,0,0,.45)}
 .selector-inner{display:flex;align-items:stretch;gap:0;overflow-x:auto;scrollbar-width:none}
 .selector-inner::-webkit-scrollbar{display:none}
 .sel-label{
@@ -171,7 +174,7 @@ h2.headline{
   font-family:"Archivo",sans-serif;font-weight:800;letter-spacing:-.015em;
   font-size:clamp(30px,4.6vw,46px);line-height:1.06;max-width:19ch;text-wrap:balance;
 }
-.brief p.lede{max-width:62ch;margin-top:20px;font-size:18.5px;color:#2A342E}
+.brief p.lede{max-width:62ch;margin-top:20px;font-size:18.5px;color:var(--ink-soft)}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
 .chip{
   font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.04em;
@@ -183,10 +186,11 @@ h2.headline{
 .ic{width:13px;height:13px;flex:none}
 
 /* ============ sections ============ */
-section{padding:0 0 64px;scroll-margin-top:70px}
+section{padding:48px 0 64px;scroll-margin-top:70px}
 .sec-head{
-  display:flex;align-items:baseline;gap:14px;
-  border-top:2px solid var(--ink);padding-top:12px;margin-bottom:26px;
+  display:flex;align-items:baseline;flex-wrap:wrap;gap:10px 14px;
+  background:var(--card);border:1px solid var(--rule);border-radius:var(--radius);
+  box-shadow:var(--shadow-1);padding:13px 20px;margin:0 0 28px;
 }
 .sec-head h3{
   font-family:"Archivo",sans-serif;font-weight:800;font-size:15px;
@@ -214,7 +218,7 @@ section{padding:0 0 64px;scroll-margin-top:70px}
   padding:9px 12px;
 }
 .p-note b{font-weight:600}
-.p-desc{font-size:15.5px;color:#2A342E}
+.p-desc{font-size:15.5px;color:var(--ink-soft)}
 .p-desc .credit{display:block;margin-top:6px;font-size:13.5px;color:var(--dim);font-style:italic}
 .p-metrics{display:flex;flex-wrap:wrap;gap:16px;margin-top:2px}
 .metric{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--dim);font-variant-numeric:tabular-nums}
@@ -236,7 +240,7 @@ section{padding:0 0 64px;scroll-margin-top:70px}
 .xp-when{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--dim);padding-top:4px}
 .xp-role{font-family:"Archivo",sans-serif;font-weight:700;font-size:17px}
 .xp-org{color:var(--mask);font-weight:600}
-.xp-body{font-size:15.5px;color:#2A342E;margin-top:6px;max-width:70ch}
+.xp-body{font-size:15.5px;color:var(--ink-soft);margin-top:6px;max-width:70ch}
 
 /* ============ skills matrix ============ */
 .skills{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
@@ -246,7 +250,7 @@ section{padding:0 0 64px;scroll-margin-top:70px}
   border:1px solid var(--rule);border-radius:var(--radius);background:var(--card);
   padding:18px;transition:border-color .3s var(--ease-out),background .3s var(--ease-out);
 }
-.skill-group.lit{border-color:var(--mask);background:#F2F8F4}
+.skill-group.lit{border-color:var(--mask);background:var(--mask-soft)}
 .skill-group h4{
   font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;
   letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:12px;
@@ -268,7 +272,7 @@ section{padding:0 0 64px;scroll-margin-top:70px}
 .edu{border:1px solid var(--rule);border-radius:var(--radius);background:var(--card);padding:22px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:baseline}
 .edu b{font-family:"Archivo",sans-serif;font-weight:800;font-size:17px}
 .edu .mono{font-size:12px;color:var(--dim)}
-footer{border-top:2px solid var(--ink);background:var(--card);margin-top:20px}
+footer{background:var(--card);margin-top:56px;box-shadow:0 -1px 0 var(--rule)}
 .foot-inner{display:flex;justify-content:space-between;align-items:center;padding:26px 0;flex-wrap:wrap;gap:14px}
 .foot-cta{font-family:"Archivo",sans-serif;font-weight:800;font-size:20px}
 .foot-links{display:flex;gap:22px;font-family:"IBM Plex Mono",monospace;font-size:13px}
