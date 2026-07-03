@@ -10,6 +10,17 @@
 <meta property="og:description" content="Robotics, embedded systems, control, AI, and full-stack product work. One engineer, six operating modes.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sterban0.github.io/">
+<meta property="og:image" content="https://sterban0.github.io/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Rakan Eyad — Mechatronic Engineer. Hardware, firmware, control, AI.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Rakan Eyad — Mechatronic Engineer">
+<meta name="twitter:description" content="Robotics, embedded systems, control, AI, and full-stack product work. One engineer, six operating modes.">
+<meta name="twitter:image" content="https://sterban0.github.io/assets/og-image.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Person","name":"Rakan Eyad","url":"https://sterban0.github.io/","jobTitle":"Mechatronic Engineer","alumniOf":{"@type":"CollegeOrUniversity","name":"University of Sydney"},"sameAs":["https://github.com/STERBAN0","https://www.linkedin.com/in/rakan-abdulla/"]}
+</script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='9' fill='%230E6B49'/%3E%3Ctext x='32' y='43' font-family='Arial,sans-serif' font-size='27' font-weight='800' fill='%23F3F6F2' text-anchor='middle'%3ERE%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -84,7 +95,7 @@ h1.name{
   font-size:12.5px;letter-spacing:.14em;color:var(--mask);
   text-transform:uppercase;margin-top:12px;
 }
-.mast-links{display:flex;flex-direction:column;gap:7px;align-items:flex-end;font-family:"IBM Plex Mono",monospace;font-size:13px}
+.mast-links{display:flex;flex-direction:column;gap:7px;align-items:flex-start;font-family:"IBM Plex Mono",monospace;font-size:13px}
 .mast-links a{display:inline-flex;align-items:center;gap:8px;color:var(--ink);border-bottom:1px solid var(--rule);padding-bottom:2px;transition:color .2s,border-color .2s}
 .mast-links a:hover{color:var(--mask);text-decoration:none;border-color:var(--mask)}
 .mast-links .dot{width:6px;height:6px;background:var(--mask);border-radius:50%;flex:none}
@@ -99,7 +110,19 @@ h1.name{
   transition:box-shadow .25s var(--ease-out);
 }
 .selector.stuck{box-shadow:0 4px 18px -8px rgba(0,0,0,.45)}
-.selector-inner{display:flex;align-items:stretch;gap:0;overflow-x:auto;scrollbar-width:none}
+.selector-inner{
+  display:flex;align-items:stretch;gap:0;overflow-x:auto;scrollbar-width:none;
+  /* desktop fix: decouple the tab row from the prose max-width (--maxw). A nav row
+     can reasonably use more of the viewport than body copy, so let it grow to the
+     right — but pin its left edge to the exact same inset the masthead/section
+     .wrap content uses (max(24px, (100% - maxw)/2 + 24px)) so it never looks
+     offset from the page content above it. Below 640px the mobile media query
+     further down overrides overflow-x/position for the hamburger dropdown and
+     is untouched by this. */
+  max-width:none;margin:0;
+  padding-left:max(24px, calc((100% - var(--maxw)) / 2 + 24px));
+  padding-right:24px;
+}
 .selector-inner::-webkit-scrollbar{display:none}
 .sel-label{
   font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.12em;
@@ -135,7 +158,10 @@ button.tab .num{color:var(--copper);margin-right:7px;font-weight:600}
     cursor:pointer;box-shadow:var(--shadow-1);
     transition:border-color .2s var(--ease-out),background .2s var(--ease-out);
   }
-  .menu-toggle:hover{border-color:var(--mask)}
+  /* hover feedback only for devices that truly have a hover pointer (mouse/trackpad) —
+     gating behind (hover:hover) avoids iOS Safari's "stuck hover after tap" quirk,
+     which otherwise leaves the toggle border looking permanently lit after a touch tap */
+  @media(hover:hover){.menu-toggle:hover{border-color:var(--mask)}}
   .menu-toggle[aria-expanded="true"]{border-color:var(--mask);background:var(--mask-soft)}
   .menu-toggle svg{overflow:visible}
   .menu-toggle .bar{
@@ -164,6 +190,23 @@ button.tab .num{color:var(--copper);margin-right:7px;font-weight:600}
   .tab-underline{display:none}
 }
 
+/* ---- desktop scroll-fade affordance (>640px; mirrors the breakpoint above,
+   no new boundary introduced) ----
+   Visible-only hint that the tab row has more content off-screen. Purely
+   decorative (aria-hidden, pointer-events:none) — reachability for keyboard
+   users already works via the tablist's existing scrollIntoView call in
+   setMode()/the arrow-key handler and is untouched here. */
+@media(min-width:641px){
+  .scroll-fade{
+    position:absolute;top:0;bottom:0;width:40px;pointer-events:none;
+    opacity:0;transition:opacity .2s var(--ease-out);
+  }
+  .scroll-fade-l{left:0;background:linear-gradient(to right, rgba(var(--paper-rgb),.92), rgba(var(--paper-rgb),0));}
+  .scroll-fade-r{right:0;background:linear-gradient(to left, rgba(var(--paper-rgb),.92), rgba(var(--paper-rgb),0));}
+  .selector.can-scroll-left .scroll-fade-l{opacity:1}
+  .selector.can-scroll-right .scroll-fade-r{opacity:1}
+}
+
 /* ============ mode brief ============ */
 .brief{padding:60px 0 48px}
 .eyebrow{
@@ -184,13 +227,22 @@ h2.headline{
 }
 .chip:hover{border-color:var(--mask);color:var(--mask)}
 .ic{width:13px;height:13px;flex:none}
+.resume-dl{
+  display:inline-flex;align-items:center;gap:7px;margin-top:24px;
+  font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600;
+  border-bottom:1px solid var(--rule);padding-bottom:2px;transition:border-color .2s;
+}
+.resume-dl:hover{border-color:var(--mask)}
+.resume-dl .arr{display:inline-block;transition:transform .2s var(--ease-out)}
+.resume-dl:hover .arr{transform:translateY(2px)}
 
 /* ============ sections ============ */
-section{padding:48px 0 64px;scroll-margin-top:70px}
+section{padding:40px 0 48px;scroll-margin-top:70px}
+@media(max-width:640px){section{padding:28px 0 36px}}
 .sec-head{
-  display:flex;align-items:baseline;flex-wrap:wrap;gap:10px 14px;
-  background:var(--card);border:1px solid var(--rule);border-radius:var(--radius);
-  box-shadow:var(--shadow-1);padding:13px 20px;margin:0 0 28px;
+  display:flex;align-items:baseline;flex-wrap:wrap;gap:8px 14px;
+  border-left:3px solid var(--mask);border-bottom:1px solid var(--rule);
+  padding:0 0 10px 14px;margin:0 0 22px;
 }
 .sec-head h3{
   font-family:"Archivo",sans-serif;font-weight:800;font-size:15px;
@@ -198,17 +250,29 @@ section{padding:48px 0 64px;scroll-margin-top:70px}
 }
 .sec-head .sec-note{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--dim);letter-spacing:.05em;text-transform:uppercase}
 
-/* ============ project cards ============ */
-.projects{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
-@media(max-width:760px){.projects{grid-template-columns:1fr}}
+/* ============ project carousel ============ */
+.proj-carousel{position:relative}
+.proj-viewport{overflow:hidden;border-radius:var(--radius)}
+.projects{display:flex;transition:transform .5s var(--ease-out)}
+.proj-controls{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:16px}
+.proj-arrow{
+  appearance:none;cursor:pointer;background:var(--card);color:var(--ink-soft);
+  border:1px solid var(--rule);border-radius:var(--radius);box-shadow:var(--shadow-1);
+  width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex:none;
+  transition:border-color .2s var(--ease-out),color .2s var(--ease-out),transform .15s var(--ease-out);
+}
+@media(hover:hover){.proj-arrow:hover{border-color:var(--mask);color:var(--mask)}}
+.proj-arrow:active{transform:scale(.93)}
+.proj-arrow svg{width:20px;height:20px}
+.proj-counter{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.08em;color:var(--dim);min-width:70px;text-align:center}
 .pcard{
+  flex:0 0 100%;
   background:var(--card);border:1px solid var(--rule);border-radius:var(--radius);
   padding:22px 22px 20px;display:flex;flex-direction:column;gap:12px;
   box-shadow:var(--shadow-1);
   transition:border-color .25s var(--ease-out),transform .25s var(--ease-out),box-shadow .25s var(--ease-out);
 }
 .pcard:hover{border-color:var(--mask);transform:translateY(-3px);box-shadow:var(--shadow-2)}
-.pcard.feature{grid-column:1 / -1}
 .p-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:14px}
 .p-title{font-family:"Archivo",sans-serif;font-weight:800;font-size:20px;letter-spacing:-.01em}
 .p-kind{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);white-space:nowrap;padding-top:5px}
@@ -267,12 +331,23 @@ section{padding:48px 0 64px;scroll-margin-top:70px}
 }
 .skill-group li:last-child{border-bottom:none}
 .skill-group li .ic{color:var(--dim)}
+.skills.single{grid-template-columns:1fr;max-width:420px;margin:0 auto}
+.skill-dots{display:flex;gap:8px;justify-content:center;margin-top:18px}
+.skill-dots:empty{display:none}
+.skill-dot{
+  width:9px;height:9px;padding:0;border-radius:50%;flex:none;
+  background:var(--rule);border:1px solid var(--rule);cursor:pointer;
+  transition:background .3s var(--ease-out),border-color .3s var(--ease-out),transform .2s var(--ease-out);
+}
+@media(hover:hover){.skill-dot:hover{border-color:var(--mask)}}
+.skill-dot.active{background:var(--mask);border-color:var(--mask);transform:scale(1.15)}
 
 /* ============ education + footer ============ */
 .edu{border:1px solid var(--rule);border-radius:var(--radius);background:var(--card);padding:22px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:baseline}
 .edu b{font-family:"Archivo",sans-serif;font-weight:800;font-size:17px}
 .edu .mono{font-size:12px;color:var(--dim)}
-footer{background:var(--card);margin-top:56px;box-shadow:0 -1px 0 var(--rule)}
+footer{background:var(--card);margin-top:32px;box-shadow:0 -1px 0 var(--rule)}
+@media(max-width:640px){footer{margin-top:24px}}
 .foot-inner{display:flex;justify-content:space-between;align-items:center;padding:26px 0;flex-wrap:wrap;gap:14px}
 .foot-cta{font-family:"Archivo",sans-serif;font-weight:800;font-size:20px}
 .foot-links{display:flex;gap:22px;font-family:"IBM Plex Mono",monospace;font-size:13px}
@@ -295,15 +370,17 @@ footer{background:var(--card);margin-top:56px;box-shadow:0 -1px 0 var(--rule)}
       <span class="doc">Doc. RE-2026 · Engineer datasheet</span>
       <span>Rev. 07/2026</span>
       <span>Sydney, Australia</span>
-      <span>Status: <span style="color:var(--mask);font-weight:600">Available 2026</span></span>
+      <span>Status: <span style="color:var(--mask);font-weight:600">Available now</span></span>
     </div>
     <div class="mast-main">
       <h1 class="name">Rakan<br>Eyad
         <small>Mechatronic engineer — hardware · firmware · control · AI</small>
       </h1>
       <nav class="mast-links" aria-label="Contact">
-        <a href="https://github.com/STERBAN0"><span class="dot"></span>github.com/STERBAN0</a>
+        <a href="https://github.com/STERBAN0" target="_blank" rel="noopener noreferrer"><span class="dot"></span>github.com/STERBAN0</a>
+        <a href="https://www.linkedin.com/in/rakan-abdulla/" target="_blank" rel="noopener noreferrer"><span class="dot"></span>linkedin.com/in/rakan-abdulla</a>
         <a href="mailto:rakan132546@gmail.com"><span class="dot"></span>rakan132546@gmail.com</a>
+        <a href="resumes/Rakan_Eyad_Resume.pdf" download><span class="dot"></span>Résumé (PDF)</a>
       </nav>
     </div>
   </div>
@@ -311,7 +388,7 @@ footer{background:var(--card);margin-top:56px;box-shadow:0 -1px 0 var(--rule)}
 
 <div id="stick-sentinel" aria-hidden="true"></div>
 <div class="selector" id="selector">
-  <div class="wrap selector-inner">
+  <div class="wrap selector-inner" id="selector-inner">
     <span class="sel-label" id="mode-label">Operating mode</span>
     <button type="button" class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="tabs" aria-label="Toggle mode menu">
       <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
@@ -322,6 +399,8 @@ footer{background:var(--card);margin-top:56px;box-shadow:0 -1px 0 var(--rule)}
     </button>
     <div role="tablist" aria-labelledby="mode-label" id="tabs"></div>
   </div>
+  <div class="scroll-fade scroll-fade-l" aria-hidden="true"></div>
+  <div class="scroll-fade scroll-fade-r" aria-hidden="true"></div>
 </div>
 
 <main class="wrap">
@@ -332,50 +411,40 @@ footer{background:var(--card);margin-top:56px;box-shadow:0 -1px 0 var(--rule)}
       <h3 id="proj-h">Featured applications</h3>
       <span class="sec-note" id="proj-note"></span>
     </div>
-    <div class="projects" id="projects"></div>
+    <div class="proj-carousel" id="proj-carousel" role="region" aria-roledescription="carousel" aria-label="Featured applications">
+      <div class="proj-viewport">
+        <div class="projects" id="projects"></div>
+      </div>
+      <div class="proj-controls">
+        <button type="button" class="proj-arrow" id="proj-prev" aria-label="Previous project">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><polyline points="15 6 9 12 15 18"/></svg>
+        </button>
+        <span class="proj-counter mono" id="proj-counter"></span>
+        <button type="button" class="proj-arrow" id="proj-playpause" aria-label="Pause autoplay">
+          <svg class="ppi-pause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="9" y1="6" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="18"/></svg>
+          <svg class="ppi-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" hidden><path d="M7 5 19 12 7 19Z"/></svg>
+        </button>
+        <button type="button" class="proj-arrow" id="proj-next" aria-label="Next project">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><polyline points="9 6 15 12 9 18"/></svg>
+        </button>
+      </div>
+    </div>
   </section>
 
   <section aria-labelledby="xp-h">
     <div class="sec-head"><h3 id="xp-h">Field history</h3><span class="sec-note">Industry experience</span></div>
-    <div class="xp">
-      <div class="xp-row reveal">
-        <div class="xp-when">Nov 2024 — Jan 2026</div>
-        <div>
-          <div class="xp-role">System Engineer · <span class="xp-org">ALBON</span></div>
-          <p class="xp-body">Developed and integrated hardware, software, and mechanical components for a prototype control system: migrated the architecture from a microcontroller to a Raspberry Pi for real-time data processing, integrated sensor arrays, and engineered the system's electrical junction box to cut power consumption and keep the hardware reliable.</p>
-        </div>
-      </div>
-      <div class="xp-row reveal">
-        <div class="xp-when">Sep 2021 — Nov 2021</div>
-        <div>
-          <div class="xp-role">Engineering Intern · <span class="xp-org">Escape The Room</span></div>
-          <p class="xp-body">Designed mechanical puzzles and implemented engineering concepts in real-world, client-facing products.</p>
-        </div>
-      </div>
-      <div class="xp-row reveal" style="border-bottom:none">
-        <div class="xp-when">May 2021 — Aug 2021</div>
-        <div>
-          <div class="xp-role">Testing Technician Intern · <span class="xp-org">CloudAk</span></div>
-          <p class="xp-body">Supported server system testing and maintenance in data-centre environments.</p>
-        </div>
-      </div>
-    </div>
+    <div class="xp" id="xp"></div>
   </section>
 
   <section aria-labelledby="sk-h">
-    <div class="sec-head"><h3 id="sk-h">Capability matrix</h3><span class="sec-note" id="sk-note">Groups relevant to this mode are highlighted</span></div>
+    <div class="sec-head"><h3 id="sk-h">Technical skills</h3><span class="sec-note" id="sk-note"></span></div>
     <div class="skills" id="skills"></div>
+    <div class="skill-dots" id="skill-dots"></div>
   </section>
 
   <section aria-labelledby="edu-h">
     <div class="sec-head"><h3 id="edu-h">Qualification</h3></div>
-    <div class="edu reveal">
-      <div>
-        <b>B.E. (Honours), Mechatronic Engineering</b><br>
-        University of Sydney · 2022 — 2026
-      </div>
-      <div class="mono">EWAM 76% — Distinction</div>
-    </div>
+    <div class="edu reveal" id="edu"></div>
   </section>
 </main>
 
@@ -384,237 +453,107 @@ footer{background:var(--card);margin-top:56px;box-shadow:0 -1px 0 var(--rule)}
     <div class="foot-inner reveal">
       <div class="foot-cta">Building something? Let's talk.</div>
       <div class="foot-links">
+        <a href="https://github.com/STERBAN0" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://www.linkedin.com/in/rakan-abdulla/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
         <a href="mailto:rakan132546@gmail.com">Email</a>
-        <a href="https://github.com/STERBAN0">GitHub</a>
+        <a href="resumes/Rakan_Eyad_Resume.pdf" download>Résumé (PDF)</a>
       </div>
     </div>
     <div class="foot-rev">Rakan Eyad · Doc. RE-2026 Rev. 07/2026 · Typeset in Archivo, Source Serif 4 &amp; IBM Plex Mono</div>
   </div>
 </footer>
 
+<script src="site-data.js"></script>
 <script>
-/* ---------- data ---------- */
-const MODES = {
-  overview:{ n:"01", label:"Overview", eyebrow:"General configuration",
-    headline:"One engineer. Six operating modes.",
-    lede:"I build electromechanical systems end-to-end: the board, the firmware, the control loop, and increasingly the learning system on top. Mechatronic engineering graduate (Honours) from the University of Sydney, with 14 months in industry shipping a prototype control system and two production web apps built solo. Pick a mode above and the page re-configures for the role you're hiring for.",
-    chips:["Hands-on builds","Embedded C/C++","Python / TS","ROS2","Isaac Sim / RL","Full-stack SaaS","Test-driven"],
-    note:"Sorted by overall signal",
-    order:["conjure","rover","tradie","tracking","sdk","fund","fpga","turtlebot","ant61"],
-    skills:[]},
-  robotics:{ n:"02", label:"Robotics", eyebrow:"Mode 02 — Robotics & mechatronics",
-    headline:"Robots that hold up outside the lab.",
-    lede:"From a ROS2 TurtleBot navigating by sensor fusion, to an FPGA-driven assistive robot, to a planetary rover learning to cross Mars terrain in simulation: I've built and programmed robotic platforms across the stack, and spent 14 months in industry integrating one into a working prototype.",
-    chips:["ROS2","Sensor fusion","Path planning","Isaac Sim","Closed-loop control","CAD (Fusion/SW)"],
-    note:"Sorted for robotics roles",
-    order:["rover","turtlebot","tracking","fpga","conjure","ant61","sdk"],
-    skills:["robotics"]},
-  embedded:{ n:"03", label:"Embedded / Electronics", eyebrow:"Mode 03 — Embedded systems & electronics",
-    headline:"From board bring-up to firmware that holds.",
-    lede:"I'm comfortable at the bench: microcontrollers and FPGAs, sensor buses, power wiring, and the firmware that ties them together. At ALBON I moved a prototype's architecture from a microcontroller to a Raspberry Pi and built its electrical junction box. My own projects run C/C++, Verilog, and real-time pipelines on tight budgets.",
-    chips:["C/C++","Arduino","FPGA / Verilog","Raspberry Pi","Sensor arrays","Power & wiring","Bench debugging"],
-    note:"Sorted for embedded roles",
-    order:["fpga","tracking","turtlebot","conjure","rover","sdk","ant61"],
-    skills:["embedded"]},
-  control:{ n:"04", label:"Control / GNC", eyebrow:"Mode 04 — Control systems & GNC",
-    headline:"Loops closed. Targets tracked.",
-    lede:"Control theory is where I started: a self-built laser rig that locks onto and tracks moving targets, filtering noisy signals into fast, precise actuation. I'm now extending it to predict where a target will be from its velocity and trajectory. My thesis pairs a classical global planner with a learned local policy, which is GNC thinking applied to modern tools.",
-    chips:["Advanced control","Signal filtering","Sensor calibration","State estimation","A* + RL policy","MATLAB"],
-    note:"Sorted for control & GNC roles",
-    order:["tracking","rover","turtlebot","fpga","conjure","sdk","ant61"],
-    skills:["control"]},
-  ai:{ n:"05", label:"AI / Autonomy", eyebrow:"Mode 05 — AI, RL & autonomy",
-    headline:"Learning systems, with an engineer's ground truth.",
-    lede:"I train and evaluate reinforcement-learning agents in NVIDIA Isaac Sim for my thesis on planetary-rover navigation, and I build real-time computer vision that runs at 60 FPS on a webcam. I've also put an LLM into production: Tradie Text's conversation engine qualifies real customer leads over SMS, with moderation, structured extraction, and cost telemetry. I come to AI from hardware, so I judge a policy by what it does on a physical system rather than by its reward curve. My repos ship with CI, deterministic tests, and CLAUDE.md context files: I work with agentic tools in the loop.",
-    chips:["RL","Isaac Sim / Isaac Lab","SAC / PPO (skrl)","Computer vision","LLMs in production","Evaluation pipelines","AI-native workflow"],
-    note:"Sorted for AI & autonomy roles",
-    order:["rover","conjure","tradie","sdk","turtlebot","tracking","fpga"],
-    skills:["ai"]},
-  software:{ n:"06", label:"Software", eyebrow:"Mode 06 — Software engineering",
-    headline:"Shipped code: tested, profiled, documented.",
-    lede:"My best software is running in production. Tradie Text recovers missed calls for trades businesses with telephony, an LLM conversation engine, and Stripe billing. Conjure's render path went from 162 ms to 2.8 ms a frame after profiling, then became a pip-installable SDK with an event API. FUN.D wires a real Stripe payment flow through a Flask + React stack. I profile before I optimise, test what's deterministic, and document what I build.",
-    chips:["Python","TypeScript","React · Next.js","Flask","Postgres · Supabase","pytest · Vitest · CI","Performance profiling"],
-    note:"Sorted for software roles",
-    order:["tradie","conjure","sdk","fund","rover","turtlebot"],
-    skills:["software"]}
-};
-
-const PROJECTS = {
-  conjure:{
-    title:"Conjure", kind:"Open source · Python",
-    link:"https://github.com/STERBAN0/Conjure",
-    desc:"A real-time engine that watches your hands and face through a webcam and fires anime-style abilities: nine gestures classified with temporal hysteresis, landmarks smoothed with One Euro filters, effects rendered at 60 FPS in a modular pipeline with unit tests and CI.",
-    metrics:[["60","FPS pipeline"],["58×","render speed-up"],["9","gesture abilities"]],
-    tags:"MediaPipe · OpenCV · pygame · pytest",
-    notes:{
-      overview:"<b>Flagship build:</b> vision, signal processing, state machines, and performance work in one shipped project.",
-      robotics:"<b>Robotics:</b> the perception → classification → action pipeline of a robot stack (tracker, gesture engine, router, actuator), under real-time constraints.",
-      embedded:"<b>Embedded:</b> a hard real-time budget on commodity hardware. The 58× speed-up came from allocation discipline, the same instinct firmware demands.",
-      control:"<b>Control:</b> two-stage One Euro + EMA filtering with hysteresis thresholds — classical signal conditioning that keeps a noisy 60 Hz loop stable.",
-      ai:"<b>AI:</b> production computer vision. MediaPipe landmark models wrapped in a tested inference pipeline that degrades gracefully.",
-      software:"<b>Software:</b> profiled a 162 ms/frame render path down to 2.8 ms (58×), verified with a headless smoke-test suite. CI, docs, and a contributor guide included."
-    }},
-  sdk:{
-    title:"Conjure SDK", kind:"Open source · Python",
-    link:"https://github.com/STERBAN0/conjure-sdk",
-    desc:"The Conjure engine extracted into a pip-installable SDK: rendering stripped out, an event-driven API in its place, so anyone can drive a game, stream overlay, or hardware trigger from gestures. Two install tiers (numpy-only or full webcam), webcam-free deterministic tests.",
-    metrics:[["2","install tiers"],["6","lifecycle events"],["0","renderer imports"]],
-    tags:"API design · packaging · event systems",
-    notes:{
-      overview:"<b>Architecture signal:</b> turning a working app into a clean, documented library is a different skill from writing the app.",
-      robotics:"<b>Robotics:</b> the event API (`ability_release` → your code) is exactly how gesture input would drive a physical actuator or robot behaviour.",
-      embedded:"<b>Embedded:</b> the pure tier needs only numpy — the separation you'd want to port the engine's logic to constrained targets.",
-      control:"<b>Control:</b> exposes the continuous signal layer (span, expansion, motion energy) directly, a clean sensor-signal interface for downstream loops.",
-      ai:"<b>AI:</b> an ML system packaged for reuse. Model download scripts, graceful degradation without the face model, deterministic tests around stochastic input.",
-      software:"<b>Software:</b> one-directional data flow, no renderer imports in the engine, semantic events over polling. Deliberate API design, documented."
-    }},
-  rover:{
-    title:"Planetary Rover RL Navigation", kind:"Thesis · Isaac Sim",
-    link:"https://github.com/STERBAN0/RL_for_Rover_Nav_Thesis",
-    desc:"Honours thesis: autonomous navigation and obstacle avoidance for a planetary rover, pairing an A* global planner with a deep-RL local policy trained in NVIDIA Isaac Sim on Mars terrain. My contributions: the fast A* command term and terrain importer for hybrid planning, SAC training configs and refactored skrl models, reward/termination tuning, and a custom evaluation pipeline.<span class='credit'>Built on RLRoverLab (Mortensen &amp; Bøgh, iSpaRo 2024) — extending a large existing research codebase rather than a toy repo.</span>",
-    metrics:[["A*+RL","hybrid planner"],["SAC","training config"],["1000s","parallel envs"]],
-    tags:"Isaac Sim · Isaac Lab · skrl · PyTorch",
-    notes:{
-      overview:"<b>Research depth:</b> classical planning fused with learned control, in a high-fidelity physics simulator.",
-      robotics:"<b>Robotics:</b> a full autonomy stack — terrain analysis, global planning, learned local control, and evaluation on a simulated rover platform.",
-      embedded:"<b>Embedded:</b> simulation-side today, but designed around a real rover's sensors and actuation limits, the constraints an embedded target imposes.",
-      control:"<b>Control & GNC:</b> the guidance-navigation-control decomposition itself. A* guidance, learned navigation policy, low-level control, evaluated end-to-end.",
-      ai:"<b>AI:</b> deep RL at scale. SAC/PPO via skrl, massively parallel Isaac Lab training, reward shaping, and a custom eval pipeline producing result CSVs rather than just training curves.",
-      software:"<b>Software:</b> contributing cleanly inside a large external research codebase: new command terms, refactored models, reproducible experiment configs."
-    }},
-  tradie:{
-    title:"Tradie Text", kind:"Micro-SaaS · in production",
-    link:null, linkNote:"Private repo · walkthrough on request",
-    desc:"A missed-call recovery service for trades businesses. Twilio catches the call a tradie can't answer, an AI SMS conversation qualifies the lead (GPT-4o-mini with moderation and emergency detection), and the result lands on a realtime dashboard with lead scoring. Next.js 15 + TypeScript, Supabase Postgres with row-level security for tenant isolation, Upstash Redis for idempotency and rate limiting, Stripe subscriptions with usage-based billing. Built and hardened solo: CI, Playwright e2e, a threat model, and incident runbooks.",
-    metrics:[["Live","in production"],["276","tests in CI"],["RLS","multi-tenant"]],
-    tags:"Next.js · Supabase · Twilio · OpenAI · Stripe",
-    notes:{
-      overview:"<b>Product range:</b> a complete commercial SaaS (telephony, AI, billing, multi-tenant data) designed, built, and hardened by one person.",
-      ai:"<b>AI:</b> an LLM doing real work — conversation engine with structured lead extraction, moderation, emergency detection, and per-message cost telemetry.",
-      software:"<b>Software:</b> production engineering end-to-end. Webhook signature verification, idempotent queues, rate limits, RLS, CI gates, security docs, runbooks."
-    }},
-  fund:{
-    title:"FUN.D", kind:"Full-stack web app",
-    link:null, linkNote:"Private repo · walkthrough on request",
-    desc:"A crowdfunding platform where users create and fund campaigns. Flask REST API with JWT auth and role-based admin, React 19 + Vite frontend, Stripe Elements payment flow (create → confirm → credit, idempotent), Supabase Postgres and image storage, deployed on Vercel. Taking it to release meant wiring the real payment flow end-to-end, adding migrations, fixing N+1 queries, validating uploads by magic bytes, and standing up a pytest + Vitest CI pipeline.",
-    metrics:[["JWT","auth + roles"],["Stripe","payments"],["2","CI test suites"]],
-    tags:"Flask · React · Stripe · Supabase",
-    notes:{
-      overview:"<b>Full-stack range:</b> the web counterpart to the hardware work — API design, auth, payments, deployment.",
-      ai:"<b>AI:</b> none in the product, and that's the point: knowing when a plain CRUD + payments stack is the right tool.",
-      software:"<b>Software:</b> the unglamorous release work — payment idempotency, migrations, query batching, upload validation, CI on both the Flask and React halves."
-    }},
-  tracking:{
-    title:"Autonomous Target Tracking System", kind:"Personal build · hardware",
-    link:null, linkNote:"Hardware build · demo on request",
-    desc:"A compact, self-built system that uses a laser to autonomously lock onto and track moving targets: control theory, sensor calibration, and signal filtering tuned for rapid actuation and precise pointing. I'm extending it to predictive targeting from target velocity and trajectory.",
-    metrics:[["Live","target lock"],["Predictive","targeting (WIP)"]],
-    tags:"Control theory · actuation · filtering",
-    notes:{
-      overview:"<b>Bench credibility:</b> designed, built, wired, and tuned by hand.",
-      robotics:"<b>Robotics:</b> perception-to-actuation latency is the whole game here. Track, predict, point, in real time on physical hardware.",
-      embedded:"<b>Embedded:</b> built from the bench up — sensors calibrated, signals conditioned, actuators driven on a microcontroller-class budget.",
-      control:"<b>Control:</b> the purest control project on this page. A live tracking loop where filter tuning and loop rate decide whether the target stays locked.",
-      ai:"<b>AI:</b> the predictive-targeting extension is an estimation problem — modelling target motion to lead the actuator.",
-      software:"<b>Software:</b> real-time code where a missed deadline is a missed target. Latency budgets over feature counts."
-    }},
-  fpga:{
-    title:"Assistive Robot (FPGA)", kind:"University build · Verilog",
-    link:null, linkNote:"University build · report on request",
-    desc:"A Bluetooth-controlled assistive robot built on an FPGA in Verilog, following and responding to dynamic commands, with multiple sensors integrated into closed-loop control for autonomous operation.",
-    metrics:[["FPGA","Verilog logic"],["BT","command link"]],
-    tags:"Verilog · FPGA · closed-loop control",
-    notes:{
-      overview:"<b>Hardware range:</b> below the microcontroller — gateware, timing, and digital design.",
-      robotics:"<b>Robotics:</b> a complete robot (comms, sensing, control, actuation) implemented at the hardware-description level.",
-      embedded:"<b>Embedded:</b> the deepest layer of the stack. HDL, sensor interfacing, and control logic in fabric rather than firmware.",
-      control:"<b>Control:</b> closed-loop control implemented in hardware, where the loop is gates and registers rather than a scheduler.",
-      ai:"<b>AI:</b> the actuation substrate learned policies eventually have to live on — useful ground truth for sim-to-real thinking.",
-      software:"<b>Software:</b> Verilog forces the concurrency discipline that makes multithreaded software feel easy afterwards."
-    }},
-  turtlebot:{
-    title:"Autonomous TurtleBot (ROS2)", kind:"University build · ROS2",
-    link:null, linkNote:"University build · report on request",
-    desc:"An autonomous TurtleBot programmed in ROS2 to identify, count, and interact with items via QR codes: sensor fusion and path-finding on a standard research platform.",
-    metrics:[["ROS2","nav stack"],["QR","task logic"]],
-    tags:"ROS2 · sensor fusion · path planning",
-    notes:{
-      overview:"<b>Platform fluency:</b> the industry-standard robotics middleware, used for a complete task pipeline.",
-      robotics:"<b>Robotics:</b> ROS2 nodes, topics, and the fusion/planning stack every robotics team expects you to already speak.",
-      embedded:"<b>Embedded:</b> working against real sensors and actuators through ROS2's hardware interfaces.",
-      control:"<b>Control:</b> path-finding and motion built on fused, imperfect sensor data — planning under uncertainty.",
-      ai:"<b>AI:</b> perception-driven task logic (detect, decide, act), the classical autonomy loop RL policies aim to replace.",
-      software:"<b>Software:</b> distributed pub/sub architecture in practice. Nodes, message contracts, and debugging across process boundaries."
-    }},
-  ant61:{
-    title:"Satellite Refueling Latch (ANT61)", kind:"Industry project · CAD",
-    link:null, linkNote:"Client project · details on request",
-    desc:"A prototype latching mechanism for mechanical autonomous satellite refueling, designed in Fusion360 for space-robotics company ANT61.",
-    metrics:[["Fusion360","mechanism design"]],
-    tags:"CAD · mechanism design · space",
-    notes:{
-      overview:"<b>Mechanical range:</b> proof the CAD skills extend to real client mechanism design.",
-      robotics:"<b>Robotics:</b> end-effector-adjacent mechanism design under space constraints — tolerance, actuation, and reliability with no service calls.",
-      embedded:"<b>Embedded:</b> the mechanical half of electromechanical, what the firmware ultimately moves.",
-      control:"<b>Control:</b> autonomous docking and latching is a precision alignment problem, so the mechanism design is shaped by control feasibility.",
-      ai:"<b>AI:</b> space robotics context that pairs with the rover thesis — autonomy where teleoperation isn't an option.",
-      software:"<b>Software:</b> CAD-to-constraint thinking that keeps simulation models honest."
-    }}
-};
-
-const SKILLS = [
-  {id:"embedded", title:"Firmware & electronics", items:["C / C++ · Arduino","FPGA · Verilog / SystemVerilog","Raspberry Pi · microcontrollers","Sensor integration & calibration","Power wiring & junction boxes","Assembly"]},
-  {id:"robotics", title:"Robotics & simulation", items:["ROS2","Isaac Sim / Isaac Lab","Sensor fusion & path planning","HIL simulation","CAD (Fusion/SW)","Mechanism design"]},
-  {id:"control", title:"Control & signals", items:["Advanced control systems","Signal processing & filtering","State estimation","GNC fundamentals","MATLAB","Radar & antenna coursework"]},
-  {id:"ai", title:"AI & computer vision", items:["RL (SAC/PPO)","skrl · PyTorch","Computer vision · MediaPipe","LLM integration (OpenAI)","Evaluation pipelines","AI-native / agentic workflows"]},
-  {id:"software", title:"Software engineering", items:["Python / TS","React · Next.js · Flask","Postgres · Supabase · Redis","Stripe · Twilio integration","pytest · Vitest · Playwright · CI","git · GitHub · profiling"]},
-  {id:"transfer", title:"Working style", items:["Test-driven & methodical","Documents thoroughly","Led teams to delivery","Client-facing comms","Self-taught: ROS2, FPGA, Isaac","Adaptable across the stack"]}
-];
+/* MODES, PROJECTS, SKILLS, EXPERIENCE, EDUCATION now live in site-data.js
+   (shared with scripts/generate-resumes.js so both the site and the
+   generated résumés read from one place). */
 
 /* ---------- decorative icons (inline SVG, currentColor, no external deps) ---------- */
-/* one glyph per concept, reused across every chip/skill label that shares it */
+/* one glyph per concept, reused only when a label genuinely repeats the same concept
+   (e.g. "Isaac Sim" in three modes) -- never shared across unrelated concepts */
 const ICONS = {
   code:`<polyline points="9 8 4 12 9 16"/><polyline points="15 8 20 12 15 16"/>`,
   chip:`<rect x="7" y="7" width="10" height="10" rx="1.5"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/>`,
-  bot:`<rect x="5" y="9" width="14" height="10" rx="2"/><line x1="12" y1="5" x2="12" y2="9"/><circle cx="12" cy="4" r="1"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/>`,
   radar:`<circle cx="12" cy="12" r="1.4"/><path d="M8.7 15.3a5 5 0 0 1 0-6.6"/><path d="M15.3 8.7a5 5 0 0 1 0 6.6"/><path d="M5.8 18.2a9 9 0 0 1 0-12.4"/><path d="M18.2 5.8a9 9 0 0 1 0 12.4"/>`,
   route:`<circle cx="6" cy="6" r="2"/><circle cx="18" cy="18" r="2"/><path d="M8 6h5.5A3.5 3.5 0 0 1 17 9.5a3.5 3.5 0 0 1-3.5 3.5H10a3.5 3.5 0 0 0-3.5 3.5"/>`,
   cube:`<path d="M12 3 20 7.5v9L12 21 4 16.5v-9Z"/><path d="M4 7.5 12 12l8-4.5"/><path d="M12 12v9"/>`,
   waveform:`<polyline points="3 12 8 12 10 6 14 18 16 12 21 12"/>`,
-  brain:`<circle cx="12" cy="12" r="2.6"/><circle cx="4.5" cy="6" r="1.4"/><circle cx="19.5" cy="6" r="1.4"/><circle cx="4.5" cy="18" r="1.4"/><circle cx="19.5" cy="18" r="1.4"/><line x1="9.8" y1="10.1" x2="5.6" y2="7"/><line x1="14.2" y1="10.1" x2="18.4" y2="7"/><line x1="9.8" y1="13.9" x2="5.6" y2="17"/><line x1="14.2" y1="13.9" x2="18.4" y2="17"/>`,
   eye:`<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="2.4"/>`,
   layers:`<path d="M12 3 21 8 12 13 3 8Z"/><path d="M3 14l9 5 9-5"/>`,
   database:`<ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.66 3.13 3 7 3s7-1.34 7-3V6"/><path d="M5 12v6c0 1.66 3.13 3 7 3s7-1.34 7-3v-6"/>`,
   check:`<circle cx="12" cy="12" r="9"/><polyline points="8 12.5 11 15.5 16 9"/>`,
   tool:`<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/>`,
-  gauge:`<path d="M4 15a8 8 0 1 1 16 0"/><line x1="12" y1="15" x2="15.3" y2="10.7"/><circle cx="12" cy="15" r="1"/>`
+  gauge:`<path d="M4 15a8 8 0 1 1 16 0"/><line x1="12" y1="15" x2="15.3" y2="10.7"/><circle cx="12" cy="15" r="1"/>`,
+  gate:`<path d="M4 7v10h5a5 5 0 0 0 0-10Z"/><line x1="2" y1="9" x2="4" y2="9"/><line x1="2" y1="15" x2="4" y2="15"/><line x1="14" y1="12" x2="20" y2="12"/>`,
+  binary:`<rect x="3" y="8" width="4" height="8" rx="2"/><line x1="10.5" y1="8" x2="10.5" y2="16"/><rect x="14" y="8" width="4" height="8" rx="2"/><line x1="20" y1="8" x2="20" y2="16"/>`,
+  filter:`<path d="M4 5h16l-6.5 7.5v5.5l-3 1.5v-7Z"/>`,
+  estimate:`<circle cx="15" cy="9" r="2.6"/><circle cx="15" cy="9" r="5.2"/><path d="M3 19c3-4 6-6 8.5-7.5" stroke-dasharray="2 2"/>`,
+  compass:`<circle cx="12" cy="12" r="9"/><path d="M14.5 9.5 12.5 12.5 9.5 14.5 11.5 11.5Z"/>`,
+  hil:`<rect x="8" y="8" width="8" height="8" rx="1.5"/><path d="M17.5 6.5a8 8 0 1 1 0 11"/><polyline points="16.2 5.6 17.7 6.3 17.2 7.8"/>`,
+  drafting:`<circle cx="12" cy="6" r="1.6"/><line x1="12" y1="7.6" x2="7" y2="20"/><line x1="12" y1="7.6" x2="15" y2="15"/><line x1="4" y1="20" x2="9" y2="20"/>`,
+  mechanism:`<circle cx="8.5" cy="9" r="4"/><circle cx="8.5" cy="9" r="1"/><circle cx="16" cy="15.5" r="3"/><circle cx="16" cy="15.5" r="0.8"/><line x1="11.5" y1="11.5" x2="13.5" y2="13.5"/>`,
+  wiring:`<path d="M9 3v4M13 3v4M8 7h6a2 2 0 0 1 2 2v2a4 4 0 0 1-4 4h0a4 4 0 0 1-4-4V9a2 2 0 0 1 2-2Z"/><line x1="11" y1="15" x2="11" y2="18"/><rect x="7" y="18" width="8" height="4" rx="1"/>`,
+  probe:`<circle cx="7" cy="17" r="2"/><line x1="8.5" y1="15.5" x2="19" y2="5"/><polyline points="16 5 19 5 19 8"/>`,
+  pipeline:`<line x1="2" y1="12" x2="14" y2="12"/><polyline points="11 9 14 12 11 15"/><circle cx="19" cy="12" r="3.2"/><polyline points="17.3 12 18.5 13.2 21 10.5"/>`,
+  vcs:`<circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="17" cy="12" r="2"/><line x1="6" y1="7" x2="6" y2="17"/><path d="M6 9c0 4 4 5 9 3"/>`,
+  integration:`<path d="M7 15a3.5 3.5 0 0 1 .3-7A5 5 0 0 1 17 8.6a3.2 3.2 0 0 1-.5 6.4H7Z"/><line x1="9.5" y1="15" x2="9.5" y2="19"/><line x1="14.5" y1="15" x2="14.5" y2="19"/>`,
+  doc:`<path d="M6 3h9l3 3v15H6Z"/><path d="M15 3v3h3"/><line x1="9" y1="11" x2="15" y2="11"/><line x1="9" y1="14.5" x2="15" y2="14.5"/><line x1="9" y1="18" x2="13" y2="18"/>`,
+  team:`<circle cx="9" cy="8" r="3"/><path d="M3.5 20c0-3.5 2.5-5.5 5.5-5.5s5.5 2 5.5 5.5"/><circle cx="17" cy="9" r="2.4"/><path d="M14.5 20c.2-2.7 1.8-4.3 4-4.6"/>`,
+  chat:`<path d="M4 5h16v10H10l-4 4v-4H4Z"/>`,
+  book:`<path d="M12 6c-1.8-1.3-4.2-2-7-2v13c2.8 0 5.2.7 7 2 1.8-1.3 4.2-2 7-2V4c-2.8 0-5.2.7-7 2Z"/><line x1="12" y1="6" x2="12" y2="19"/>`,
+  adapt:`<path d="M4 12a8 8 0 0 1 13.5-5.7"/><polyline points="17 3 17.5 6.5 14 6.3"/><path d="M20 12a8 8 0 0 1-13.5 5.7"/><polyline points="7 21 6.5 17.5 10 17.7"/>`,
+  product:`<rect x="3" y="5" width="18" height="14" rx="1.5"/><line x1="3" y1="9" x2="21" y2="9"/><circle cx="6" cy="7" r=".6"/><circle cx="8.2" cy="7" r=".6"/><circle cx="10.4" cy="7" r=".6"/>`,
+  rlloop:`<circle cx="7" cy="12" r="3"/><circle cx="17" cy="12" r="3"/><path d="M10 10.5c2-2 5-2 6.3-.3"/><polyline points="15 9 16.3 9.7 15.6 11.2"/><path d="M14 13.5c-2 2-5 2-6.3.3"/><polyline points="9 15 7.7 14.3 8.4 12.8"/>`,
+  tuning:`<path d="M4 18c4-1 6-8 8-8s4 7 8 8"/><circle cx="12" cy="10" r="1.3"/>`,
+  agentic:`<path d="M12 3l1.2 3.2L16 7l-2.8.8L12 11l-1.2-3.2L8 7l2.8-.8Z"/><path d="M5 16a4 4 0 0 1 6-3.5"/><path d="M19 16a4 4 0 0 1-6 3.5"/>`,
+  matrix:`<rect x="4" y="4" width="16" height="16" rx="1.5"/><circle cx="8.5" cy="8.5" r="1"/><circle cx="12" cy="8.5" r="1"/><circle cx="15.5" cy="8.5" r="1"/><circle cx="8.5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="15.5" cy="12" r="1"/><circle cx="8.5" cy="15.5" r="1"/><circle cx="12" cy="15.5" r="1"/><circle cx="15.5" cy="15.5" r="1"/>`
 };
-/* label text -> icon id. labels not listed here render as text-only (no clean unambiguous icon) */
+/* real brand marks (MIT-licensed single-path glyphs from the Simple Icons project,
+   https://simpleicons.org), rendered filled with currentColor rather than stroked --
+   used only for labels naming exactly one recognizable, logo-bearing technology */
+const BRAND_ICONS = {
+  python:`<path d="M14.25.18l.9.2.73.26.59.3.45.32.34.34.25.34.16.33.1.3.04.26.02.2-.01.13V8.5l-.05.63-.13.55-.21.46-.26.38-.3.31-.33.25-.35.19-.35.14-.33.1-.3.07-.26.04-.21.02H8.77l-.69.05-.59.14-.5.22-.41.27-.33.32-.27.35-.2.36-.15.37-.1.35-.07.32-.04.27-.02.21v3.06H3.17l-.21-.03-.28-.07-.32-.12-.35-.18-.36-.26-.36-.36-.35-.46-.32-.59-.28-.73-.21-.88-.14-1.05-.05-1.23.06-1.22.16-1.04.24-.87.32-.71.36-.57.4-.44.42-.33.42-.24.4-.16.36-.1.32-.05.24-.01h.16l.06.01h8.16v-.83H6.18l-.01-2.75-.02-.37.05-.34.11-.31.17-.28.25-.26.31-.23.38-.2.44-.18.51-.15.58-.12.64-.1.71-.06.77-.04.84-.02 1.27.05zm-6.3 1.98l-.23.33-.08.41.08.41.23.34.33.22.41.09.41-.09.33-.22.23-.34.08-.41-.08-.41-.23-.33-.33-.22-.41-.09-.41.09zm13.09 3.95l.28.06.32.12.35.18.36.27.36.35.35.47.32.59.28.73.21.88.14 1.04.05 1.23-.06 1.23-.16 1.04-.24.86-.32.71-.36.57-.4.45-.42.33-.42.24-.4.16-.36.09-.32.05-.24.02-.16-.01h-8.22v.82h5.84l.01 2.76.02.36-.05.34-.11.31-.17.29-.25.25-.31.24-.38.2-.44.17-.51.15-.58.13-.64.09-.71.07-.77.04-.84.01-1.27-.04-1.07-.14-.9-.2-.73-.25-.59-.3-.45-.33-.34-.34-.25-.34-.16-.33-.1-.3-.04-.25-.02-.2.01-.13v-5.34l.05-.64.13-.54.21-.46.26-.38.3-.32.33-.24.35-.2.35-.14.33-.1.3-.06.26-.04.21-.02.13-.01h5.84l.69-.05.59-.14.5-.21.41-.28.33-.32.27-.35.2-.36.15-.36.1-.35.07-.32.04-.28.02-.21V6.07h2.09l.14.01zm-6.47 14.25l-.23.33-.08.41.08.41.23.33.33.23.41.08.41-.08.33-.23.23-.33.08-.41-.08-.41-.23-.33-.33-.23-.41-.08-.41.08z"/>`,
+  typescript:`<path d="M1.125 0C.502 0 0 .502 0 1.125v21.75C0 23.498.502 24 1.125 24h21.75c.623 0 1.125-.502 1.125-1.125V1.125C24 .502 23.498 0 22.875 0zm17.363 9.75c.612 0 1.154.037 1.627.111a6.38 6.38 0 0 1 1.306.34v2.458a3.95 3.95 0 0 0-.643-.361 5.093 5.093 0 0 0-.717-.26 5.453 5.453 0 0 0-1.426-.2c-.3 0-.573.028-.819.086a2.1 2.1 0 0 0-.623.242c-.17.104-.3.229-.393.374a.888.888 0 0 0-.14.49c0 .196.053.373.156.529.104.156.252.304.443.444s.423.276.696.41c.273.135.582.274.926.416.47.197.892.407 1.266.628.374.222.695.473.963.753.268.279.472.598.614.957.142.359.214.776.214 1.253 0 .657-.125 1.21-.373 1.656a3.033 3.033 0 0 1-1.012 1.085 4.38 4.38 0 0 1-1.487.596c-.566.12-1.163.18-1.79.18a9.916 9.916 0 0 1-1.84-.164 5.544 5.544 0 0 1-1.512-.493v-2.63a5.033 5.033 0 0 0 3.237 1.2c.333 0 .624-.03.872-.09.249-.06.456-.144.623-.25.166-.108.29-.234.373-.38a1.023 1.023 0 0 0-.074-1.089 2.12 2.12 0 0 0-.537-.5 5.597 5.597 0 0 0-.807-.444 27.72 27.72 0 0 0-1.007-.436c-.918-.383-1.602-.852-2.053-1.405-.45-.553-.676-1.222-.676-2.005 0-.614.123-1.141.369-1.582.246-.441.58-.804 1.004-1.089a4.494 4.494 0 0 1 1.47-.629 7.536 7.536 0 0 1 1.77-.201zm-15.113.188h9.563v2.166H9.506v9.646H6.789v-9.646H3.375z"/>`,
+  flask:`<path d="M10.773 2.878c-.013 1.434.322 4.624.445 5.734l-8.558 3.83c-.56-.959-.98-2.304-1.237-3.38l-.06.027c-.205.09-.406.053-.494-.088l-.011-.018-.82-1.506c-.058-.105-.05-.252.024-.392a.78.78 0 0 1 .358-.331l9.824-4.207c.146-.064.299-.063.4.004.106.062.127.128.13.327Zm.68 7c.523 1.97.675 2.412.832 2.818l-7.263 3.7a19.35 19.35 0 0 1-1.81-2.83l8.24-3.689Zm12.432 8.786h.003c.283.402-.047.657-.153.698l-.947.37c.037.125.035.319-.217.414l-.736.287c-.229.09-.398-.059-.42-.2l-.025-.125c-4.427 1.784-7.94 1.685-10.696.647-1.981-.745-3.576-1.983-4.846-3.379l6.948-3.54c.721 1.431 1.586 2.454 2.509 3.178 2.086 1.638 4.415 1.712 5.793 1.563l-.047-.233c-.015-.077.007-.135.086-.165l.734-.288a.302.302 0 0 1 .342.086l.748-.288a.306.306 0 0 1 .341.086l.583.89Z"/>`,
+  arduino:`<path d="M18.087 6.146c-.3 0-.607.017-.907.069-2.532.367-4.23 2.239-5.18 3.674-.95-1.435-2.648-3.307-5.18-3.674a6.49 6.49 0 0 0-.907-.069C2.648 6.146 0 8.77 0 12s2.656 5.854 5.913 5.854c.3 0 .607-.017.916-.069 2.531-.376 4.23-2.247 5.18-3.683.949 1.436 2.647 3.307 5.18 3.683.299.043.607.069.915.069C21.344 17.854 24 15.23 24 12s-2.656-5.854-5.913-5.854zM6.53 15.734a3.837 3.837 0 0 1-.625.043c-2.148 0-3.889-1.7-3.889-3.777 0-2.085 1.749-3.777 3.898-3.777.208 0 .416.017.624.043 2.39.35 3.847 2.768 4.347 3.734-.508.974-1.974 3.384-4.355 3.734zm11.558.043c-.208 0-.416-.017-.624-.043-2.39-.35-3.856-2.768-4.347-3.734.491-.966 1.957-3.384 4.347-3.734.208-.026.416-.043.624-.043 2.149 0 3.89 1.7 3.89 3.777 0 2.085-1.75 3.777-3.89 3.777zm1.65-4.404v1.134h-1.205v1.182h-1.156v-1.182H16.17v-1.134h1.206V10.19h1.156v1.183h1.206zM4.246 12.498H7.82v-1.125H4.245v1.125z"/>`,
+  raspberrypi:`<path d="m19.8955 10.8961-.1726-.3028c.0068-2.1746-1.0022-3.061-2.1788-3.7348.356-.0938.7237-.1711.8245-.6182.6118-.1566.7397-.4398.8011-.7398.16-.1066.6955-.4061.6394-.9211.2998-.2069.4669-.4725.3819-.8487.3222-.3515.407-.6419.2702-.9096.3868-.4805.2152-.7295.05-.9817.2897-.5254.0341-1.0887-.7758-.9944-.3221-.4733-1.0244-.3659-1.133-.3637-.1215-.1519-.2819-.2821-.7755-.219-.3197-.2851-.6771-.2364-1.0458-.0964-.4378-.3403-.7275-.0675-1.0584.0356-.53-.1706-.6513.0631-.9117.1583-.5781-.1203-.7538.1416-1.0309.4182l-.3224-.0063c-.8719.5061-1.305 1.5366-1.4585 2.0664-.1536-.5299-.5858-1.5604-1.4575-2.0664l-.3223.0063C9.942.5014 9.7663.2394 9.1883.3597 8.9279.2646 8.807.0309 8.2766.2015c-.2172-.0677-.417-.2084-.6522-.2012l.0004.0002C7.5017.0041 7.369.049 7.2185.166c-.3688-.1401-.7262-.1887-1.0459.0964-.4936-.0631-.654.0671-.7756.219C5.2887.4791 4.5862.3717 4.264.845c-.8096-.0943-1.0655.4691-.7756.9944-.1653.2521-.3366.5013.05.9819-.1367.2677-.0519.5581.2703.9096-.085.3763.0822.6418.3819.8487-.0561.515.4795.8144.6394.9211.0614.3001.1894.5832.8011.7398.1008.4472.4685.5244.8245.6183-1.1766.6737-2.1856 1.56-2.1788 3.7348l-.1724.3028c-1.3491.8082-2.5629 3.4056-.6648 5.5167.124.6609.3319 1.1355.5171 1.6609.2769 2.117 2.0841 3.1082 2.5608 3.2255.6984.524 1.4423 1.0212 2.449 1.3696.949.964 1.977 1.3314 3.0107 1.3308.0152 0 .0306.0002.0457 0 1.0337.0006 2.0618-.3668 3.0107-1.3308 1.0067-.3483 1.7506-.8456 2.4491-1.3696.4766-.1173 2.2838-1.1085 2.5607-3.2255.1851-.5253.3931-1 .517-1.6609 1.8981-2.1113.6843-4.7089-.6649-5.517zm-1.0386-.3715c-.0704.8759-4.6354-3.0504-3.8472-3.1808 2.1391-.3558 3.9191.896 3.8472 3.1808zm-2.0155 4.3649c-1.1481.7409-2.8025.2626-3.6953-1.0681-.8928-1.3306-.6858-3.0101.4623-3.7509 1.1481-.7409 2.8025-.2627 3.6953 1.068.8927 1.3307.6858 3.0101-.4623 3.751zM13.6591 1.3721c.0396.1967.0843.321.1354.3577.2537-.272.4611-.5506.7878-.8123.0011.1537-.0776.3205.1169.4425.1752-.2356.4119-.4459.7263-.6244-.1514.2611-.026.3404.0554.4486.24-.2059.4681-.4144.9109-.5759-.121.1474-.2902.2914-.1108.4607.2473-.1544.496-.3086 1.0833-.4183-.1323.1475-.4059.295-.2401.4426.3104-.1186.6539-.2047 1.034-.2546-.182.1496-.3337.2963-.1846.4122.3323-.1022.7899-.2398 1.2372-.1212l-.2832.2849c-.0314.0382.6623.0297 1.1202.0364-.167.2321-.3375.4562-.437.8548.0454.0459.2723.0204.4862 0-.2194.4618-.6004.5783-.6893.776.134.1015.32.075.5232.006-.158.3254-.4892.5484-.7509.8123.0662.047.1818.075.4555.0425-.2418.257-.5339.492-.8802.7032.0614.0708.2722.0681.4678.0727-.3136.3069-.7173.466-1.0955.6668.1885.1288.3234.0988.4678.097-.2676.2198-.7225.3342-1.1448.4668.0803.1249.1607.1589.3324.194-.447.2473-1.0873.1343-1.2679.2607.0435.1243.1665.2053.3139.2728-.7197.0418-2.6879-.0262-3.0652-1.5156.7367-.8094 2.0813-1.7593 4.394-2.934-1.7994.6022-3.4229 1.405-4.7817 2.5096-1.5978-.7436-.4965-2.6197.283-3.3645zm-1.6126 5.3718c1.1329-.0123 2.5356.8325 2.53 1.6286-.005.7027-.9851 1.2715-2.5213 1.2607-1.5043-.0177-2.5172-.7148-2.5137-1.3957.003-.5603 1.2282-1.5263 2.505-1.4936zm-5.7646-.6006c.1717-.0351.252-.0692.3323-.194-.4223-.1327-.8772-.247-1.1448-.4668.1444.0018.2792.0318.4678-.097-.3783-.2008-.782-.3599-1.0956-.6668.1955-.0048.4064-.002.4677-.0728-.3462-.2113-.6383-.4463-.8801-.7033.2738.0325.3893.0045.4555-.0425-.2617-.264-.593-.487-.7509-.8123.2032.069.3892.0954.5232-.006-.089-.1977-.47-.3142-.6894-.776.214.0204.4409.0459.4863 0-.0994-.3985-.2698-.6226-.4369-.8547.4579-.0067 1.1516.0018 1.1202-.0364l-.2831-.2849c.4472-.1186.9049.019 1.2371.1213.1492-.1159-.0026-.2626-.1847-.4123.3801.05.7236.1361 1.034.2547.1659-.1476-.1076-.2951-.24-.4426.5872.1097.8361.2639 1.0833.4183.1794-.1694.0103-.3133-.1108-.4607.4428.1615.6709.37.911.5759.0814-.1082.2068-.1875.0554-.4486.3143.1785.5511.3888.7263.6244.1945-.122.1159-.2888.1169-.4426.3267.2618.534.5404.7879.8124.0511-.0366.0959-.161.1354-.3577.7794.7448 1.8807 2.6208.2831 3.3646-1.3589-1.1039-2.9817-1.9064-4.78-2.5086 2.3115 1.174 3.6556 2.1239 4.392 2.9328-.3773 1.4895-2.3455 1.5575-3.0651 1.5157.1473-.0676.2703-.1485.3139-.2728-.1806-.1264-.8209-.0134-1.2679-.2607zm2.8175 1.1334c.7881.1304-3.7769 4.0567-3.8472 3.1809-.0719-2.2846 1.7079-3.5367 3.8472-3.1809zm-4.847 8.7567c-1.1094-.8789-1.4668-3.4529.5901-4.6097 1.2394-.3273.4184 5.051-.5901 4.6097zm4.2656 4.5989c-.6257.3719-2.1452.2187-3.2252-1.3095-.7283-1.2823-.6345-2.5872-.123-2.9705.7648-.4589 1.9464.1609 2.8559 1.2003.7923.9405 1.1536 2.5927.4923 3.0797zm-1.2415-5.6086c-1.1481-.7409-1.3551-2.4203-.4623-3.7511.8928-1.3307 2.5472-1.8089 3.6952-1.068 1.1481.7409 1.3551 2.4203.4623 3.7509-.8926 1.3308-2.5471 1.809-3.6952 1.0682zm4.7948 8.2279c-1.3763.0584-2.7258-1.1105-2.7081-1.5157-.0206-.594 1.6758-1.0578 2.782-1.0306 1.1131-.0479 2.6068.3531 2.6097.8851.0184.5166-1.3547 1.6838-2.6836 1.6612zm2.7584-5.8578c.0081 1.3899-1.226 2.5225-2.7562 2.5299-1.5302.0073-2.7773-1.1135-2.7854-2.5033v-.0265c-.008-1.3899 1.2259-2.5226 2.7562-2.5299 1.5302-.0073 2.7773 1.1134 2.7853 2.5033a.7794.7794 0 0 1 .0001.0265zm3.855 2.0029c-1.186 1.6208-2.7916 1.684-3.3896 1.2325-.6255-.5811-.148-2.3854.7094-3.3747v-.0003c.9812-1.0912 2.0302-1.8037 2.7609-1.2469.4919.4828.7805 2.3008-.0807 3.3894zm1.0724-3.4301c-1.0086.4413-1.8298-4.9372-.5901-4.61 2.0568 1.1569 1.6994 3.731.5901 4.61zm-.0256-8.3279h.2985v-.5304h.2986c.1502 0 .2053.0624.2262.2052.0152.1088.0113.2395.0477.3253h.2984c-.0533-.0763-.0515-.2358-.0571-.3213-.0097-.1373-.0513-.2796-.1977-.3176v-.0037c.1502-.061.2149-.1807.2149-.341 0-.2048-.1539-.3738-.3974-.3738h-.732v1.3573zm.2985-1.1255h.3269c.1333 0 .2054.0573.2054.188 0 .1369-.0721.1942-.2054.1942H20.03v-.3822zm-1.0337.4633c0 .7009.5682 1.2694 1.2695 1.2694s1.2695-.5684 1.2695-1.2694c0-.7013-.5683-1.2697-1.2695-1.2697-.7013 0-1.2695.5684-1.2695 1.2697zm2.3275 0c0 .5845-.4737 1.058-1.058 1.058s-1.058-.4735-1.058-1.058c0-.5849.4737-1.058 1.058-1.058s1.058.4731 1.058 1.058z"/>`,
+  pytorch:`<path d="M12.005 0L4.952 7.053a9.865 9.865 0 000 14.022 9.866 9.866 0 0014.022 0c3.984-3.9 3.986-10.205.085-14.023l-1.744 1.743c2.904 2.905 2.904 7.634 0 10.538s-7.634 2.904-10.538 0-2.904-7.634 0-10.538l4.647-4.646.582-.665zm3.568 3.899a1.327 1.327 0 00-1.327 1.327 1.327 1.327 0 001.327 1.328A1.327 1.327 0 0016.9 5.226 1.327 1.327 0 0015.573 3.9z"/>`,
+  openai:`<path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/>`,
+  ros:`<path d="M2.807 0C1.353 0 .173 1.22.173 2.722c0 1.504 1.18 2.723 2.634 2.723 1.455 0 2.635-1.22 2.635-2.723S4.262 0 2.807 0zM12 0c-1.455 0-2.634 1.22-2.634 2.722 0 1.504 1.18 2.723 2.634 2.723 1.455 0 2.634-1.22 2.634-2.723S13.454 0 12 0zm9.193 0c-1.455 0-2.635 1.22-2.635 2.722 0 1.504 1.18 2.723 2.635 2.723 1.455 0 2.634-1.22 2.634-2.723S22.647 0 21.193 0zM2.807 9.277C1.353 9.277.173 10.497.173 12s1.18 2.722 2.634 2.722c1.455 0 2.635-1.219 2.635-2.722 0-1.504-1.18-2.723-2.635-2.723zm9.193 0c-1.455 0-2.634 1.22-2.634 2.723s1.18 2.722 2.634 2.722c1.455 0 2.634-1.219 2.634-2.722 0-1.504-1.18-2.723-2.634-2.723zm9.193 0c-1.455 0-2.635 1.22-2.635 2.723s1.18 2.722 2.635 2.722c1.455 0 2.634-1.219 2.634-2.722 0-1.504-1.18-2.723-2.634-2.723zM2.807 18.555c-1.454 0-2.634 1.22-2.634 2.722C.173 22.781 1.353 24 2.807 24c1.455 0 2.635-1.22 2.635-2.723s-1.18-2.722-2.635-2.722zm9.193 0c-1.455 0-2.634 1.22-2.634 2.722C9.366 22.781 10.546 24 12 24c1.455 0 2.634-1.22 2.634-2.723s-1.18-2.722-2.634-2.722zm9.193 0c-1.455 0-2.635 1.22-2.635 2.722 0 1.504 1.18 2.723 2.635 2.723 1.455 0 2.634-1.22 2.634-2.723s-1.18-2.722-2.634-2.722z"/>`
+};
+/* label text -> icon id (looked up in ICONS, or BRAND_ICONS if the id matches there).
+   labels not listed here render as text-only (no clean unambiguous icon) */
 const ICON_FOR = {
-  "Hands-on builds":"tool","Embedded C/C++":"chip","Python / TS":"code","ROS2":"bot",
-  "Isaac Sim / RL":"cube","Full-stack SaaS":"layers","Test-driven":"check",
+  "Hands-on builds":"tool","Embedded C/C++":"chip","Python / TS":"code","ROS2":"ros",
+  "Isaac Sim / RL":"cube","Full-stack SaaS":"product","Test-driven":"check",
   "Sensor fusion":"radar","Path planning":"route","Isaac Sim":"cube","Closed-loop control":"waveform",
-  "CAD (Fusion/SW)":"cube","C/C++":"code","Arduino":"chip","FPGA / Verilog":"chip","Raspberry Pi":"chip",
-  "Sensor arrays":"radar","Power & wiring":"tool","Bench debugging":"tool",
-  "Advanced control":"waveform","Signal filtering":"waveform","Sensor calibration":"radar",
-  "State estimation":"waveform","A* + RL policy":"route","MATLAB":"code",
-  "RL":"brain","Isaac Sim / Isaac Lab":"cube","SAC / PPO (skrl)":"brain","Computer vision":"eye",
-  "LLMs in production":"brain","Evaluation pipelines":"gauge","AI-native workflow":"brain",
-  "Python":"code","TypeScript":"code","React · Next.js":"layers","Flask":"layers",
+  "CAD (Fusion/SW)":"drafting","C/C++":"code","Arduino":"arduino","FPGA / Verilog":"gate","Raspberry Pi":"raspberrypi",
+  "Sensor arrays":"radar","Power & wiring":"wiring","Bench debugging":"probe",
+  "Advanced control":"waveform","Signal filtering":"filter","Sensor calibration":"radar",
+  "State estimation":"estimate","A* + RL policy":"route","MATLAB":"matrix",
+  "RL":"rlloop","Isaac Sim / Isaac Lab":"cube","SAC / PPO (skrl)":"tuning","Computer vision":"eye",
+  "LLMs in production":"openai","Evaluation pipelines":"pipeline","AI-native workflow":"agentic",
+  "Python":"python","TypeScript":"typescript","React · Next.js":"layers","Flask":"flask",
   "Postgres · Supabase":"database","pytest · Vitest · CI":"check","Performance profiling":"gauge",
-  "C / C++ · Arduino":"chip","FPGA · Verilog / SystemVerilog":"chip","Raspberry Pi · microcontrollers":"chip",
-  "Sensor integration & calibration":"radar","Power wiring & junction boxes":"tool","Assembly":"chip",
-  "Sensor fusion & path planning":"radar","HIL simulation":"cube","Mechanism design":"cube",
-  "Advanced control systems":"waveform","Signal processing & filtering":"waveform",
-  "GNC fundamentals":"waveform","Radar & antenna coursework":"radar",
-  "RL (SAC/PPO)":"brain","skrl · PyTorch":"brain","Computer vision · MediaPipe":"eye",
-  "LLM integration (OpenAI)":"brain","AI-native / agentic workflows":"brain",
+  "C / C++ · Arduino":"chip","FPGA · Verilog / SystemVerilog":"gate","Raspberry Pi · microcontrollers":"raspberrypi",
+  "Sensor integration & calibration":"radar","Power wiring & junction boxes":"wiring","Assembly":"binary",
+  "Sensor fusion & path planning":"radar","HIL simulation":"hil","Mechanism design":"mechanism",
+  "Advanced control systems":"waveform","Signal processing & filtering":"filter",
+  "GNC fundamentals":"compass","Radar & antenna coursework":"radar",
+  "RL (SAC/PPO)":"rlloop","skrl · PyTorch":"pytorch","Computer vision · MediaPipe":"eye",
+  "LLM integration (OpenAI)":"openai","AI-native / agentic workflows":"agentic",
   "React · Next.js · Flask":"layers","Postgres · Supabase · Redis":"database",
-  "pytest · Vitest · Playwright · CI":"check","Test-driven & methodical":"check"
+  "pytest · Vitest · Playwright · CI":"check","Test-driven & methodical":"check",
+  "Documents thoroughly":"doc","Led teams to delivery":"team","Client-facing comms":"chat",
+  "Self-taught: ROS2, FPGA, Isaac":"book","Adaptable across the stack":"adapt"
 };
 function icon(label){
   const id = ICON_FOR[label];
   if(!id) return "";
+  if(BRAND_ICONS[id]){
+    return `<svg class="ic ic-brand" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">${BRAND_ICONS[id]}</svg>`;
+  }
   return `<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${ICONS[id]}</svg>`;
 }
 
@@ -623,8 +562,30 @@ const tabsEl = document.getElementById("tabs");
 const briefEl = document.getElementById("brief");
 const projEl = document.getElementById("projects");
 const projNote = document.getElementById("proj-note");
+const projCounterEl = document.getElementById("proj-counter");
 const skillsEl = document.getElementById("skills");
+const skillDotsEl = document.getElementById("skill-dots");
+const skNoteEl = document.getElementById("sk-note");
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const hoverCapable = window.matchMedia("(hover:hover)");
+
+/* ---------- projects carousel state ---------- */
+const PROJ_AUTOPLAY_MS = 5000;   /* normal autoplay interval */
+const PROJ_RESUME_DELAY_MS = 6000; /* delay before autoplay resumes after a manual arrow click */
+let projOrder = [];
+let projIndex = 0;
+let projAutoplayTimer = null;
+let projResumeTimer = null;
+/* true once the user has explicitly hit the pause button; every other
+   autoplay-start path (hover-leave, arrow-click auto-resume) must check this
+   before restarting the timer — only the play/pause button itself is allowed
+   to flip it and start/stop autoplay unconditionally */
+let projManuallyPaused = false;
+
+/* ---------- skills spotlight state ---------- */
+const SKILL_CYCLE_MS = 3200; /* interval between spotlight advances in overview mode */
+let skillCycleTimer = null;
+let skillCycleIndex = 0;
 
 Object.entries(MODES).forEach(([id,m],i)=>{
   const b=document.createElement("button");
@@ -632,7 +593,15 @@ Object.entries(MODES).forEach(([id,m],i)=>{
   b.setAttribute("aria-selected", i===0 ? "true":"false");
   b.setAttribute("tabindex", i===0 ? "0":"-1");
   b.innerHTML=`<span class="num">${m.n}</span>${m.label}`;
-  b.addEventListener("click",()=>{switchMode(id); closeMobileMenu(true);});
+  b.addEventListener("click",(e)=>{
+    switchMode(id);
+    /* MouseEvent.detail is 0 only for synthetic clicks from keyboard activation
+       (Enter/Space on a focused button); it is >=1 for real pointer/touch taps.
+       Only re-focus (and thus show) the toggle's :focus-visible ring when the
+       tab was actually selected via keyboard — otherwise a touch tap on a tab
+       left the toggle looking permanently "lit" with a lingering focus ring. */
+    closeMobileMenu(e.detail===0);
+  });
   tabsEl.appendChild(b);
 });
 const underline=document.createElement("span");
@@ -659,6 +628,7 @@ tabsEl.addEventListener("keydown",e=>{
 
 /* ---------- mobile disclosure (hamburger) ---------- */
 const selector=document.getElementById("selector");
+const selectorInnerEl=document.getElementById("selector-inner");
 const menuToggle=document.getElementById("menu-toggle");
 const mobileMenuQuery=window.matchMedia("(max-width:640px)");
 
@@ -683,16 +653,234 @@ document.addEventListener("keydown",e=>{
 });
 mobileMenuQuery.addEventListener("change",e=>{ if(!e.matches) closeMobileMenu(false); });
 
-function renderSkills(lit){
-  skillsEl.innerHTML="";
-  SKILLS.forEach(g=>{
-    const d=document.createElement("div");
-    d.className="skill-group"+(lit.includes(g.id)?" lit":"");
-    d.innerHTML=`<h4>${g.title}</h4><ul>${g.items.map(i=>`<li>${icon(i)}<span>${i}</span></li>`).join("")}</ul>`;
-    skillsEl.appendChild(d);
+/* ---------- desktop tab-row scroll-fade affordance ----------
+   Toggles can-scroll-left/right on #selector based on the *real* scrollWidth
+   vs clientWidth of the tab row, so the fade only ever shows on the side that
+   still has hidden content (never a static fade left lit on a fully-scrolled
+   edge). Below 640px the row is a vertical dropdown (overflow-x:visible), so
+   this is skipped there — the .scroll-fade CSS is itself gated to >640px too. */
+function updateScrollFade(){
+  if(mobileMenuQuery.matches){
+    selector.classList.remove("can-scroll-left","can-scroll-right");
+    return;
+  }
+  const maxScroll=selectorInnerEl.scrollWidth-selectorInnerEl.clientWidth;
+  if(maxScroll<=1){
+    selector.classList.remove("can-scroll-left","can-scroll-right");
+    return;
+  }
+  const atStart=selectorInnerEl.scrollLeft<=1;
+  const atEnd=selectorInnerEl.scrollLeft>=maxScroll-1;
+  selector.classList.toggle("can-scroll-left", !atStart);
+  selector.classList.toggle("can-scroll-right", !atEnd);
+}
+selectorInnerEl.addEventListener("scroll", updateScrollFade, {passive:true});
+window.addEventListener("resize", updateScrollFade);
+mobileMenuQuery.addEventListener("change", updateScrollFade);
+updateScrollFade();
+
+/* ---------- projects carousel controls (bound once) ---------- */
+const projCarouselEl = document.getElementById("proj-carousel");
+const projPlayPauseBtn = document.getElementById("proj-playpause");
+const projPauseIcon = projPlayPauseBtn.querySelector(".ppi-pause");
+const projPlayIcon = projPlayPauseBtn.querySelector(".ppi-play");
+document.getElementById("proj-prev").addEventListener("click",()=>stepProj(-1));
+document.getElementById("proj-next").addEventListener("click",()=>stepProj(1));
+projPlayPauseBtn.addEventListener("click", onProjPlayPauseClick);
+projCarouselEl.addEventListener("mouseenter", onProjMouseEnter);
+projCarouselEl.addEventListener("mouseleave", onProjMouseLeave);
+
+/* ---------- projects carousel ---------- */
+function renderProjCards(id, order){
+  projEl.innerHTML = "";
+  order.forEach((pid,idx)=>{
+    const p = PROJECTS[pid];
+    const card = document.createElement("article");
+    card.className = "pcard fade";
+    card.style.animationDelay = (idx*40)+"ms";
+    card.setAttribute("aria-hidden", idx===0 ? "false" : "true");
+    card.innerHTML = `
+      <div class="p-top"><div class="p-title">${p.title}</div><div class="p-kind">${p.kind}</div></div>
+      <div class="p-note">${p.notes[id]||p.notes.overview}</div>
+      <p class="p-desc">${p.desc}</p>
+      <div class="p-metrics">${p.metrics.map(([v,l])=>`<span class="metric"><b>${v}</b> ${l}</span>`).join("")}</div>
+      <div class="p-foot"><span class="p-tags">${p.tags}</span>${p.link?`<a class="p-link" href="${p.link}" target="_blank" rel="noopener noreferrer">View source <span class="arr">↗</span></a>`:`<a class="p-link" href="mailto:rakan132546@gmail.com?subject=${encodeURIComponent("Re: "+p.title)}">${p.linkNote||"Details on request"} <span class="arr">→</span></a>`}</div>`;
+    projEl.appendChild(card);
   });
 }
+function updateProjPosition(animate=true){
+  /* suppress the CSS transition for a hard reset (mode switch) so the new
+     mode's slide 1 doesn't visibly slide in from wherever the old carousel
+     was parked */
+  if(!animate) projEl.style.transition = "none";
+  projEl.style.transform = `translateX(-${projIndex*100}%)`;
+  if(!animate){ void projEl.offsetWidth; projEl.style.transition = ""; }
+  projEl.querySelectorAll(".pcard").forEach((c,idx)=>{
+    const hidden = idx!==projIndex;
+    c.setAttribute("aria-hidden", hidden ? "true":"false");
+    if(hidden) c.setAttribute("inert",""); else c.removeAttribute("inert");
+  });
+  projCounterEl.textContent = `${String(projIndex+1).padStart(2,"0")} / ${String(projOrder.length).padStart(2,"0")}`;
+}
+function stopProjAutoplay(){
+  if(projAutoplayTimer){ clearInterval(projAutoplayTimer); projAutoplayTimer=null; }
+}
+function clearProjResumeTimer(){
+  if(projResumeTimer){ clearTimeout(projResumeTimer); projResumeTimer=null; }
+}
+function startProjAutoplay(intervalMs){
+  stopProjAutoplay();
+  if(reducedMotion.matches || projOrder.length<2) return;
+  projAutoplayTimer = setInterval(()=>{
+    projIndex = (projIndex+1) % projOrder.length;
+    updateProjPosition();
+  }, intervalMs);
+}
+function stepProj(dir){
+  if(!projOrder.length) return;
+  projIndex = (projIndex + dir + projOrder.length) % projOrder.length;
+  updateProjPosition();
+  clearProjResumeTimer();
+  stopProjAutoplay();
+  syncProjPlayPauseUI();
+  if(!reducedMotion.matches){
+    projResumeTimer = setTimeout(()=>{
+      if(!projManuallyPaused) startProjAutoplay(PROJ_AUTOPLAY_MS);
+      syncProjPlayPauseUI();
+    }, PROJ_RESUME_DELAY_MS);
+  }
+}
+function onProjMouseEnter(){
+  /* hover means "let me look" — fully pause (not just slow) while the pointer
+     is over the carousel; resumes fresh on mouseleave unless manually paused */
+  if(!hoverCapable.matches || reducedMotion.matches) return;
+  clearProjResumeTimer();
+  stopProjAutoplay();
+  syncProjPlayPauseUI();
+}
+function onProjMouseLeave(){
+  if(!hoverCapable.matches || reducedMotion.matches) return;
+  clearProjResumeTimer();
+  if(!projManuallyPaused) startProjAutoplay(PROJ_AUTOPLAY_MS);
+  syncProjPlayPauseUI();
+}
+/* ---------- projects play/pause button ----------
+   single source of truth for "is playing" is projAutoplayTimer itself (not a
+   separate flag), so the icon/aria-label can never drift from what's actually
+   running. projManuallyPaused only gates *other* autoplay-start paths so a
+   manual pause survives hover-leave and arrow-click auto-resume. */
+function syncProjPlayPauseUI(){
+  const isPlaying = projAutoplayTimer !== null;
+  projPlayPauseBtn.setAttribute("aria-label", isPlaying ? "Pause autoplay" : "Play autoplay");
+  projPauseIcon.hidden = !isPlaying;
+  projPlayIcon.hidden = isPlaying;
+}
+function onProjPlayPauseClick(){
+  /* the one control allowed to override projManuallyPaused unconditionally */
+  projManuallyPaused = !projManuallyPaused;
+  clearProjResumeTimer();
+  if(projManuallyPaused) stopProjAutoplay();
+  else startProjAutoplay(PROJ_AUTOPLAY_MS);
+  syncProjPlayPauseUI();
+}
+function initProjCarousel(id, order){
+  clearProjResumeTimer();
+  stopProjAutoplay();
+  projOrder = order;
+  projIndex = 0;
+  /* a pause on one mode's carousel shouldn't silently carry over and confuse
+     the user after they switch to a different mode */
+  projManuallyPaused = false;
+  renderProjCards(id, order);
+  updateProjPosition(false);
+  startProjAutoplay(PROJ_AUTOPLAY_MS);
+  syncProjPlayPauseUI();
+}
 
+/* ---------- skills matrix ---------- */
+function buildSkillGroupEl(g, lit){
+  const d = document.createElement("div");
+  d.className = "skill-group"+(lit?" lit":"");
+  d.innerHTML = `<h4>${g.title}</h4><ul>${g.items.map(i=>`<li>${icon(i)}<span>${i}</span></li>`).join("")}</ul>`;
+  return d;
+}
+function stopSkillCycle(){
+  if(skillCycleTimer){ clearInterval(skillCycleTimer); skillCycleTimer=null; }
+}
+function applySkillLit(index){
+  skillsEl.querySelectorAll(".skill-group").forEach((g,idx)=>g.classList.toggle("lit", idx===index));
+  skillDotsEl.querySelectorAll(".skill-dot").forEach((d,idx)=>d.classList.toggle("active", idx===index));
+}
+function startSkillCycle(){
+  stopSkillCycle();
+  if(reducedMotion.matches) return;
+  skillCycleTimer = setInterval(()=>{
+    skillCycleIndex = (skillCycleIndex+1) % SKILLS.length;
+    applySkillLit(skillCycleIndex);
+  }, SKILL_CYCLE_MS);
+}
+function renderExperience(){
+  const el = document.getElementById("xp");
+  el.innerHTML = EXPERIENCE.map((x,i)=>
+    `<div class="xp-row reveal"${i===EXPERIENCE.length-1?' style="border-bottom:none"':""}>
+      <div class="xp-when">${x.when}</div>
+      <div>
+        <div class="xp-role">${x.role} · <span class="xp-org">${x.org}</span></div>
+        <p class="xp-body">${x.body}</p>
+      </div>
+    </div>`).join("");
+}
+function renderEducation(){
+  const el = document.getElementById("edu");
+  el.innerHTML = `<div><b>${EDUCATION.degree}</b><br>${EDUCATION.school} · ${EDUCATION.when}</div>
+    <div class="mono">${EDUCATION.detail}</div>`;
+}
+function renderSkillDots(){
+  skillDotsEl.innerHTML = "";
+  SKILLS.forEach((g,idx)=>{
+    const dot = document.createElement("button");
+    dot.type = "button";
+    dot.className = "skill-dot"+(idx===0?" active":"");
+    dot.setAttribute("aria-label","Highlight "+g.title);
+    dot.addEventListener("click",()=>{
+      skillCycleIndex = idx;
+      applySkillLit(idx);
+      startSkillCycle();
+    });
+    skillDotsEl.appendChild(dot);
+  });
+}
+function renderSkillsOverview(){
+  skillsEl.className = "skills";
+  skillsEl.innerHTML = "";
+  skillCycleIndex = 0;
+  SKILLS.forEach((g,idx)=>skillsEl.appendChild(buildSkillGroupEl(g, idx===0)));
+  renderSkillDots();
+  startSkillCycle();
+  skNoteEl.textContent = "";
+}
+function renderSkillsSingle(groupId){
+  skillDotsEl.innerHTML = "";
+  skillsEl.className = "skills single";
+  skillsEl.innerHTML = "";
+  const g = SKILLS.find(s=>s.id===groupId) || SKILLS[0];
+  skillsEl.appendChild(buildSkillGroupEl(g, true));
+  skNoteEl.textContent = "Only the group relevant to this mode is shown.";
+}
+function renderSkills(id, m){
+  stopSkillCycle();
+  if(m.skills.length===0) renderSkillsOverview();
+  else renderSkillsSingle(m.skills[0]);
+}
+
+/* which generated résumé variant (see scripts/generate-resumes.js) suits each mode */
+const RESUME_FOR = {overview:"general",robotics:"hardware",embedded:"hardware",control:"hardware",ai:"ai",software:"software"};
+const RESUME_FILES = {
+  general:"resumes/Rakan_Eyad_Resume.pdf",
+  hardware:"resumes/Rakan_Eyad_Resume_Hardware.pdf",
+  ai:"resumes/Rakan_Eyad_Resume_AI.pdf",
+  software:"resumes/Rakan_Eyad_Resume_Software.pdf"
+};
 function setMode(id, updateHash){
   const m=MODES[id]; if(!m) return;
   Object.keys(MODES).forEach(k=>{
@@ -702,26 +890,15 @@ function setMode(id, updateHash){
     t.setAttribute("tabindex", on?"0":"-1");
   });
   briefEl.className="brief fade";
+  const resumeVariant = RESUME_FOR[id] || "general";
   briefEl.innerHTML=`<div class="eyebrow">${m.eyebrow}</div>
     <h2 class="headline">${m.headline}</h2>
     <p class="lede">${m.lede}</p>
-    <div class="chips">${m.chips.map(c=>`<span class="chip">${icon(c)}<span>${c}</span></span>`).join("")}</div>`;
+    <div class="chips">${m.chips.map(c=>`<span class="chip">${icon(c)}<span>${c}</span></span>`).join("")}</div>
+    <a class="resume-dl" href="${RESUME_FILES[resumeVariant]}" download>Download ${resumeVariant==="general"?"résumé":"tailored résumé"} <span class="arr">↓</span></a>`;
   projNote.textContent=m.note;
-  projEl.innerHTML="";
-  m.order.forEach((pid,idx)=>{
-    const p=PROJECTS[pid];
-    const card=document.createElement("article");
-    card.className="pcard fade"+(idx===0?" feature":"");
-    card.style.animationDelay=(idx*40)+"ms";
-    card.innerHTML=`
-      <div class="p-top"><div class="p-title">${p.title}</div><div class="p-kind">${p.kind}</div></div>
-      <div class="p-note">${p.notes[id]||p.notes.overview}</div>
-      <p class="p-desc">${p.desc}</p>
-      <div class="p-metrics">${p.metrics.map(([v,l])=>`<span class="metric"><b>${v}</b> ${l}</span>`).join("")}</div>
-      <div class="p-foot"><span class="p-tags">${p.tags}</span>${p.link?`<a class="p-link" href="${p.link}">View source <span class="arr">↗</span></a>`:`<span class="p-tags">${p.linkNote||"Details on request"}</span>`}</div>`;
-    projEl.appendChild(card);
-  });
-  renderSkills(m.skills);
+  initProjCarousel(id, m.order);
+  renderSkills(id, m);
   positionUnderline();
   const activeTab=document.getElementById("tab-"+id);
   if(activeTab.scrollIntoView) activeTab.scrollIntoView({block:"nearest",inline:"nearest"});
@@ -747,6 +924,9 @@ new IntersectionObserver(([e])=>{
   selector.classList.toggle("stuck", !e.isIntersecting);
 }).observe(sentinel);
 
+renderExperience();
+renderEducation();
+
 /* scroll reveals */
 const revealIO=new IntersectionObserver(entries=>{
   entries.forEach(e=>{
@@ -758,7 +938,7 @@ document.querySelectorAll(".reveal").forEach(el=>revealIO.observe(el));
 const initial = location.hash.replace("#","");
 setMode(MODES[initial] ? initial : "overview", false);
 window.addEventListener("resize",positionUnderline);
-if(document.fonts && document.fonts.ready) document.fonts.ready.then(positionUnderline);
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=>{ positionUnderline(); updateScrollFade(); });
 </script>
 </body>
 </html>
