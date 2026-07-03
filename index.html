@@ -121,6 +121,46 @@ button.tab .num{color:var(--copper);margin-right:7px;font-weight:600}
   transition:transform .35s var(--ease-out),width .35s var(--ease-out);
 }
 
+/* ---- mobile disclosure (hamburger) ---- */
+.menu-toggle{display:none}
+@media(max-width:640px){
+  .selector-inner{overflow-x:visible;position:relative}
+  .menu-toggle{
+    display:flex;align-items:center;justify-content:center;
+    width:44px;height:44px;margin-left:auto;flex:none;
+    background:var(--card);border:1px solid var(--rule);border-radius:var(--radius);
+    cursor:pointer;box-shadow:var(--shadow-1);
+    transition:border-color .2s var(--ease-out),background .2s var(--ease-out);
+  }
+  .menu-toggle:hover{border-color:var(--mask)}
+  .menu-toggle[aria-expanded="true"]{border-color:var(--mask);background:var(--mask-soft)}
+  .menu-toggle svg{overflow:visible}
+  .menu-toggle .bar{
+    stroke:var(--ink);stroke-width:2;stroke-linecap:square;
+    transform-box:fill-box;transform-origin:center;
+    transition:transform .3s var(--ease-out),opacity .2s var(--ease-out);
+  }
+  .menu-toggle[aria-expanded="true"] .bar-top{transform:translateY(5px) rotate(45deg)}
+  .menu-toggle[aria-expanded="true"] .bar-mid{opacity:0}
+  .menu-toggle[aria-expanded="true"] .bar-bot{transform:translateY(-5px) rotate(-45deg)}
+
+  [role="tablist"]{
+    display:none;flex-direction:column;
+    position:absolute;top:100%;left:0;right:0;
+    background:var(--card);border:1px solid var(--rule);border-top:none;
+    border-radius:0 0 var(--radius) var(--radius);
+    box-shadow:var(--shadow-2);max-height:calc(100vh - 140px);overflow-y:auto;
+    z-index:60;
+  }
+  .selector.menu-open [role="tablist"]{display:flex}
+  button.tab{
+    width:100%;text-align:left;min-height:44px;
+    border-right:none;border-bottom:1px solid var(--rule);
+  }
+  button.tab:last-of-type{border-bottom:none}
+  .tab-underline{display:none}
+}
+
 /* ============ mode brief ============ */
 .brief{padding:60px 0 48px}
 .eyebrow{
@@ -265,6 +305,13 @@ footer{border-top:2px solid var(--ink);background:var(--card);margin-top:20px}
 <div class="selector" id="selector">
   <div class="wrap selector-inner">
     <span class="sel-label" id="mode-label">Operating mode</span>
+    <button type="button" class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="tabs" aria-label="Toggle mode menu">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+        <line class="bar bar-top" x1="3" y1="7" x2="21" y2="7"></line>
+        <line class="bar bar-mid" x1="3" y1="12" x2="21" y2="12"></line>
+        <line class="bar bar-bot" x1="3" y1="17" x2="21" y2="17"></line>
+      </svg>
+    </button>
     <div role="tablist" aria-labelledby="mode-label" id="tabs"></div>
   </div>
 </div>
@@ -530,7 +577,7 @@ Object.entries(MODES).forEach(([id,m],i)=>{
   b.setAttribute("aria-selected", i===0 ? "true":"false");
   b.setAttribute("tabindex", i===0 ? "0":"-1");
   b.innerHTML=`<span class="num">${m.n}</span>${m.label}`;
-  b.addEventListener("click",()=>switchMode(id));
+  b.addEventListener("click",()=>{switchMode(id); closeMobileMenu(true);});
   tabsEl.appendChild(b);
 });
 const underline=document.createElement("span");
@@ -554,6 +601,32 @@ tabsEl.addEventListener("keydown",e=>{
   if(e.key==="End") next=ids.length-1;
   if(next!==null){e.preventDefault(); switchMode(ids[next]); document.getElementById("tab-"+ids[next]).focus();}
 });
+
+/* ---------- mobile disclosure (hamburger) ---------- */
+const selector=document.getElementById("selector");
+const menuToggle=document.getElementById("menu-toggle");
+const mobileMenuQuery=window.matchMedia("(max-width:640px)");
+
+function openMobileMenu(){
+  selector.classList.add("menu-open");
+  menuToggle.setAttribute("aria-expanded","true");
+}
+function closeMobileMenu(focusToggle){
+  selector.classList.remove("menu-open");
+  menuToggle.setAttribute("aria-expanded","false");
+  if(focusToggle) menuToggle.focus();
+}
+menuToggle.addEventListener("click",()=>{
+  if(selector.classList.contains("menu-open")) closeMobileMenu(false);
+  else openMobileMenu();
+});
+document.addEventListener("click",e=>{
+  if(selector.classList.contains("menu-open") && !selector.contains(e.target)) closeMobileMenu(false);
+});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape" && selector.classList.contains("menu-open")) closeMobileMenu(true);
+});
+mobileMenuQuery.addEventListener("change",e=>{ if(!e.matches) closeMobileMenu(false); });
 
 function renderSkills(lit){
   skillsEl.innerHTML="";
@@ -614,7 +687,6 @@ function switchMode(id){
 }
 
 /* sticky selector shadow */
-const selector=document.getElementById("selector");
 const sentinel=document.getElementById("stick-sentinel");
 new IntersectionObserver(([e])=>{
   selector.classList.toggle("stuck", !e.isIntersecting);
