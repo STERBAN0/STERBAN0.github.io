@@ -239,12 +239,12 @@ section{padding:40px 0 48px;scroll-margin-top:70px}
 .proj-arrow{
   appearance:none;cursor:pointer;background:var(--card);color:var(--ink-soft);
   border:1px solid var(--rule);border-radius:var(--radius);box-shadow:var(--shadow-1);
-  width:38px;height:38px;display:flex;align-items:center;justify-content:center;flex:none;
+  width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex:none;
   transition:border-color .2s var(--ease-out),color .2s var(--ease-out),transform .15s var(--ease-out);
 }
 @media(hover:hover){.proj-arrow:hover{border-color:var(--mask);color:var(--mask)}}
 .proj-arrow:active{transform:scale(.93)}
-.proj-arrow svg{width:18px;height:18px}
+.proj-arrow svg{width:20px;height:20px}
 .proj-counter{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.08em;color:var(--dim);min-width:70px;text-align:center}
 .pcard{
   flex:0 0 100%;
@@ -351,14 +351,15 @@ footer{background:var(--card);margin-top:32px;box-shadow:0 -1px 0 var(--rule)}
       <span class="doc">Doc. RE-2026 · Engineer datasheet</span>
       <span>Rev. 07/2026</span>
       <span>Sydney, Australia</span>
-      <span>Status: <span style="color:var(--mask);font-weight:600">Available 2026</span></span>
+      <span>Status: <span style="color:var(--mask);font-weight:600">Available now</span></span>
     </div>
     <div class="mast-main">
       <h1 class="name">Rakan<br>Eyad
         <small>Mechatronic engineer — hardware · firmware · control · AI</small>
       </h1>
       <nav class="mast-links" aria-label="Contact">
-        <a href="https://github.com/STERBAN0"><span class="dot"></span>github.com/STERBAN0</a>
+        <a href="https://github.com/STERBAN0" target="_blank" rel="noopener noreferrer"><span class="dot"></span>github.com/STERBAN0</a>
+        <a href="https://www.linkedin.com/in/rakan-abdulla/" target="_blank" rel="noopener noreferrer"><span class="dot"></span>linkedin.com/in/rakan-abdulla</a>
         <a href="mailto:rakan132546@gmail.com"><span class="dot"></span>rakan132546@gmail.com</a>
       </nav>
     </div>
@@ -399,6 +400,10 @@ footer{background:var(--card);margin-top:32px;box-shadow:0 -1px 0 var(--rule)}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><polyline points="15 6 9 12 15 18"/></svg>
         </button>
         <span class="proj-counter mono" id="proj-counter"></span>
+        <button type="button" class="proj-arrow" id="proj-playpause" aria-label="Pause autoplay">
+          <svg class="ppi-pause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="9" y1="6" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="18"/></svg>
+          <svg class="ppi-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" hidden><path d="M7 5 19 12 7 19Z"/></svg>
+        </button>
         <button type="button" class="proj-arrow" id="proj-next" aria-label="Next project">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><polyline points="9 6 15 12 9 18"/></svg>
         </button>
@@ -434,7 +439,7 @@ footer{background:var(--card);margin-top:32px;box-shadow:0 -1px 0 var(--rule)}
   </section>
 
   <section aria-labelledby="sk-h">
-    <div class="sec-head"><h3 id="sk-h">Capability matrix</h3><span class="sec-note" id="sk-note"></span></div>
+    <div class="sec-head"><h3 id="sk-h">Technical skills</h3><span class="sec-note" id="sk-note"></span></div>
     <div class="skills" id="skills"></div>
     <div class="skill-dots" id="skill-dots"></div>
   </section>
@@ -446,7 +451,7 @@ footer{background:var(--card);margin-top:32px;box-shadow:0 -1px 0 var(--rule)}
         <b>B.E. (Honours), Mechatronic Engineering</b><br>
         University of Sydney · 2022 — 2026
       </div>
-      <div class="mono">EWAM 76% — Distinction</div>
+      <div class="mono">EWAM (Engineering Weighted Average Mark) 76% — Distinction</div>
     </div>
   </section>
 </main>
@@ -456,8 +461,9 @@ footer{background:var(--card);margin-top:32px;box-shadow:0 -1px 0 var(--rule)}
     <div class="foot-inner reveal">
       <div class="foot-cta">Building something? Let's talk.</div>
       <div class="foot-links">
+        <a href="https://github.com/STERBAN0" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://www.linkedin.com/in/rakan-abdulla/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
         <a href="mailto:rakan132546@gmail.com">Email</a>
-        <a href="https://github.com/STERBAN0">GitHub</a>
       </div>
     </div>
     <div class="foot-rev">Rakan Eyad · Doc. RE-2026 Rev. 07/2026 · Typeset in Archivo, Source Serif 4 &amp; IBM Plex Mono</div>
@@ -704,13 +710,16 @@ const hoverCapable = window.matchMedia("(hover:hover)");
 
 /* ---------- projects carousel state ---------- */
 const PROJ_AUTOPLAY_MS = 5000;   /* normal autoplay interval */
-const PROJ_HOVER_MS = 9000;      /* slowed interval while hovering (hover-capable pointers only) */
 const PROJ_RESUME_DELAY_MS = 6000; /* delay before autoplay resumes after a manual arrow click */
 let projOrder = [];
 let projIndex = 0;
 let projAutoplayTimer = null;
 let projResumeTimer = null;
-let projHovering = false;
+/* true once the user has explicitly hit the pause button; every other
+   autoplay-start path (hover-leave, arrow-click auto-resume) must check this
+   before restarting the timer — only the play/pause button itself is allowed
+   to flip it and start/stop autoplay unconditionally */
+let projManuallyPaused = false;
 
 /* ---------- skills spotlight state ---------- */
 const SKILL_CYCLE_MS = 3200; /* interval between spotlight advances in overview mode */
@@ -811,8 +820,12 @@ updateScrollFade();
 
 /* ---------- projects carousel controls (bound once) ---------- */
 const projCarouselEl = document.getElementById("proj-carousel");
+const projPlayPauseBtn = document.getElementById("proj-playpause");
+const projPauseIcon = projPlayPauseBtn.querySelector(".ppi-pause");
+const projPlayIcon = projPlayPauseBtn.querySelector(".ppi-play");
 document.getElementById("proj-prev").addEventListener("click",()=>stepProj(-1));
 document.getElementById("proj-next").addEventListener("click",()=>stepProj(1));
+projPlayPauseBtn.addEventListener("click", onProjPlayPauseClick);
 projCarouselEl.addEventListener("mouseenter", onProjMouseEnter);
 projCarouselEl.addEventListener("mouseleave", onProjMouseLeave);
 
@@ -830,7 +843,7 @@ function renderProjCards(id, order){
       <div class="p-note">${p.notes[id]||p.notes.overview}</div>
       <p class="p-desc">${p.desc}</p>
       <div class="p-metrics">${p.metrics.map(([v,l])=>`<span class="metric"><b>${v}</b> ${l}</span>`).join("")}</div>
-      <div class="p-foot"><span class="p-tags">${p.tags}</span>${p.link?`<a class="p-link" href="${p.link}">View source <span class="arr">↗</span></a>`:`<span class="p-tags">${p.linkNote||"Details on request"}</span>`}</div>`;
+      <div class="p-foot"><span class="p-tags">${p.tags}</span>${p.link?`<a class="p-link" href="${p.link}" target="_blank" rel="noopener noreferrer">View source <span class="arr">↗</span></a>`:`<a class="p-link" href="mailto:rakan132546@gmail.com?subject=${encodeURIComponent("Re: "+p.title)}">${p.linkNote||"Details on request"} <span class="arr">→</span></a>`}</div>`;
     projEl.appendChild(card);
   });
 }
@@ -868,32 +881,59 @@ function stepProj(dir){
   updateProjPosition();
   clearProjResumeTimer();
   stopProjAutoplay();
+  syncProjPlayPauseUI();
   if(!reducedMotion.matches){
     projResumeTimer = setTimeout(()=>{
-      startProjAutoplay(projHovering && hoverCapable.matches ? PROJ_HOVER_MS : PROJ_AUTOPLAY_MS);
+      if(!projManuallyPaused) startProjAutoplay(PROJ_AUTOPLAY_MS);
+      syncProjPlayPauseUI();
     }, PROJ_RESUME_DELAY_MS);
   }
 }
 function onProjMouseEnter(){
+  /* hover means "let me look" — fully pause (not just slow) while the pointer
+     is over the carousel; resumes fresh on mouseleave unless manually paused */
   if(!hoverCapable.matches || reducedMotion.matches) return;
-  projHovering = true;
   clearProjResumeTimer();
-  startProjAutoplay(PROJ_HOVER_MS);
+  stopProjAutoplay();
+  syncProjPlayPauseUI();
 }
 function onProjMouseLeave(){
   if(!hoverCapable.matches || reducedMotion.matches) return;
-  projHovering = false;
   clearProjResumeTimer();
-  startProjAutoplay(PROJ_AUTOPLAY_MS);
+  if(!projManuallyPaused) startProjAutoplay(PROJ_AUTOPLAY_MS);
+  syncProjPlayPauseUI();
+}
+/* ---------- projects play/pause button ----------
+   single source of truth for "is playing" is projAutoplayTimer itself (not a
+   separate flag), so the icon/aria-label can never drift from what's actually
+   running. projManuallyPaused only gates *other* autoplay-start paths so a
+   manual pause survives hover-leave and arrow-click auto-resume. */
+function syncProjPlayPauseUI(){
+  const isPlaying = projAutoplayTimer !== null;
+  projPlayPauseBtn.setAttribute("aria-label", isPlaying ? "Pause autoplay" : "Play autoplay");
+  projPauseIcon.hidden = !isPlaying;
+  projPlayIcon.hidden = isPlaying;
+}
+function onProjPlayPauseClick(){
+  /* the one control allowed to override projManuallyPaused unconditionally */
+  projManuallyPaused = !projManuallyPaused;
+  clearProjResumeTimer();
+  if(projManuallyPaused) stopProjAutoplay();
+  else startProjAutoplay(PROJ_AUTOPLAY_MS);
+  syncProjPlayPauseUI();
 }
 function initProjCarousel(id, order){
   clearProjResumeTimer();
   stopProjAutoplay();
   projOrder = order;
   projIndex = 0;
+  /* a pause on one mode's carousel shouldn't silently carry over and confuse
+     the user after they switch to a different mode */
+  projManuallyPaused = false;
   renderProjCards(id, order);
   updateProjPosition(false);
-  startProjAutoplay(projHovering && hoverCapable.matches ? PROJ_HOVER_MS : PROJ_AUTOPLAY_MS);
+  startProjAutoplay(PROJ_AUTOPLAY_MS);
+  syncProjPlayPauseUI();
 }
 
 /* ---------- skills matrix ---------- */
@@ -940,7 +980,7 @@ function renderSkillsOverview(){
   SKILLS.forEach((g,idx)=>skillsEl.appendChild(buildSkillGroupEl(g, idx===0)));
   renderSkillDots();
   startSkillCycle();
-  skNoteEl.textContent = "Highlight auto-cycles through all six groups.";
+  skNoteEl.textContent = "";
 }
 function renderSkillsSingle(groupId){
   skillDotsEl.innerHTML = "";
