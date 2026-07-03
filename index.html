@@ -380,7 +380,7 @@ footer{background:var(--card);margin-top:32px;box-shadow:0 -1px 0 var(--rule)}
         <a href="https://github.com/STERBAN0" target="_blank" rel="noopener noreferrer"><span class="dot"></span>github.com/STERBAN0</a>
         <a href="https://www.linkedin.com/in/rakan-abdulla/" target="_blank" rel="noopener noreferrer"><span class="dot"></span>linkedin.com/in/rakan-abdulla</a>
         <a href="mailto:rakan132546@gmail.com"><span class="dot"></span>rakan132546@gmail.com</a>
-        <a href="resumes/Rakan_Eyad_Resume.pdf" download><span class="dot"></span>Resume (PDF)</a>
+        <a href="resumes/Rakan_Eyad_Resume.pdf" download target="_blank" rel="noopener noreferrer"><span class="dot"></span>Resume (PDF)</a>
       </nav>
     </div>
   </div>
@@ -456,7 +456,7 @@ footer{background:var(--card);margin-top:32px;box-shadow:0 -1px 0 var(--rule)}
         <a href="https://github.com/STERBAN0" target="_blank" rel="noopener noreferrer">GitHub</a>
         <a href="https://www.linkedin.com/in/rakan-abdulla/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
         <a href="mailto:rakan132546@gmail.com">Email</a>
-        <a href="resumes/Rakan_Eyad_Resume.pdf" download>Resume (PDF)</a>
+        <a href="resumes/Rakan_Eyad_Resume.pdf" download target="_blank" rel="noopener noreferrer">Resume (PDF)</a>
       </div>
     </div>
     <div class="foot-rev">Rakan Eyad · Doc. RE-2026 Rev. 07/2026 · Typeset in Archivo, Source Serif 4 &amp; IBM Plex Mono</div>
@@ -895,7 +895,7 @@ function setMode(id, updateHash){
     <h2 class="headline">${m.headline}</h2>
     <p class="lede">${m.lede}</p>
     <div class="chips">${m.chips.map(c=>`<span class="chip">${icon(c)}<span>${c}</span></span>`).join("")}</div>
-    <a class="resume-dl" href="${RESUME_FILES[resumeVariant]}" download>Download ${resumeVariant==="general"?"resume":"tailored resume"} <span class="arr">↓</span></a>`;
+    <a class="resume-dl" href="${RESUME_FILES[resumeVariant]}" download target="_blank" rel="noopener noreferrer">Download ${resumeVariant==="general"?"resume":"tailored resume"} <span class="arr">↓</span></a>`;
   projNote.textContent=m.note;
   initProjCarousel(id, m.order);
   renderSkills(id, m);
