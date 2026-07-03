@@ -99,7 +99,19 @@ h1.name{
   transition:box-shadow .25s var(--ease-out);
 }
 .selector.stuck{box-shadow:0 4px 18px -8px rgba(0,0,0,.45)}
-.selector-inner{display:flex;align-items:stretch;gap:0;overflow-x:auto;scrollbar-width:none}
+.selector-inner{
+  display:flex;align-items:stretch;gap:0;overflow-x:auto;scrollbar-width:none;
+  /* desktop fix: decouple the tab row from the prose max-width (--maxw). A nav row
+     can reasonably use more of the viewport than body copy, so let it grow to the
+     right — but pin its left edge to the exact same inset the masthead/section
+     .wrap content uses (max(24px, (100% - maxw)/2 + 24px)) so it never looks
+     offset from the page content above it. Below 640px the mobile media query
+     further down overrides overflow-x/position for the hamburger dropdown and
+     is untouched by this. */
+  max-width:none;margin:0;
+  padding-left:max(24px, calc((100% - var(--maxw)) / 2 + 24px));
+  padding-right:24px;
+}
 .selector-inner::-webkit-scrollbar{display:none}
 .sel-label{
   font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.12em;
@@ -165,6 +177,23 @@ button.tab .num{color:var(--copper);margin-right:7px;font-weight:600}
   }
   button.tab:last-of-type{border-bottom:none}
   .tab-underline{display:none}
+}
+
+/* ---- desktop scroll-fade affordance (>640px; mirrors the breakpoint above,
+   no new boundary introduced) ----
+   Visible-only hint that the tab row has more content off-screen. Purely
+   decorative (aria-hidden, pointer-events:none) — reachability for keyboard
+   users already works via the tablist's existing scrollIntoView call in
+   setMode()/the arrow-key handler and is untouched here. */
+@media(min-width:641px){
+  .scroll-fade{
+    position:absolute;top:0;bottom:0;width:40px;pointer-events:none;
+    opacity:0;transition:opacity .2s var(--ease-out);
+  }
+  .scroll-fade-l{left:0;background:linear-gradient(to right, rgba(var(--paper-rgb),.92), rgba(var(--paper-rgb),0));}
+  .scroll-fade-r{right:0;background:linear-gradient(to left, rgba(var(--paper-rgb),.92), rgba(var(--paper-rgb),0));}
+  .selector.can-scroll-left .scroll-fade-l{opacity:1}
+  .selector.can-scroll-right .scroll-fade-r{opacity:1}
 }
 
 /* ============ mode brief ============ */
@@ -338,7 +367,7 @@ footer{background:var(--card);margin-top:32px;box-shadow:0 -1px 0 var(--rule)}
 
 <div id="stick-sentinel" aria-hidden="true"></div>
 <div class="selector" id="selector">
-  <div class="wrap selector-inner">
+  <div class="wrap selector-inner" id="selector-inner">
     <span class="sel-label" id="mode-label">Operating mode</span>
     <button type="button" class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="tabs" aria-label="Toggle mode menu">
       <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
@@ -349,6 +378,8 @@ footer{background:var(--card);margin-top:32px;box-shadow:0 -1px 0 var(--rule)}
     </button>
     <div role="tablist" aria-labelledby="mode-label" id="tabs"></div>
   </div>
+  <div class="scroll-fade scroll-fade-l" aria-hidden="true"></div>
+  <div class="scroll-fade scroll-fade-r" aria-hidden="true"></div>
 </div>
 
 <main class="wrap">
@@ -727,6 +758,7 @@ tabsEl.addEventListener("keydown",e=>{
 
 /* ---------- mobile disclosure (hamburger) ---------- */
 const selector=document.getElementById("selector");
+const selectorInnerEl=document.getElementById("selector-inner");
 const menuToggle=document.getElementById("menu-toggle");
 const mobileMenuQuery=window.matchMedia("(max-width:640px)");
 
@@ -750,6 +782,32 @@ document.addEventListener("keydown",e=>{
   if(e.key==="Escape" && selector.classList.contains("menu-open")) closeMobileMenu(true);
 });
 mobileMenuQuery.addEventListener("change",e=>{ if(!e.matches) closeMobileMenu(false); });
+
+/* ---------- desktop tab-row scroll-fade affordance ----------
+   Toggles can-scroll-left/right on #selector based on the *real* scrollWidth
+   vs clientWidth of the tab row, so the fade only ever shows on the side that
+   still has hidden content (never a static fade left lit on a fully-scrolled
+   edge). Below 640px the row is a vertical dropdown (overflow-x:visible), so
+   this is skipped there — the .scroll-fade CSS is itself gated to >640px too. */
+function updateScrollFade(){
+  if(mobileMenuQuery.matches){
+    selector.classList.remove("can-scroll-left","can-scroll-right");
+    return;
+  }
+  const maxScroll=selectorInnerEl.scrollWidth-selectorInnerEl.clientWidth;
+  if(maxScroll<=1){
+    selector.classList.remove("can-scroll-left","can-scroll-right");
+    return;
+  }
+  const atStart=selectorInnerEl.scrollLeft<=1;
+  const atEnd=selectorInnerEl.scrollLeft>=maxScroll-1;
+  selector.classList.toggle("can-scroll-left", !atStart);
+  selector.classList.toggle("can-scroll-right", !atEnd);
+}
+selectorInnerEl.addEventListener("scroll", updateScrollFade, {passive:true});
+window.addEventListener("resize", updateScrollFade);
+mobileMenuQuery.addEventListener("change", updateScrollFade);
+updateScrollFade();
 
 /* ---------- projects carousel controls (bound once) ---------- */
 const projCarouselEl = document.getElementById("proj-carousel");
@@ -950,7 +1008,7 @@ document.querySelectorAll(".reveal").forEach(el=>revealIO.observe(el));
 const initial = location.hash.replace("#","");
 setMode(MODES[initial] ? initial : "overview", false);
 window.addEventListener("resize",positionUnderline);
-if(document.fonts && document.fonts.ready) document.fonts.ready.then(positionUnderline);
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=>{ positionUnderline(); updateScrollFade(); });
 </script>
 </body>
 </html>
