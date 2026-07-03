@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-/* Generates tailored, ATS-friendly PDF résumés from the shared site data
-   (site-data.js) plus the résumé-specific content below (summaries, bullet
-   phrasing, and per-variant project/skill selection -- these use a résumé
+/* Generates tailored, ATS-friendly PDF resumes from the shared site data
+   (site-data.js) plus the resume-specific content below (summaries, bullet
+   phrasing, and per-variant project/skill selection -- these use a resume
    register, not the site's marketing-voice copy). Single source of truth
    for facts/metrics; run with `npm run resumes`. */
 "use strict";
@@ -14,7 +14,7 @@ const NAME = "Rakan Eyad";
 const CONTACT = "rakan132546@gmail.com  ·  github.com/STERBAN0  ·  linkedin.com/in/rakan-abdulla";
 const OUT_DIR = path.join(__dirname, "..", "resumes");
 
-/* Résumé-register bullets per project, grounded in the same facts/metrics
+/* Resume-register bullets per project, grounded in the same facts/metrics
    as site-data.js's PROJECTS.desc, but written as concise action-verb
    bullets rather than narrative prose. */
 const PROJECT_BULLETS = {
@@ -86,35 +86,31 @@ const PROFILES = [
 ];
 
 const PAGE_MARGIN = 46;
-const RULE_COLOR = "#999999";
+const ACCENT_COLOR = "#1F4E79";
+const TEXT_COLOR = "#1A1A1A";
 const DIM_COLOR = "#444444";
 
+/* Bullet lines position text at an explicit x, which leaves pdfkit's
+   internal cursor (doc.x) sitting at that indent -- reset it afterward so
+   the next default-flow text() call (e.g. the following entry's title)
+   starts back at the page margin instead of inheriting the indent. */
 function bulletLine(doc, str) {
   const startX = doc.page.margins.left;
   const bulletW = 12;
   const textX = startX + bulletW;
   const textWidth = doc.page.width - doc.page.margins.right - textX;
   const y = doc.y;
-  doc.text("-", startX, y, { width: bulletW });
+  doc.text("•", startX, y, { width: bulletW });
   doc.text(str, textX, y, { width: textWidth });
-  doc.moveDown(0.15);
+  doc.x = startX;
+  doc.moveDown(0.1);
 }
 
 function sectionHeader(doc, label) {
-  doc.moveDown(0.4);
-  doc
-    .font("Helvetica-Bold")
-    .fontSize(11.5)
-    .fillColor("#000000")
-    .text(label.toUpperCase(), { characterSpacing: 0.6 });
-  const y = doc.y + 1;
-  doc
-    .moveTo(doc.page.margins.left, y)
-    .lineTo(doc.page.width - doc.page.margins.right, y)
-    .strokeColor(RULE_COLOR)
-    .lineWidth(0.75)
-    .stroke();
   doc.moveDown(0.35);
+  doc.x = doc.page.margins.left;
+  doc.font("Helvetica-Bold").fontSize(12.5).fillColor(ACCENT_COLOR).text(label);
+  doc.moveDown(0.18);
 }
 
 function renderResume(profile) {
@@ -125,22 +121,31 @@ function renderResume(profile) {
   const outPath = path.join(OUT_DIR, profile.file);
   doc.pipe(fs.createWriteStream(outPath));
 
-  doc.font("Helvetica-Bold").fontSize(20).fillColor("#000000").text(NAME);
-  doc.font("Helvetica").fontSize(12).fillColor(DIM_COLOR).text(profile.title);
+  doc.font("Helvetica-Bold").fontSize(22).fillColor(ACCENT_COLOR).text(NAME, { align: "center" });
   doc.moveDown(0.2);
-  doc.font("Helvetica").fontSize(9.5).fillColor(DIM_COLOR).text(CONTACT);
+  doc
+    .moveTo(doc.page.margins.left, doc.y)
+    .lineTo(doc.page.width - doc.page.margins.right, doc.y)
+    .strokeColor(ACCENT_COLOR)
+    .lineWidth(1.3)
+    .stroke();
+  doc.moveDown(0.22);
+  doc.font("Helvetica").fontSize(11).fillColor(TEXT_COLOR).text(profile.title, { align: "center" });
+  doc.moveDown(0.1);
+  doc.font("Helvetica").fontSize(9.5).fillColor(DIM_COLOR).text(CONTACT, { align: "center" });
+  doc.x = doc.page.margins.left;
 
   sectionHeader(doc, "Summary");
-  doc.font("Helvetica").fontSize(10).fillColor("#000000").text(profile.summary, {
+  doc.font("Helvetica").fontSize(10).fillColor(TEXT_COLOR).text(profile.summary, {
     width: doc.page.width - doc.page.margins.left - doc.page.margins.right
   });
 
   sectionHeader(doc, "Experience");
   EXPERIENCE.forEach((x, i) => {
-    doc.font("Helvetica-Bold").fontSize(10.5).fillColor("#000000").text(`${x.role} — ${x.org}`, { continued: true });
-    doc.font("Helvetica").fontSize(9.5).fillColor(DIM_COLOR).text(`   ${x.when}`, { align: "left" });
+    doc.font("Helvetica-Bold").fontSize(10.5).fillColor(TEXT_COLOR).text(`${x.role} — ${x.org}`, { continued: true });
+    doc.font("Helvetica").fontSize(9.5).fillColor(DIM_COLOR).text(`   ${x.when}`);
     doc.moveDown(0.1);
-    doc.font("Helvetica").fontSize(10).fillColor("#000000");
+    doc.font("Helvetica").fontSize(10).fillColor(TEXT_COLOR);
     bulletLine(doc, x.body);
     if (i < EXPERIENCE.length - 1) doc.moveDown(0.1);
   });
@@ -148,10 +153,10 @@ function renderResume(profile) {
   sectionHeader(doc, "Featured Projects");
   profile.projectKeys.forEach((key, i) => {
     const p = PROJECTS[key];
-    doc.font("Helvetica-Bold").fontSize(10.5).fillColor("#000000").text(`${p.title}`, { continued: true });
+    doc.font("Helvetica-Bold").fontSize(10.5).fillColor(TEXT_COLOR).text(`${p.title}`, { continued: true, underline: true });
     doc.font("Helvetica").fontSize(9.5).fillColor(DIM_COLOR).text(`  —  ${p.kind}`);
     doc.moveDown(0.1);
-    doc.font("Helvetica").fontSize(10).fillColor("#000000");
+    doc.font("Helvetica").fontSize(10).fillColor(TEXT_COLOR);
     (PROJECT_BULLETS[key] || []).forEach(b => bulletLine(doc, b));
     if (i < profile.projectKeys.length - 1) doc.moveDown(0.1);
   });
@@ -160,14 +165,14 @@ function renderResume(profile) {
   profile.skillGroups.forEach(gid => {
     const g = SKILLS.find(s => s.id === gid);
     if (!g) return;
-    doc.font("Helvetica-Bold").fontSize(10).fillColor("#000000").text(`${g.title}: `, { continued: true });
-    doc.font("Helvetica").fontSize(10).fillColor("#000000").text(g.items.join(", "));
+    doc.font("Helvetica-Bold").fontSize(10).fillColor(TEXT_COLOR).text(`${g.title}: `, { continued: true });
+    doc.font("Helvetica").fontSize(10).fillColor(TEXT_COLOR).text(g.items.join(", "));
     doc.moveDown(0.12);
   });
 
   sectionHeader(doc, "Education");
-  doc.font("Helvetica-Bold").fontSize(10.5).fillColor("#000000").text(EDUCATION.degree);
-  doc.font("Helvetica").fontSize(10).fillColor("#000000").text(`${EDUCATION.school} · ${EDUCATION.when}`);
+  doc.font("Helvetica-Bold").fontSize(10.5).fillColor(TEXT_COLOR).text(EDUCATION.degree);
+  doc.font("Helvetica").fontSize(10).fillColor(TEXT_COLOR).text(`${EDUCATION.school} · ${EDUCATION.when}`);
   doc.font("Helvetica").fontSize(9.5).fillColor(DIM_COLOR).text(EDUCATION.detail);
 
   doc.end();
