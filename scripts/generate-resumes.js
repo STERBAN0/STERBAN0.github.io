@@ -23,7 +23,7 @@ const PROJECT_BULLETS = {
     "Profiled and optimized the render pipeline from 162 ms to 2.8 ms per frame (58x speed-up) through allocation discipline."
   ],
   sdk: [
-    "Extracted the engine into a pip-installable SDK with an event-driven API, enabling downstream game, overlay, and hardware integrations.",
+    "Extracted the engine into a pip-installable SDK with an event-driven API for driving games, overlays, or hardware from gesture events.",
     "Designed two install tiers (numpy-only and full webcam) with deterministic, webcam-free tests."
   ],
   rover: [
@@ -31,7 +31,7 @@ const PROJECT_BULLETS = {
     "Implemented a fast A* command term and terrain importer for hybrid planning; tuned SAC training configs and reward/termination logic across 1000s of parallel environments; built a custom evaluation pipeline."
   ],
   tradie: [
-    "Designed and shipped a production micro-SaaS recovering missed calls for trades businesses via Twilio telephony and an AI (GPT-4o-mini) SMS conversation engine.",
+    "Built a production micro-SaaS that recovers missed calls for trades businesses using Twilio telephony and a GPT-4o-mini SMS conversation engine.",
     "Built multi-tenant infrastructure end-to-end: Next.js 15 + TypeScript, Supabase Postgres with row-level security, Redis-backed idempotency/rate limiting, and Stripe usage-based billing.",
     "Hardened the system solo with 276 CI tests, Playwright e2e coverage, a threat model, and incident runbooks."
   ],
@@ -58,28 +58,28 @@ const PROFILES = [
   {
     file: "Rakan_Eyad_Resume.pdf",
     title: "Mechatronic Engineer",
-    summary: "Mechatronic engineering graduate (Honours, University of Sydney) with 14 months of industry experience shipping a prototype control system, plus two production web applications built solo. Works across the full stack: hardware, firmware, control systems, and modern AI/software tooling.",
+    summary: "Mechatronic engineering graduate (Honours, University of Sydney) with 14 months of industry experience on a prototype control system, plus two production web applications built solo.",
     projectKeys: ["conjure", "rover", "tradie", "fund"],
     skillGroups: ["embedded", "robotics", "control", "ai", "software"]
   },
   {
     file: "Rakan_Eyad_Resume_Hardware.pdf",
     title: "Robotics & Embedded Systems Engineer",
-    summary: "Mechatronic engineering graduate with hands-on experience across robotics, embedded systems, and control theory: from an FPGA-driven assistive robot and a ROS2 TurtleBot, to a self-built closed-loop tracking system, to migrating an industry prototype's architecture onto a Raspberry Pi.",
+    summary: "Mechatronic engineering graduate with hands-on experience in robotics, embedded systems, and control. Built an FPGA-driven assistive robot, programmed a ROS2 TurtleBot, built a self-contained laser tracking system, and migrated an industrial prototype from a microcontroller to a Raspberry Pi.",
     projectKeys: ["tracking", "fpga", "turtlebot", "rover"],
     skillGroups: ["embedded", "robotics", "control"]
   },
   {
     file: "Rakan_Eyad_Resume_AI.pdf",
     title: "AI / Autonomy Engineer",
-    summary: "Mechatronic engineering graduate specialising in reinforcement learning, computer vision, and applied AI: training RL agents in NVIDIA Isaac Sim for planetary-rover navigation, building real-time computer vision pipelines, and shipping an LLM-powered conversation engine into production.",
+    summary: "Mechatronic engineering graduate working in reinforcement learning and computer vision. Trained RL agents in NVIDIA Isaac Sim for planetary rover navigation, built a real-time computer vision pipeline, and shipped an LLM-based conversation engine to production.",
     projectKeys: ["rover", "conjure", "tradie", "sdk"],
     skillGroups: ["ai", "software"]
   },
   {
     file: "Rakan_Eyad_Resume_Software.pdf",
     title: "Software Engineer",
-    summary: "Mechatronic engineering graduate with full-stack software engineering experience: a production micro-SaaS with telephony, AI, and billing; a full-stack payments platform; and an open-source Python engine profiled to a 58x speed-up and shipped as an installable SDK.",
+    summary: "Mechatronic engineering graduate with full-stack software engineering experience. Built a production micro-SaaS with telephony, AI, and billing, a full-stack payments platform, and an open-source Python engine profiled to a 58x speed-up and shipped as an installable SDK.",
     projectKeys: ["tradie", "fund", "conjure", "sdk"],
     skillGroups: ["software", "transfer"]
   }
