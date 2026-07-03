@@ -202,17 +202,29 @@ section{padding:40px 0 48px;scroll-margin-top:70px}
 }
 .sec-head .sec-note{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--dim);letter-spacing:.05em;text-transform:uppercase}
 
-/* ============ project cards ============ */
-.projects{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
-@media(max-width:760px){.projects{grid-template-columns:1fr}}
+/* ============ project carousel ============ */
+.proj-carousel{position:relative}
+.proj-viewport{overflow:hidden;border-radius:var(--radius)}
+.projects{display:flex;transition:transform .5s var(--ease-out)}
+.proj-controls{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:16px}
+.proj-arrow{
+  appearance:none;cursor:pointer;background:var(--card);color:var(--ink-soft);
+  border:1px solid var(--rule);border-radius:var(--radius);box-shadow:var(--shadow-1);
+  width:38px;height:38px;display:flex;align-items:center;justify-content:center;flex:none;
+  transition:border-color .2s var(--ease-out),color .2s var(--ease-out),transform .15s var(--ease-out);
+}
+@media(hover:hover){.proj-arrow:hover{border-color:var(--mask);color:var(--mask)}}
+.proj-arrow:active{transform:scale(.93)}
+.proj-arrow svg{width:18px;height:18px}
+.proj-counter{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.08em;color:var(--dim);min-width:70px;text-align:center}
 .pcard{
+  flex:0 0 100%;
   background:var(--card);border:1px solid var(--rule);border-radius:var(--radius);
   padding:22px 22px 20px;display:flex;flex-direction:column;gap:12px;
   box-shadow:var(--shadow-1);
   transition:border-color .25s var(--ease-out),transform .25s var(--ease-out),box-shadow .25s var(--ease-out);
 }
 .pcard:hover{border-color:var(--mask);transform:translateY(-3px);box-shadow:var(--shadow-2)}
-.pcard.feature{grid-column:1 / -1}
 .p-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:14px}
 .p-title{font-family:"Archivo",sans-serif;font-weight:800;font-size:20px;letter-spacing:-.01em}
 .p-kind{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);white-space:nowrap;padding-top:5px}
@@ -271,6 +283,16 @@ section{padding:40px 0 48px;scroll-margin-top:70px}
 }
 .skill-group li:last-child{border-bottom:none}
 .skill-group li .ic{color:var(--dim)}
+.skills.single{grid-template-columns:1fr;max-width:420px;margin:0 auto}
+.skill-dots{display:flex;gap:8px;justify-content:center;margin-top:18px}
+.skill-dots:empty{display:none}
+.skill-dot{
+  width:9px;height:9px;padding:0;border-radius:50%;flex:none;
+  background:var(--rule);border:1px solid var(--rule);cursor:pointer;
+  transition:background .3s var(--ease-out),border-color .3s var(--ease-out),transform .2s var(--ease-out);
+}
+@media(hover:hover){.skill-dot:hover{border-color:var(--mask)}}
+.skill-dot.active{background:var(--mask);border-color:var(--mask);transform:scale(1.15)}
 
 /* ============ education + footer ============ */
 .edu{border:1px solid var(--rule);border-radius:var(--radius);background:var(--card);padding:22px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:baseline}
@@ -337,7 +359,20 @@ footer{background:var(--card);margin-top:32px;box-shadow:0 -1px 0 var(--rule)}
       <h3 id="proj-h">Featured applications</h3>
       <span class="sec-note" id="proj-note"></span>
     </div>
-    <div class="projects" id="projects"></div>
+    <div class="proj-carousel" id="proj-carousel" role="region" aria-roledescription="carousel" aria-label="Featured applications">
+      <div class="proj-viewport">
+        <div class="projects" id="projects"></div>
+      </div>
+      <div class="proj-controls">
+        <button type="button" class="proj-arrow" id="proj-prev" aria-label="Previous project">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><polyline points="15 6 9 12 15 18"/></svg>
+        </button>
+        <span class="proj-counter mono" id="proj-counter"></span>
+        <button type="button" class="proj-arrow" id="proj-next" aria-label="Next project">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><polyline points="9 6 15 12 9 18"/></svg>
+        </button>
+      </div>
+    </div>
   </section>
 
   <section aria-labelledby="xp-h">
@@ -368,8 +403,9 @@ footer{background:var(--card);margin-top:32px;box-shadow:0 -1px 0 var(--rule)}
   </section>
 
   <section aria-labelledby="sk-h">
-    <div class="sec-head"><h3 id="sk-h">Capability matrix</h3><span class="sec-note" id="sk-note">Groups relevant to this mode are highlighted</span></div>
+    <div class="sec-head"><h3 id="sk-h">Capability matrix</h3><span class="sec-note" id="sk-note"></span></div>
     <div class="skills" id="skills"></div>
+    <div class="skill-dots" id="skill-dots"></div>
   </section>
 
   <section aria-labelledby="edu-h">
@@ -628,8 +664,27 @@ const tabsEl = document.getElementById("tabs");
 const briefEl = document.getElementById("brief");
 const projEl = document.getElementById("projects");
 const projNote = document.getElementById("proj-note");
+const projCounterEl = document.getElementById("proj-counter");
 const skillsEl = document.getElementById("skills");
+const skillDotsEl = document.getElementById("skill-dots");
+const skNoteEl = document.getElementById("sk-note");
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const hoverCapable = window.matchMedia("(hover:hover)");
+
+/* ---------- projects carousel state ---------- */
+const PROJ_AUTOPLAY_MS = 5000;   /* normal autoplay interval */
+const PROJ_HOVER_MS = 9000;      /* slowed interval while hovering (hover-capable pointers only) */
+const PROJ_RESUME_DELAY_MS = 6000; /* delay before autoplay resumes after a manual arrow click */
+let projOrder = [];
+let projIndex = 0;
+let projAutoplayTimer = null;
+let projResumeTimer = null;
+let projHovering = false;
+
+/* ---------- skills spotlight state ---------- */
+const SKILL_CYCLE_MS = 3200; /* interval between spotlight advances in overview mode */
+let skillCycleTimer = null;
+let skillCycleIndex = 0;
 
 Object.entries(MODES).forEach(([id,m],i)=>{
   const b=document.createElement("button");
@@ -696,14 +751,151 @@ document.addEventListener("keydown",e=>{
 });
 mobileMenuQuery.addEventListener("change",e=>{ if(!e.matches) closeMobileMenu(false); });
 
-function renderSkills(lit){
-  skillsEl.innerHTML="";
-  SKILLS.forEach(g=>{
-    const d=document.createElement("div");
-    d.className="skill-group"+(lit.includes(g.id)?" lit":"");
-    d.innerHTML=`<h4>${g.title}</h4><ul>${g.items.map(i=>`<li>${icon(i)}<span>${i}</span></li>`).join("")}</ul>`;
-    skillsEl.appendChild(d);
+/* ---------- projects carousel controls (bound once) ---------- */
+const projCarouselEl = document.getElementById("proj-carousel");
+document.getElementById("proj-prev").addEventListener("click",()=>stepProj(-1));
+document.getElementById("proj-next").addEventListener("click",()=>stepProj(1));
+projCarouselEl.addEventListener("mouseenter", onProjMouseEnter);
+projCarouselEl.addEventListener("mouseleave", onProjMouseLeave);
+
+/* ---------- projects carousel ---------- */
+function renderProjCards(id, order){
+  projEl.innerHTML = "";
+  order.forEach((pid,idx)=>{
+    const p = PROJECTS[pid];
+    const card = document.createElement("article");
+    card.className = "pcard fade";
+    card.style.animationDelay = (idx*40)+"ms";
+    card.setAttribute("aria-hidden", idx===0 ? "false" : "true");
+    card.innerHTML = `
+      <div class="p-top"><div class="p-title">${p.title}</div><div class="p-kind">${p.kind}</div></div>
+      <div class="p-note">${p.notes[id]||p.notes.overview}</div>
+      <p class="p-desc">${p.desc}</p>
+      <div class="p-metrics">${p.metrics.map(([v,l])=>`<span class="metric"><b>${v}</b> ${l}</span>`).join("")}</div>
+      <div class="p-foot"><span class="p-tags">${p.tags}</span>${p.link?`<a class="p-link" href="${p.link}">View source <span class="arr">↗</span></a>`:`<span class="p-tags">${p.linkNote||"Details on request"}</span>`}</div>`;
+    projEl.appendChild(card);
   });
+}
+function updateProjPosition(animate=true){
+  /* suppress the CSS transition for a hard reset (mode switch) so the new
+     mode's slide 1 doesn't visibly slide in from wherever the old carousel
+     was parked */
+  if(!animate) projEl.style.transition = "none";
+  projEl.style.transform = `translateX(-${projIndex*100}%)`;
+  if(!animate){ void projEl.offsetWidth; projEl.style.transition = ""; }
+  projEl.querySelectorAll(".pcard").forEach((c,idx)=>{
+    const hidden = idx!==projIndex;
+    c.setAttribute("aria-hidden", hidden ? "true":"false");
+    if(hidden) c.setAttribute("inert",""); else c.removeAttribute("inert");
+  });
+  projCounterEl.textContent = `${String(projIndex+1).padStart(2,"0")} / ${String(projOrder.length).padStart(2,"0")}`;
+}
+function stopProjAutoplay(){
+  if(projAutoplayTimer){ clearInterval(projAutoplayTimer); projAutoplayTimer=null; }
+}
+function clearProjResumeTimer(){
+  if(projResumeTimer){ clearTimeout(projResumeTimer); projResumeTimer=null; }
+}
+function startProjAutoplay(intervalMs){
+  stopProjAutoplay();
+  if(reducedMotion.matches || projOrder.length<2) return;
+  projAutoplayTimer = setInterval(()=>{
+    projIndex = (projIndex+1) % projOrder.length;
+    updateProjPosition();
+  }, intervalMs);
+}
+function stepProj(dir){
+  if(!projOrder.length) return;
+  projIndex = (projIndex + dir + projOrder.length) % projOrder.length;
+  updateProjPosition();
+  clearProjResumeTimer();
+  stopProjAutoplay();
+  if(!reducedMotion.matches){
+    projResumeTimer = setTimeout(()=>{
+      startProjAutoplay(projHovering && hoverCapable.matches ? PROJ_HOVER_MS : PROJ_AUTOPLAY_MS);
+    }, PROJ_RESUME_DELAY_MS);
+  }
+}
+function onProjMouseEnter(){
+  if(!hoverCapable.matches || reducedMotion.matches) return;
+  projHovering = true;
+  clearProjResumeTimer();
+  startProjAutoplay(PROJ_HOVER_MS);
+}
+function onProjMouseLeave(){
+  if(!hoverCapable.matches || reducedMotion.matches) return;
+  projHovering = false;
+  clearProjResumeTimer();
+  startProjAutoplay(PROJ_AUTOPLAY_MS);
+}
+function initProjCarousel(id, order){
+  clearProjResumeTimer();
+  stopProjAutoplay();
+  projOrder = order;
+  projIndex = 0;
+  renderProjCards(id, order);
+  updateProjPosition(false);
+  startProjAutoplay(projHovering && hoverCapable.matches ? PROJ_HOVER_MS : PROJ_AUTOPLAY_MS);
+}
+
+/* ---------- skills matrix ---------- */
+function buildSkillGroupEl(g, lit){
+  const d = document.createElement("div");
+  d.className = "skill-group"+(lit?" lit":"");
+  d.innerHTML = `<h4>${g.title}</h4><ul>${g.items.map(i=>`<li>${icon(i)}<span>${i}</span></li>`).join("")}</ul>`;
+  return d;
+}
+function stopSkillCycle(){
+  if(skillCycleTimer){ clearInterval(skillCycleTimer); skillCycleTimer=null; }
+}
+function applySkillLit(index){
+  skillsEl.querySelectorAll(".skill-group").forEach((g,idx)=>g.classList.toggle("lit", idx===index));
+  skillDotsEl.querySelectorAll(".skill-dot").forEach((d,idx)=>d.classList.toggle("active", idx===index));
+}
+function startSkillCycle(){
+  stopSkillCycle();
+  if(reducedMotion.matches) return;
+  skillCycleTimer = setInterval(()=>{
+    skillCycleIndex = (skillCycleIndex+1) % SKILLS.length;
+    applySkillLit(skillCycleIndex);
+  }, SKILL_CYCLE_MS);
+}
+function renderSkillDots(){
+  skillDotsEl.innerHTML = "";
+  SKILLS.forEach((g,idx)=>{
+    const dot = document.createElement("button");
+    dot.type = "button";
+    dot.className = "skill-dot"+(idx===0?" active":"");
+    dot.setAttribute("aria-label","Highlight "+g.title);
+    dot.addEventListener("click",()=>{
+      skillCycleIndex = idx;
+      applySkillLit(idx);
+      startSkillCycle();
+    });
+    skillDotsEl.appendChild(dot);
+  });
+}
+function renderSkillsOverview(){
+  skillsEl.className = "skills";
+  skillsEl.innerHTML = "";
+  skillCycleIndex = 0;
+  SKILLS.forEach((g,idx)=>skillsEl.appendChild(buildSkillGroupEl(g, idx===0)));
+  renderSkillDots();
+  startSkillCycle();
+  skNoteEl.textContent = "Highlight auto-cycles through all six groups.";
+}
+function renderSkillsSingle(groupId){
+  skillDotsEl.innerHTML = "";
+  skillsEl.className = "skills single";
+  skillsEl.innerHTML = "";
+  const g = SKILLS.find(s=>s.id===groupId) || SKILLS[0];
+  skillsEl.appendChild(buildSkillGroupEl(g, true));
+  skNoteEl.textContent = "Only the group relevant to this mode is shown.";
+}
+function renderSkills(id, m){
+  stopSkillCycle();
+  if(m.skills.length===0) renderSkillsOverview();
+  else renderSkillsSingle(m.skills[0]);
 }
 
 function setMode(id, updateHash){
@@ -720,21 +912,8 @@ function setMode(id, updateHash){
     <p class="lede">${m.lede}</p>
     <div class="chips">${m.chips.map(c=>`<span class="chip">${icon(c)}<span>${c}</span></span>`).join("")}</div>`;
   projNote.textContent=m.note;
-  projEl.innerHTML="";
-  m.order.forEach((pid,idx)=>{
-    const p=PROJECTS[pid];
-    const card=document.createElement("article");
-    card.className="pcard fade"+(idx===0?" feature":"");
-    card.style.animationDelay=(idx*40)+"ms";
-    card.innerHTML=`
-      <div class="p-top"><div class="p-title">${p.title}</div><div class="p-kind">${p.kind}</div></div>
-      <div class="p-note">${p.notes[id]||p.notes.overview}</div>
-      <p class="p-desc">${p.desc}</p>
-      <div class="p-metrics">${p.metrics.map(([v,l])=>`<span class="metric"><b>${v}</b> ${l}</span>`).join("")}</div>
-      <div class="p-foot"><span class="p-tags">${p.tags}</span>${p.link?`<a class="p-link" href="${p.link}">View source <span class="arr">↗</span></a>`:`<span class="p-tags">${p.linkNote||"Details on request"}</span>`}</div>`;
-    projEl.appendChild(card);
-  });
-  renderSkills(m.skills);
+  initProjCarousel(id, m.order);
+  renderSkills(id, m);
   positionUnderline();
   const activeTab=document.getElementById("tab-"+id);
   if(activeTab.scrollIntoView) activeTab.scrollIntoView({block:"nearest",inline:"nearest"});
