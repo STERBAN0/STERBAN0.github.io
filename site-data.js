@@ -43,7 +43,7 @@ const MODES = {
   ai:{ n:"05", label:"AI / Autonomy", eyebrow:"Mode 05 — AI, RL & autonomy",
     headline:"Learning systems, with an engineer's ground truth.",
     lede:"I train and evaluate reinforcement-learning agents in NVIDIA Isaac Sim for my thesis on planetary-rover navigation, and I build real-time computer vision that runs at 60 FPS on a webcam. I've also put an LLM into production: Tradie Text's conversation engine qualifies real customer leads over SMS, with moderation, structured extraction, and cost telemetry. I come to AI from hardware, so I judge a policy by what it does on a physical system rather than by its reward curve. My repos ship with CI, deterministic tests, and CLAUDE.md context files: I work with agentic tools in the loop.",
-    chips:["RL","Isaac Sim / Isaac Lab","SAC / PPO (skrl)","Computer vision","LLMs in production","Evaluation pipelines","AI-native workflow"],
+    chips:["RL","Isaac Sim / Isaac Lab","PPO (skrl)","Computer vision","LLMs in production","Evaluation pipelines","AI-native workflow"],
     note:"Sorted for AI & autonomy roles",
     order:["rover","conjure","tradie","sdk","turtlebot","tracking","fpga"],
     skills:["ai"]},
@@ -88,15 +88,15 @@ const PROJECTS = {
   rover:{
     title:"Planetary Rover RL Navigation", kind:"Thesis · Isaac Sim",
     link:"https://github.com/STERBAN0/RL_for_Rover_Nav_Thesis",
-    desc:"Honours thesis: autonomous navigation and obstacle avoidance for a planetary rover, pairing an A* global planner with a deep-RL local policy trained in NVIDIA Isaac Sim on Mars terrain. My contributions: the fast A* command term and terrain importer for hybrid planning, SAC training configs and refactored skrl models, reward/termination tuning, and a custom evaluation pipeline.<span class='credit'>Built on RLRoverLab (Mortensen &amp; Bøgh, iSpaRo 2024) — extending a large existing research codebase rather than a toy repo.</span>",
-    metrics:[["A*+RL","hybrid planner"],["SAC","training config"],["1000s","parallel envs"]],
+    desc:"Honours thesis (graded 78/100, Distinction): autonomous navigation for a planetary rover, coupling an A* global planner to a PPO local policy through a pure-pursuit waypoint interface, trained in NVIDIA Isaac Sim with 64 parallel rovers on Martian terrain. The hybrid reached 99.5% success at the 10 m training distance against a standalone PPO baseline's 79.5%, and held 90% at 50 m where the standalone collapsed to 2%. My contributions: the fast A* command term and terrain importer for hybrid planning, matched skrl configs (PPO/SAC/TD3), reward/termination tuning, and a custom evaluation pipeline.<span class='credit'>Built on RLRoverLab (Mortensen &amp; Bøgh, iSpaRo 2024) — extending a large existing research codebase rather than a toy repo.</span>",
+    metrics:[["99.5%","success @ 10 m (vs 79.5%)"],["90%","success @ 50 m (vs 2%)"],["64","parallel rovers"]],
     tags:"Isaac Sim · Isaac Lab · skrl · PyTorch",
     notes:{
       overview:"<b>Research depth:</b> classical planning fused with learned control, in a high-fidelity physics simulator.",
       robotics:"<b>Robotics:</b> a full autonomy stack — terrain analysis, global planning, learned local control, and evaluation on a simulated rover platform.",
       embedded:"<b>Embedded:</b> simulation-side today, but designed around a real rover's sensors and actuation limits, the constraints an embedded target imposes.",
       control:"<b>Control & GNC:</b> the guidance-navigation-control decomposition itself. A* guidance, learned navigation policy, low-level control, evaluated end-to-end.",
-      ai:"<b>AI:</b> deep RL at scale. SAC/PPO via skrl, massively parallel Isaac Lab training, reward shaping, and a custom eval pipeline producing result CSVs rather than just training curves.",
+      ai:"<b>AI:</b> deep RL done honestly. PPO via skrl in vectorised Isaac Lab training (SAC/TD3 configs prepared, infeasible on available VRAM), reward shaping at the planner-to-policy interface, and a custom eval pipeline producing result CSVs rather than just training curves.",
       software:"<b>Software:</b> contributing cleanly inside a large external research codebase: new command terms, refactored models, reproducible experiment configs."
     }},
   tradie:{
@@ -183,7 +183,7 @@ const SKILLS = [
   {id:"embedded", title:"Firmware & electronics", items:["C / C++ · Arduino","FPGA · Verilog / SystemVerilog","Raspberry Pi · microcontrollers","Sensor integration & calibration","Power wiring & junction boxes","Assembly"]},
   {id:"robotics", title:"Robotics & simulation", items:["ROS2","Isaac Sim / Isaac Lab","Sensor fusion & path planning","HIL simulation","CAD (Fusion/SW)","Mechanism design"]},
   {id:"control", title:"Control & signals", items:["Advanced control systems","Signal processing & filtering","State estimation","GNC fundamentals","MATLAB","Radar & antenna coursework"]},
-  {id:"ai", title:"AI & computer vision", items:["RL (SAC/PPO)","skrl · PyTorch","Computer vision · MediaPipe","LLM integration (OpenAI)","Evaluation pipelines","AI-native / agentic workflows"]},
+  {id:"ai", title:"AI & computer vision", items:["RL (PPO)","skrl · PyTorch","Computer vision · MediaPipe","LLM integration (OpenAI)","Evaluation pipelines","AI-native / agentic workflows"]},
   {id:"software", title:"Software engineering", items:["Python / TS","React · Next.js · Flask","Postgres · Supabase · Redis","Stripe · Twilio integration","pytest · Vitest · Playwright · CI","git · GitHub · profiling"]},
   {id:"transfer", title:"Working style", items:["Test-driven & methodical","Documents thoroughly","Led teams to delivery","Client-facing comms","Self-taught: ROS2, FPGA, Isaac","Adaptable across the stack"]}
 ];
