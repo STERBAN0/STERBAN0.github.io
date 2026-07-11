@@ -27,8 +27,8 @@ const PROJECT_BULLETS = {
     "Designed two install tiers (numpy-only and full webcam) with deterministic, webcam-free tests."
   ],
   rover: [
-    "Developed an Honours thesis on autonomous rover navigation, pairing an A* global planner with a deep-RL local policy trained in NVIDIA Isaac Sim on Mars terrain.",
-    "Implemented a fast A* command term and terrain importer for hybrid planning; tuned SAC training configs and reward/termination logic across 1000s of parallel environments; built a custom evaluation pipeline."
+    "Developed an Honours thesis (78/100, Distinction) on autonomous rover navigation: an A* global planner coupled to a PPO local policy, trained in NVIDIA Isaac Sim with 64 parallel rovers on Martian terrain.",
+    "Hybrid achieved 99.5% success at 10 m (vs 79.5% standalone-PPO) and 90% vs 2% at 50 m; built the A* command term, terrain importer, reward tuning, and a custom evaluation pipeline."
   ],
   tradie: [
     "Built a production micro-SaaS that recovers missed calls for trades businesses using Twilio telephony and a GPT-4o-mini SMS conversation engine.",
@@ -74,6 +74,13 @@ const PROFILES = [
     title: "AI & Software Engineer",
     summary: "Mechatronic engineering graduate with software engineering and applied AI experience. Trained reinforcement-learning agents in NVIDIA Isaac Sim for planetary rover navigation, built a real-time computer vision engine and shipped it as an installable SDK, and built a production micro-SaaS with an LLM-based conversation engine, telephony, and billing.",
     projectKeys: ["rover", "conjure", "tradie", "sdk", "fund"],
+    skillGroups: ["ai", "software", "transfer"]
+  },
+  {
+    file: "Rakan_Eyad_Resume_Claude_Corps.pdf",
+    title: "AI & Full-Stack Engineer",
+    summary: "Mechatronic engineering graduate (Honours, University of Sydney) who builds end-to-end and ships solo: Tradie Text, a production missed-call recovery SaaS for trades businesses (LLM conversation engine, telephony, billing), now piloting with first users; an open-source real-time computer-vision engine and SDK; and an Honours thesis training RL agents in NVIDIA Isaac Sim. Works AI-natively: repos ship with CLAUDE.md context files, CI, and deterministic tests. Completed Anthropic's AI Fluency and Claude 101 courses.",
+    projectKeys: ["tradie", "conjure", "fund", "rover"],
     skillGroups: ["ai", "software", "transfer"]
   }
 ];
