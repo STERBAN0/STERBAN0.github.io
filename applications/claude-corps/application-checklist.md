@@ -14,10 +14,26 @@
 - [x] Built something end-to-end solo (Tradie Text)
 - [x] Willing to relocate + commit 1 year
 
+## Form status (pre-filled in browser, 11 Jul 2026 — do NOT close the tab without submitting or your entries are lost)
+
+Filled: name (Rakan Abdulla / preferred Rakan), email, country +61, location Sydney NSW, education Bachelor's, LinkedIn, portfolio+GitHub, work auth **Yes**, sponsorship **No**, <2yrs **Yes**, full-time **Yes**, relocate **Yes**, 18+ **Yes**, both courses **Yes**, start date "October 19, 2026", both essays, language checkboxes (Python/JS-TS/SQL/HTML-CSS), built-things checkboxes (6), optional link → Conjure repo.
+
+Still yours to do in the form:
+- [ ] Phone number (required)
+- [ ] Attach resume: `resumes\Rakan_Eyad_Resume_Claude_Corps.pdf` (required)
+- [ ] Attach certificates: `applications\claude-corps\Certificates.pdf` (both certs, merged)
+- [ ] Social-impact checkboxes — tick only what's true ("Taught, tutored, or mentored" if real; otherwise "None of these yet" is a fine, honest answer)
+- [ ] "How did you hear about Claude Corps?" dropdown
+- [ ] "Are you a CodePath member or alum?" dropdown
+- [ ] Anthropic research-participation consent dropdown (your choice)
+- [ ] Pronouns / accommodations / demographic survey (all optional, your choice)
+- [ ] Personalize Essay 1 first paragraph if a specific tradie sparked the idea
+- [ ] Review everything → Submit (reCAPTCHA is yours)
+
 ## Before you submit (in order)
 
 1. [ ] Post the Tradie Text "coming soon" post on LinkedIn (`linkedin-tradie-text-post.md`)
-2. [ ] Update LinkedIn profile (`linkedin-profile-updates.md`) — headline, Projects, certifications, Featured
+2. [ ] Update LinkedIn profile (`linkedin-profile-updates.md`) — headline, **About (missing)**, Projects (section is empty — add both), ALBON dates, Featured. Certifications already done ✓ (audited 12 Jul)
 3. [ ] Send the FUN.D permission message to your client (`fund-client-permission-message.md`) — don't wait for the reply
 4. [ ] Personalize Essay 1 where marked (`essay-1-community-tradie-text.md`), paste into the form, check the word counter
 5. [ ] Read Essay 2 out loud once, tweak anything that doesn't sound like you (`essay-2-setback-thesis.md`)
