@@ -22,6 +22,19 @@
 {"@context":"https://schema.org","@type":"Person","name":"Rakan Eyad","url":"https://sterban0.github.io/","jobTitle":"Mechatronic Engineer","alumniOf":{"@type":"CollegeOrUniversity","name":"University of Sydney"},"sameAs":["https://github.com/STERBAN0","https://www.linkedin.com/in/rakan-abdulla/"]}
 </script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='9' fill='%230E6B49'/%3E%3Ctext x='32' y='43' font-family='Arial,sans-serif' font-size='27' font-weight='800' fill='%23F3F6F2' text-anchor='middle'%3ERE%3C/text%3E%3C/svg%3E">
+<script>
+/* theme init — must run before first paint so there's no flash of the wrong
+   theme. Manual choice (localStorage) wins; otherwise follow the OS setting. */
+(function(){
+  var theme = "dark";
+  try{
+    var stored = localStorage.getItem("theme");
+    if(stored === "light" || stored === "dark") theme = stored;
+    else if(window.matchMedia("(prefers-color-scheme: light)").matches) theme = "light";
+  }catch(e){/* storage blocked — keep dark default */}
+  document.documentElement.setAttribute("data-theme", theme);
+})();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -44,6 +57,23 @@
   --shadow-1:0 1px 2px rgba(0,0,0,.35);
   --shadow-2:0 12px 28px -14px rgba(0,0,0,.55), 0 3px 8px rgba(0,0,0,.35);
 }
+/* light theme — same datasheet, printed on paper. Only tokens change; every
+   component reads these variables so both themes stay in lockstep. */
+html[data-theme="light"]{
+  --paper:#F4F6F2;
+  --paper-rgb:244,246,242;
+  --card:#FDFEFC;
+  --ink:#141B16;
+  --ink-soft:#33413A;
+  --dim:#5D6C62;
+  --rule:#C7D2C9;
+  --mask:#0E6B49;
+  --mask-rgb:14,107,73;
+  --mask-soft:#DFEDE5;
+  --copper:#8F5410;
+  --shadow-1:0 1px 2px rgba(20,30,24,.10);
+  --shadow-2:0 12px 28px -14px rgba(20,30,24,.20), 0 3px 8px rgba(20,30,24,.08);
+}
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 @media (prefers-reduced-motion: reduce){
@@ -63,7 +93,12 @@ body::after{
   content:"";position:fixed;inset:0;z-index:999;pointer-events:none;opacity:.06;mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
 }
+/* on light paper the overlay blend washes out — multiply reads as print grain */
+html[data-theme="light"] body::after{opacity:.05;mix-blend-mode:multiply}
 .mono{font-family:"IBM Plex Mono", ui-monospace, monospace}
+/* the hidden attribute has no UA default on SVG (it's an HTML-namespace rule),
+   so icon-swap buttons (theme, play/pause) need it made explicit */
+svg[hidden]{display:none}
 a{color:var(--mask);text-decoration:none}
 a:hover{text-decoration:underline}
 ::selection{background:var(--mask);color:var(--paper)}
@@ -84,6 +119,16 @@ header.masthead{
   color:var(--dim);text-transform:uppercase;flex-wrap:wrap;gap:6px 18px;
 }
 .mast-top .doc{color:var(--ink)}
+.theme-toggle{
+  appearance:none;background:none;cursor:pointer;
+  border:1px solid var(--rule);border-radius:99px;padding:3px 10px;
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:500;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--dim);
+  transition:color .2s,border-color .2s;
+}
+@media(hover:hover){.theme-toggle:hover{color:var(--mask);border-color:var(--mask)}}
+.theme-toggle svg{width:12px;height:12px;flex:none}
 .mast-main{display:flex;justify-content:space-between;align-items:flex-end;padding:30px 0 26px;gap:24px;flex-wrap:wrap}
 h1.name{
   font-family:"Archivo",sans-serif;font-weight:900;
@@ -147,15 +192,19 @@ button.tab .num{color:var(--copper);margin-right:7px;font-weight:600}
   transition:transform .35s var(--ease-out),width .35s var(--ease-out);
 }
 
-/* ---- mobile disclosure (hamburger) ---- */
+/* ---- mobile disclosure (mode dropdown) ----
+   Not a hamburger: this is a mode SELECTOR, so the trigger is a labelled
+   dropdown button that always shows the active mode ("01 Overview ▾"). */
 .menu-toggle{display:none}
 @media(max-width:640px){
-  .selector-inner{overflow-x:visible;position:relative}
+  .selector-inner{overflow-x:visible;position:relative;padding-top:8px;padding-bottom:8px}
   .menu-toggle{
-    display:flex;align-items:center;justify-content:center;
-    width:44px;height:44px;margin-left:auto;flex:none;
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    flex:1;min-width:0;min-height:44px;margin-left:14px;padding:0 12px;
     background:var(--card);border:1px solid var(--rule);border-radius:var(--radius);
     cursor:pointer;box-shadow:var(--shadow-1);
+    font-family:"IBM Plex Mono",monospace;font-size:12.5px;font-weight:600;
+    letter-spacing:.05em;text-transform:uppercase;color:var(--ink);
     transition:border-color .2s var(--ease-out),background .2s var(--ease-out);
   }
   /* hover feedback only for devices that truly have a hover pointer (mouse/trackpad) —
@@ -163,15 +212,10 @@ button.tab .num{color:var(--copper);margin-right:7px;font-weight:600}
      which otherwise leaves the toggle border looking permanently lit after a touch tap */
   @media(hover:hover){.menu-toggle:hover{border-color:var(--mask)}}
   .menu-toggle[aria-expanded="true"]{border-color:var(--mask);background:var(--mask-soft)}
-  .menu-toggle svg{overflow:visible}
-  .menu-toggle .bar{
-    stroke:var(--ink);stroke-width:2;stroke-linecap:square;
-    transform-box:fill-box;transform-origin:center;
-    transition:transform .3s var(--ease-out),opacity .2s var(--ease-out);
-  }
-  .menu-toggle[aria-expanded="true"] .bar-top{transform:translateY(5px) rotate(45deg)}
-  .menu-toggle[aria-expanded="true"] .bar-mid{opacity:0}
-  .menu-toggle[aria-expanded="true"] .bar-bot{transform:translateY(-5px) rotate(-45deg)}
+  .menu-toggle .mt-current{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .menu-toggle .mt-current .num{color:var(--copper);margin-right:7px;font-weight:600}
+  .menu-toggle .mt-chev{flex:none;color:var(--dim);transition:transform .3s var(--ease-out)}
+  .menu-toggle[aria-expanded="true"] .mt-chev{transform:rotate(180deg)}
 
   [role="tablist"]{
     display:none;flex-direction:column;
@@ -371,6 +415,11 @@ footer{background:var(--card);margin-top:32px;box-shadow:0 -1px 0 var(--rule)}
       <span>Rev. 07/2026</span>
       <span>Sydney, Australia</span>
       <span>Status: <span style="color:var(--mask);font-weight:600">Available now</span></span>
+      <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch theme">
+        <svg class="tt-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+        <svg class="tt-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" hidden><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <span class="tt-label">Dark</span>
+      </button>
     </div>
     <div class="mast-main">
       <h1 class="name">Rakan<br>Eyad
@@ -390,12 +439,9 @@ footer{background:var(--card);margin-top:32px;box-shadow:0 -1px 0 var(--rule)}
 <div class="selector" id="selector">
   <div class="wrap selector-inner" id="selector-inner">
     <span class="sel-label" id="mode-label">Operating mode</span>
-    <button type="button" class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="tabs" aria-label="Toggle mode menu">
-      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
-        <line class="bar bar-top" x1="3" y1="7" x2="21" y2="7"></line>
-        <line class="bar bar-mid" x1="3" y1="12" x2="21" y2="12"></line>
-        <line class="bar bar-bot" x1="3" y1="17" x2="21" y2="17"></line>
-      </svg>
+    <button type="button" class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="tabs" aria-label="Change operating mode">
+      <span class="mt-current" id="menu-toggle-label"></span>
+      <svg class="mt-chev" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><polyline points="6 9 12 15 18 9"/></svg>
     </button>
     <div role="tablist" aria-labelledby="mode-label" id="tabs"></div>
   </div>
@@ -773,8 +819,9 @@ function onProjMouseLeave(){
 function syncProjPlayPauseUI(){
   const isPlaying = projAutoplayTimer !== null;
   projPlayPauseBtn.setAttribute("aria-label", isPlaying ? "Pause autoplay" : "Play autoplay");
-  projPauseIcon.hidden = !isPlaying;
-  projPlayIcon.hidden = isPlaying;
+  /* toggleAttribute, not .hidden — SVGElement has no hidden IDL property */
+  projPauseIcon.toggleAttribute("hidden", !isPlaying);
+  projPlayIcon.toggleAttribute("hidden", isPlaying);
 }
 function onProjPlayPauseClick(){
   /* the one control allowed to override projManuallyPaused unconditionally */
@@ -897,6 +944,10 @@ function setMode(id, updateHash){
     <div class="chips">${m.chips.map(c=>`<span class="chip">${icon(c)}<span>${c}</span></span>`).join("")}</div>
     <a class="resume-dl" href="${RESUME_FILES[resumeVariant]}" download target="_blank" rel="noopener noreferrer">Download ${resumeVariant==="general"?"resume":"tailored resume"} <span class="arr">↓</span></a>`;
   projNote.textContent=m.note;
+  /* keep the mobile dropdown trigger showing the active mode */
+  const mtLabel=document.getElementById("menu-toggle-label");
+  mtLabel.innerHTML=`<span class="num">${m.n}</span>${m.label}`;
+  menuToggle.setAttribute("aria-label",`Change operating mode (current: ${m.label})`);
   initProjCarousel(id, m.order);
   renderSkills(id, m);
   positionUnderline();
@@ -917,6 +968,33 @@ function switchMode(id){
   }
   setMode(id,true);
 }
+
+/* ---------- theme toggle ----------
+   The head script already set data-theme before paint; this only wires the
+   button, keeps the meta theme-color in sync, and follows OS changes until
+   the user makes a manual choice (which persists in localStorage). */
+const themeToggle=document.getElementById("theme-toggle");
+const themeColorMeta=document.querySelector('meta[name="theme-color"]');
+const lightSchemeQuery=window.matchMedia("(prefers-color-scheme: light)");
+function applyTheme(theme){
+  document.documentElement.setAttribute("data-theme",theme);
+  themeColorMeta.setAttribute("content", theme==="light" ? "#F4F6F2" : "#0E1310");
+  themeToggle.querySelector(".tt-label").textContent = theme==="light" ? "Light" : "Dark";
+  /* toggleAttribute, not .hidden — SVGElement has no hidden IDL property */
+  themeToggle.querySelector(".tt-sun").toggleAttribute("hidden", theme!=="light");
+  themeToggle.querySelector(".tt-moon").toggleAttribute("hidden", theme==="light");
+  themeToggle.setAttribute("aria-label", theme==="light" ? "Switch to dark theme" : "Switch to light theme");
+}
+themeToggle.addEventListener("click",()=>{
+  const next = document.documentElement.getAttribute("data-theme")==="light" ? "dark" : "light";
+  applyTheme(next);
+  try{ localStorage.setItem("theme", next); }catch(e){/* storage blocked — theme still applies for this visit */}
+});
+lightSchemeQuery.addEventListener("change",e=>{
+  try{ if(localStorage.getItem("theme")) return; }catch(err){/* can't read — treat as no manual choice */}
+  applyTheme(e.matches ? "light" : "dark");
+});
+applyTheme(document.documentElement.getAttribute("data-theme")==="light" ? "light" : "dark");
 
 /* sticky selector shadow */
 const sentinel=document.getElementById("stick-sentinel");
