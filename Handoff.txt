@@ -6,7 +6,7 @@
 Changes made at deploy time (2 July 2026):
 - Contact email switched to **rakan132546@gmail.com** everywhere (uni address retired — graduated).
 - Education updated to graduated: 2022–2026, EWAM 76% Distinction, no "final semester" wording.
-- Two project cards added from private repos, framed from their own READMEs/commit history: **Tradie Text** (`Local_Tradies_Missed_Calls`: AI missed-call recovery SaaS, Next.js 15/Supabase RLS/Twilio/GPT-4o-mini/Stripe, in production) and **FUN.D** (`FUN.D-Project`: Flask + React crowdfunding platform, Stripe Elements flow, CI). Both marked "Private repo · walkthrough on request".
+- Two project cards added from private repos, framed from their own READMEs/commit history: **Tradie Texts** (`Local_Tradies_Missed_Calls`: AI missed-call recovery SaaS, Next.js 15/Supabase RLS/Twilio/GPT-4o-mini/Stripe, in production) and **FUN.D** (`FUN.D-Project`: Flask + React crowdfunding platform, Stripe Elements flow, CI). Both marked "Private repo · walkthrough on request".
 - Front-end smoothed (same editorial datasheet direction): View Transitions on mode switch, sliding tab underline, backdrop-blur sticky selector, card hover lift, scroll reveals, paper grain, favicon + OG tags. Still one dependency-free file.
 - Copy de-slopped (stop-slop pass) while keeping the honesty guardrails below.
 - Phone number deliberately kept off the public page.

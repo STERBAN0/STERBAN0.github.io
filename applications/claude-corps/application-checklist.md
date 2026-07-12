@@ -11,7 +11,7 @@
 - [x] AI Fluency certificate
 - [x] Claude 101 certificate
 - [x] 18+ by 19 Oct 2026
-- [x] Built something end-to-end solo (Tradie Text)
+- [x] Built something end-to-end solo (Tradie Texts)
 - [x] Willing to relocate + commit 1 year
 
 ## Form status (pre-filled in browser, 11 Jul 2026 — do NOT close the tab without submitting or your entries are lost)
@@ -32,7 +32,7 @@ Still yours to do in the form:
 
 ## Before you submit (in order)
 
-1. [ ] Post the Tradie Text "coming soon" post on LinkedIn (`linkedin-tradie-text-post.md`)
+1. [ ] Post the Tradie Texts "coming soon" post on LinkedIn (`linkedin-tradie-text-post.md`)
 2. [ ] Update LinkedIn profile (`linkedin-profile-updates.md`) — headline, **About (missing)**, Projects (section is empty — add both), ALBON dates, Featured. Certifications already done ✓ (audited 12 Jul)
 3. [ ] Send the FUN.D permission message to your client (`fund-client-permission-message.md`) — don't wait for the reply
 4. [ ] Personalize Essay 1 where marked (`essay-1-community-tradie-text.md`), paste into the form, check the word counter
@@ -44,15 +44,15 @@ Still yours to do in the form:
 
 ## Your strongest cards (use in every stage)
 
-1. **Tradie Text = the fellowship in miniature.** They want someone who scopes a real org's problem, builds an AI solution non-technical people use, and hardens it responsibly. You did that solo for trades businesses: discovery → LLM conversation engine with moderation/emergency escalation → production hardening (276 CI tests, RLS, threat model, runbooks) → piloting with real users. Say this mapping out loud in interviews.
+1. **Tradie Texts = the fellowship in miniature.** They want someone who scopes a real org's problem, builds an AI solution non-technical people use, and hardens it responsibly. You did that solo for trades businesses: discovery → LLM conversation engine with moderation/emergency escalation → production hardening (276 CI tests, RLS, threat model, runbooks) → piloting with real users. Say this mapping out loud in interviews.
 2. **Utility player, provably.** Same person shipped: firmware/FPGA, control systems, an RL thesis, computer vision, a production SaaS, and client work (ANT61, FUN.D). The posting literally asks for "people who can build, teach, scope, and translate."
 3. **Honesty as a feature.** Thesis credits RLRoverLab. Portfolio says "piloting with first users," not "hundreds of customers." The must-have is "ability to discuss it honestly" — you can, with log books.
 4. **AI-native workflow.** Repos ship CLAUDE.md context files; you build with Claude Code daily.
 
 ## Questions to have answers for (25-min conversation + Super Day)
 
-- **"Tradie Text uses GPT-4o-mini, not Claude — why?"** Honest answer: cost-per-message decision for an SMS product at build time; the architecture is provider-agnostic (moderation, structured extraction, cost telemetry are all yours); your development workflow is Claude Code end-to-end; swapping the model is a config change, and you'd reach for Claude for anything needing longer context or tool use. Do not dodge this one.
-- **"Walk me through something you built end-to-end."** Tradie Text, 3 minutes, problem-first: missed call = lost job → catch, converse, qualify, escalate → what hardening a solo production system taught you. Practice it timed.
+- **"Tradie Texts uses GPT-4o-mini, not Claude — why?"** Honest answer: cost-per-message decision for an SMS product at build time; the architecture is provider-agnostic (moderation, structured extraction, cost telemetry are all yours); your development workflow is Claude Code end-to-end; swapping the model is a config change, and you'd reach for Claude for anything needing longer context or tool use. Do not dodge this one.
+- **"Walk me through something you built end-to-end."** Tradie Texts, 3 minutes, problem-first: missed call = lost job → catch, converse, qualify, escalate → what hardening a solo production system taught you. Practice it timed.
 - **"Tell me about teaching or translating for non-technical people."** Prepare 1–2 true stories: onboarding pilot tradies counts; explaining engineering decisions to the FUN.D client counts; ALBON cross-discipline work counts. Pick the ones with the most real detail.
 - **"What would you do in your first month at a host org?"** Their own posting answers it: spend real time understanding what the org actually needs before building. Say how you'd do discovery (shadow people, map the workflow, find the missed-call-equivalent).
 - **Setback question** — you have Essay 2 as a spoken story. Practice it without reading.
