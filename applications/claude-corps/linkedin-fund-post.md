@@ -1,8 +1,10 @@
 # LinkedIn post — FUN.D (client-approved 13 Jul 2026)
 
-> Client approved: post about the build itself (stack + engineering). No business numbers,
-> no launch details, no final name, no site link. "FUN.D" working title is fine (already
-> public on the portfolio).
+> Client approved 13 Jul: post about the build itself (stack + engineering). No business
+> numbers, no launch details, no site link, and NO NAME — client asked to drop "FUN.D"
+> from the post too since they're renaming ("write like funding platform etc").
+> Portfolio card keeps the FUN.D working title for now; rename it when the client rebrands.
+> Client also offered to write a LinkedIn recommendation.
 > Post midweek (Wed/Thu morning AEST), a few days after the Tradie Texts post.
 > Both @mentions must be picked from the dropdown to become real tags.
 
@@ -22,7 +24,7 @@ Making it work in a demo was the easy half. Making it ready for strangers' money
 
 There's no AI in this one, on purpose. A CRUD-plus-payments product wants boring, proven tools, and knowing when that's true is part of the job.
 
-The product belongs to the client, so no name or link yet. It's listed as FUN.D on my portfolio, and I'll share the real thing when they ship.
+The product belongs to the client, so no name or link yet. I'll share the real thing when they ship.
 
 #softwareengineering #fullstack #webdevelopment #buildinpublic
 

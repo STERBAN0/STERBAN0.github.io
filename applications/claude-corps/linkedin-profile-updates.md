@@ -43,7 +43,7 @@ Paste this (fits well inside the 2,600-char limit; edit anything that doesn't so
 >
 > Right now that means Tradie Texts, a missed-call recovery service for trades businesses that I designed, built, and hardened solo. Twilio catches the call a tradie can't answer, an AI SMS conversation qualifies the lead (with moderation and emergency detection), and a scored lead lands on a realtime dashboard. It's live in production and piloting with first users: 276 tests in CI, row-level security for tenant isolation, a threat model, and incident runbooks.
 >
-> Before that: an Honours thesis coupling an A* global planner to a PPO local policy across 64 parallel simulated Mars rovers in NVIDIA Isaac Sim (99.5% vs 79.5% success at the 10 m training distance; 90% vs 2% at 50 m), built on the open-source RLRoverLab. Fourteen months at ALBON integrating a prototype control system. Real-time computer vision at 60 FPS (Conjure). Client work for ANT61 (space robotics) and a crowdfunding platform (FUN.D).
+> Before that: an Honours thesis coupling an A* global planner to a PPO local policy across 64 parallel simulated Mars rovers in NVIDIA Isaac Sim (99.5% vs 79.5% success at the 10 m training distance; 90% vs 2% at 50 m), built on the open-source RLRoverLab. Fourteen months at ALBON integrating a prototype control system. Real-time computer vision at 60 FPS (Conjure). Client work for ANT61 (space robotics) and a crowdfunding platform.
 >
 > I work AI-natively: my repos ship with CI, deterministic tests, and CLAUDE.md context files.
 >
