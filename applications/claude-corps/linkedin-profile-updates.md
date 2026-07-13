@@ -110,7 +110,7 @@ Steps: Experience section → pencil → pencil on the ALBON entry → fix start
 - **Certifications:** ✅ already done, all three Anthropic certs live with credential links. Nothing to do.
 - **Email:** Contact info → verify rakan132546@gmail.com is shown (not the uni address).
 - **Name check:** LinkedIn says "Rakan Abdulla", portfolio and resume say "Rakan Eyad". If both names are yours, fine, but reviewers cross-reference: consider adding the other name in one place (e.g. LinkedIn "Additional name" field) so the trail connects.
-- **FUN.D:** hold. No LinkedIn post about it until the client answers (`fund-client-permission-message.md`). "Client project, private repo" on resume/portfolio stays fine.
+- **FUN.D:** client approved the build-focused post on 13 Jul (stack + engineering only; no business numbers, launch details, name, or link). Draft in `linkedin-fund-post.md` — post midweek. Credit Karim Tuikin (two-person build, Rakan led).
 
 ## Recommended order of operations
 

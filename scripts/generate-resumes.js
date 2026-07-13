@@ -58,7 +58,7 @@ const PROFILES = [
   {
     file: "Rakan_Eyad_Resume.pdf",
     title: "Mechatronic Engineer",
-    summary: "Mechatronic engineering graduate (Honours, University of Sydney) with 14 months of industry experience on a prototype control system, plus two production web applications built solo.",
+    summary: "Mechatronic engineering graduate (Honours, University of Sydney) with 14 months of industry experience on a prototype control system, plus two production web applications, one built solo and one leading a two-person client build.",
     projectKeys: ["conjure", "rover", "tradie", "fund"],
     skillGroups: ["embedded", "robotics", "control", "ai", "software"]
   },

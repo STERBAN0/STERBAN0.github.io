@@ -2,6 +2,8 @@
 
 > Post this before you submit the application (reviewers will look at your LinkedIn).
 > Best posting windows: Tue–Thu morning AEST. Reply to every comment in the first 2 hours.
+> The "@Tradie Texts" must be a real mention: type the @, then pick the company page from
+> the dropdown so it turns into a blue tag. Pasting the plain text does not tag the page.
 
 ---
 
@@ -9,7 +11,7 @@ I've spent the last few months building something for the tradies in my life.
 
 A tradie on the tools can't answer the phone. The caller doesn't leave a voicemail; they ring the next number on Google. That missed call was a job.
 
-Tradie Texts catches the missed call and texts the caller back in seconds. An AI conversation works out what the job is, where it is, and how urgent, then puts a scored lead on the tradie's dashboard. Emergencies get detected and escalated instead of chatting with a bot.
+@Tradie Texts catches the missed call and texts the caller back in seconds. An AI conversation works out what the job is, where it is, and how urgent, then puts a scored lead on the tradie's dashboard. Emergencies get detected and escalated instead of chatting with a bot.
 
 I designed, built, and hardened it solo: Next.js, Supabase, Twilio, Stripe, 276 tests in CI, and a proper threat model, because small businesses deserve real engineering too.
 
