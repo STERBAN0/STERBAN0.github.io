@@ -14,7 +14,7 @@
 const MODES = {
   overview:{ n:"01", label:"Overview", eyebrow:"General configuration",
     headline:"One engineer. Six operating modes.",
-    lede:"I build electromechanical systems end-to-end: the board, the firmware, the control loop, and increasingly the learning system on top. Mechatronic engineering graduate (Honours) from the University of Sydney, with 14 months in industry shipping a prototype control system and two production web apps built solo. Pick a mode above and the page re-configures for the role you're hiring for.",
+    lede:"I build electromechanical systems end-to-end: the board, the firmware, the control loop, and increasingly the learning system on top. Mechatronic engineering graduate (Honours) from the University of Sydney, with 14 months in industry shipping a prototype control system and two production web apps (one solo, one a client build I led). Pick a mode above and the page re-configures for the role you're hiring for.",
     chips:["Hands-on builds","Embedded C/C++","Python / TS","ROS2","Isaac Sim / RL","Full-stack SaaS","Test-driven"],
     note:"Sorted by overall signal",
     order:["tradie","rover","conjure","tracking","sdk","fund","fpga","turtlebot","ant61"],
@@ -113,7 +113,7 @@ const PROJECTS = {
   fund:{
     title:"FUN.D", kind:"Full-stack web app",
     link:null, linkNote:"Private repo · walkthrough on request",
-    desc:"A crowdfunding platform where users create and fund campaigns. Flask REST API with JWT auth and role-based admin, React 19 + Vite frontend, Stripe Elements payment flow (create → confirm → credit, idempotent), Supabase Postgres and image storage, deployed on Vercel. Taking it to release meant wiring the real payment flow end-to-end, adding migrations, fixing N+1 queries, validating uploads by magic bytes, and standing up a pytest + Vitest CI pipeline.",
+    desc:"A crowdfunding platform where users create and fund campaigns. Flask REST API with JWT auth and role-based admin, React 19 + Vite frontend, Stripe Elements payment flow (create → confirm → credit, idempotent), Supabase Postgres and image storage, deployed on Vercel. Taking it to release meant wiring the real payment flow end-to-end, adding migrations, fixing N+1 queries, validating uploads by magic bytes, and standing up a pytest + Vitest CI pipeline. A two-person build with Karim Tuikin; I led the engineering.",
     metrics:[["JWT","auth + roles"],["Stripe","payments"],["2","CI test suites"]],
     tags:"Flask · React · Stripe · Supabase",
     notes:{
