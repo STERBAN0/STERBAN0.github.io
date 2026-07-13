@@ -49,7 +49,7 @@ const MODES = {
     skills:["ai"]},
   software:{ n:"06", label:"Software", eyebrow:"Mode 06 — Software engineering",
     headline:"Shipped code: tested, profiled, documented.",
-    lede:"My best software is running in production. Tradie Texts recovers missed calls for trades businesses with telephony, an LLM conversation engine, and Stripe billing. Conjure's render path went from 162 ms to 2.8 ms a frame after profiling, then became a pip-installable SDK with an event API. FUN.D wires a real Stripe payment flow through a Flask + React stack. I profile before I optimise, test what's deterministic, and document what I build.",
+    lede:"My best software is running in production. Tradie Texts recovers missed calls for trades businesses with telephony, an LLM conversation engine, and Stripe billing. Conjure's render path went from 162 ms to 2.8 ms a frame after profiling, then became a pip-installable SDK with an event API. A client crowdfunding platform wires a real Stripe payment flow through a Flask + React stack. I profile before I optimise, test what's deterministic, and document what I build.",
     chips:["Python","TypeScript","React · Next.js","Flask","Postgres · Supabase","pytest · Vitest · CI","Performance profiling"],
     note:"Sorted for software roles",
     order:["tradie","conjure","sdk","fund","rover","turtlebot"],
@@ -111,7 +111,7 @@ const PROJECTS = {
       software:"<b>Software:</b> production engineering end-to-end. Webhook signature verification, idempotent queues, rate limits, RLS, CI gates, security docs, runbooks."
     }},
   fund:{
-    title:"FUN.D", kind:"Full-stack web app",
+    title:"Crowdfunding Platform", kind:"Client build · Full-stack web app",
     link:null, linkNote:"Private repo · walkthrough on request",
     desc:"A crowdfunding platform where users create and fund campaigns. Flask REST API with JWT auth and role-based admin, React 19 + Vite frontend, Stripe Elements payment flow (create → confirm → credit, idempotent), Supabase Postgres and image storage, deployed on Vercel. Taking it to release meant wiring the real payment flow end-to-end, adding migrations, fixing N+1 queries, validating uploads by magic bytes, and standing up a pytest + Vitest CI pipeline. A two-person build with Karim Tuikin; I led the engineering.",
     metrics:[["JWT","auth + roles"],["Stripe","payments"],["2","CI test suites"]],
