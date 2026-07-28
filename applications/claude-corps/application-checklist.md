@@ -1,8 +1,15 @@
-# Claude Corps Fellow — application checklist
+# Claude Corps Fellow — application status
+
+> **SUBMITTED — before the 17 July 2026 deadline.** Confirmed by Rakan 27 July 2026.
+> Phone number, `Rakan_Eyad_Resume_Claude_Corps.pdf`, and the merged `Certificates.pdf`
+> all went in with the form. Both certificates are also on his LinkedIn profile, and the
+> Tradie Texts and crowdfunding-build posts are published.
+>
+> Everything below the "Form status" section is now **interview prep**, not pre-submit work.
 
 **Posting:** https://job-boards.greenhouse.io/claudecorps/jobs/4250200009
-**Deadline: 17 July 2026 — rolling review. Submit by Mon 13 / Tue 14 July.** Rolling means early applications get read when reviewers are fresh and slots are open.
 **Program:** CodePath × Anthropic. $85k + benefits, 1 year, in-person at a host org in the US, cohort starts 19 Oct 2026.
+**Next stages:** take-home assessment → 25-min conversation → Super Day.
 
 ## Eligibility (all confirmed ✓)
 
@@ -14,38 +21,23 @@
 - [x] Built something end-to-end solo (Tradie Texts)
 - [x] Willing to relocate + commit 1 year
 
-## Form status (pre-filled in browser, 11 Jul 2026 — do NOT close the tab without submitting or your entries are lost)
+## What was submitted (for reference in later stages)
 
-Filled: name (Rakan Abdulla / preferred Rakan), email, country +61, location Sydney NSW, education Bachelor's, LinkedIn, portfolio+GitHub, work auth **Yes**, sponsorship **No**, <2yrs **Yes**, full-time **Yes**, relocate **Yes**, 18+ **Yes**, both courses **Yes**, start date "October 19, 2026", both essays, language checkboxes (Python/JS-TS/SQL/HTML-CSS), built-things checkboxes (6), optional link → Conjure repo.
+Name (Rakan Abdulla / preferred Rakan), email, country +61, location Sydney NSW, education Bachelor's, phone, LinkedIn, portfolio+GitHub, work auth **Yes**, sponsorship **No**, <2yrs **Yes**, full-time **Yes**, relocate **Yes**, 18+ **Yes**, both courses **Yes**, start date "October 19, 2026", both essays, language checkboxes (Python/JS-TS/SQL/HTML-CSS), built-things checkboxes (6), optional link → Conjure repo, resume `Rakan_Eyad_Resume_Claude_Corps.pdf`, certificates `Certificates.pdf` (Claude 101 + AI Fluency, merged).
 
-Still yours to do in the form:
-- [ ] Phone number (required)
-- [ ] Attach resume: `resumes\Rakan_Eyad_Resume_Claude_Corps.pdf` (required)
-- [ ] Attach certificates: `applications\claude-corps\Certificates.pdf` (both certs, merged)
-- [ ] Social-impact checkboxes — tick only what's true ("Taught, tutored, or mentored" if real; otherwise "None of these yet" is a fine, honest answer)
-- [ ] "How did you hear about Claude Corps?" dropdown
-- [ ] "Are you a CodePath member or alum?" dropdown
-- [ ] Anthropic research-participation consent dropdown (your choice)
-- [ ] Pronouns / accommodations / demographic survey (all optional, your choice)
-- [ ] Personalize Essay 1 first paragraph if a specific tradie sparked the idea
-- [ ] Review everything → Submit (reCAPTCHA is yours)
+Keep the essays (`essay-1-community-tradie-text.md`, `essay-2-setback-thesis.md`) handy — interviewers work from what you wrote, so re-read them before any call rather than improvising a different version of the same story.
 
-## Before you submit (in order)
+## Supporting work — done
 
-1. [ ] Post the Tradie Texts "coming soon" post on LinkedIn (`linkedin-tradie-text-post.md`)
-2. [ ] Update LinkedIn profile (`linkedin-profile-updates.md`) — headline, **About (missing)**, Projects (section is empty — add both), ALBON dates, Featured. Certifications already done ✓ (audited 12 Jul)
-3. [ ] Send the FUN.D permission message to your client (`fund-client-permission-message.md`) — don't wait for the reply
-4. [ ] Personalize Essay 1 where marked (`essay-1-community-tradie-text.md`), paste into the form, check the word counter
-5. [ ] Read Essay 2 out loud once, tweak anything that doesn't sound like you (`essay-2-setback-thesis.md`)
-6. [ ] Upload resume: `resumes/Rakan_Eyad_Resume_Claude_Corps.pdf`
-7. [ ] Attach both course certificates
-8. [ ] Links: portfolio https://sterban0.github.io · github.com/STERBAN0 · linkedin.com/in/rakan-abdulla — make sure the form gets all three
-9. [ ] Screenshot your submitted application before hitting submit (forms eat text)
+- [x] Tradie Texts post published on LinkedIn (`linkedin-tradie-text-post.md`)
+- [x] Crowdfunding build post published (`linkedin-fund-post.md`) — build-focused per client constraints
+- [x] Both certificates on the LinkedIn profile
+- [x] Client permission message sent (`fund-client-permission-message.md`)
 
 ## Your strongest cards (use in every stage)
 
 1. **Tradie Texts = the fellowship in miniature.** They want someone who scopes a real org's problem, builds an AI solution non-technical people use, and hardens it responsibly. You did that solo for trades businesses: discovery → LLM conversation engine with moderation/emergency escalation → production hardening (276 CI tests, RLS, threat model, runbooks) → piloting with real users. Say this mapping out loud in interviews.
-2. **Utility player, provably.** Same person shipped: firmware/FPGA, control systems, an RL thesis, computer vision, a production SaaS, and client work (ANT61, FUN.D). The posting literally asks for "people who can build, teach, scope, and translate."
+2. **Utility player, provably.** Same person shipped: firmware/FPGA, control systems, an RL thesis, computer vision, a production SaaS, and paid client work (FUN.D). The posting literally asks for "people who can build, teach, scope, and translate." **Say ANT61 accurately**: a two-day team hackathon where you designed a satellite-refuelling latch in Fusion360 and presented it to the company — not a client engagement.
 3. **Honesty as a feature.** Thesis credits RLRoverLab. Portfolio says "piloting with first users," not "hundreds of customers." The must-have is "ability to discuss it honestly" — you can, with log books.
 4. **AI-native workflow.** Repos ship CLAUDE.md context files; you build with Claude Code daily.
 
@@ -57,10 +49,10 @@ Still yours to do in the form:
 - **"What would you do in your first month at a host org?"** Their own posting answers it: spend real time understanding what the org actually needs before building. Say how you'd do discovery (shadow people, map the workflow, find the missed-call-equivalent).
 - **Setback question** — you have Essay 2 as a spoken story. Practice it without reading.
 
-## Take-home assessment prep (do this week, ~2 evenings)
+## Take-home assessment prep — this is the live next stage (~2 evenings)
 
 The take-home will almost certainly be "build/scope something with Claude for a realistic org scenario."
-- [ ] Build one small end-to-end thing with the Claude API this week so it's fresh: e.g. a triage bot that reads a nonprofit's contact-form emails, classifies + drafts replies, with an eval script. Tool use + structured output + a simple eval = exactly the fellowship's stack.
+- [ ] Build one small end-to-end thing with the Claude API so it's fresh when the brief lands: e.g. a triage bot that reads a nonprofit's contact-form emails, classifies + drafts replies, with an eval script. Tool use + structured output + a simple eval = exactly the fellowship's stack.
 - [ ] Skim Anthropic's docs on tool use, prompt caching, and evals so vocabulary is current.
 - [ ] Re-read your AI Fluency / Claude 101 notes; assessments often echo course framing.
 
