@@ -21,8 +21,8 @@ const MODES = {
     skills:[]},
   robotics:{ n:"02", label:"Robotics", eyebrow:"Mode 02 — Robotics & mechatronics",
     headline:"Robots that hold up outside the lab.",
-    lede:"From a ROS2 TurtleBot navigating by sensor fusion, to an FPGA-driven assistive robot, to a planetary rover learning to cross Mars terrain in simulation: I've built and programmed robotic platforms across the stack, and spent 14 months in industry integrating one into a working prototype.",
-    chips:["ROS2","Sensor fusion","Path planning","Isaac Sim","Closed-loop control","CAD (Fusion/SW)"],
+    lede:"From a ROS 2 TurtleBot running a supermarket on Nav2 and QR codes, to an FPGA-driven companion robot, to a planetary rover learning to cross Mars terrain in simulation: I've built and programmed robotic platforms across the stack, and spent 14 months in industry integrating one into a working prototype.",
+    chips:["ROS 2","Nav2","State estimation","Isaac Sim","Closed-loop control","CAD (Fusion/SW)"],
     note:"Sorted for robotics roles",
     order:["rover","turtlebot","tracking","fpga","conjure","ant61","sdk"],
     skills:["robotics"]},
@@ -35,8 +35,8 @@ const MODES = {
     skills:["embedded"]},
   control:{ n:"04", label:"Control / GNC", eyebrow:"Mode 04 — Control systems & GNC",
     headline:"Loops closed. Targets tracked.",
-    lede:"Control theory is where I started: a self-built laser rig that locks onto and tracks moving targets, filtering noisy signals into fast, precise actuation. I'm now extending it to predict where a target will be from its velocity and trajectory. My thesis pairs a classical global planner with a learned local policy, which is GNC thinking applied to modern tools.",
-    chips:["Advanced control","Signal filtering","Sensor calibration","State estimation","A* + RL policy","MATLAB"],
+    lede:"Control theory is where I started: a self-built rig that keeps a moving target pinned in frame, with two PID loops driving the mount and a Kalman filter estimating the target's velocity so it keeps leading when the target drops out of view. My thesis pairs a classical global planner with a learned local policy, which is GNC thinking applied to modern tools.",
+    chips:["Advanced control","PID + Kalman","Signal filtering","State estimation","A* + RL policy","MATLAB"],
     note:"Sorted for control & GNC roles",
     order:["tracking","rover","turtlebot","fpga","conjure","sdk","ant61"],
     skills:["control"]},
@@ -124,68 +124,116 @@ const PROJECTS = {
   tracking:{
     title:"Autonomous Target Tracking System", kind:"Personal build · hardware",
     link:null, linkNote:"Hardware build · demo on request",
-    desc:"A compact, self-built system that uses a laser to autonomously lock onto and track moving targets: control theory, sensor calibration, and signal filtering tuned for rapid actuation and precise pointing. I'm extending it to predictive targeting from target velocity and trajectory.",
-    metrics:[["Live","target lock"],["Predictive","targeting (WIP)"]],
-    tags:"Control theory · actuation · filtering",
+    desc:"A camera on a two-axis motorised mount that keeps a moving hand or drone pinned inside an invisible bounding box at the centre of frame. A pretrained detection model finds the target, two PID loops — one per motor — drive the x and y axes to null the error, and a Kalman filter estimates the target's velocity so the rig keeps leading it through the moments it leaves the frame. Vision, filtering, and both control loops run on a Raspberry Pi. I designed, built, wired, and tuned the whole rig by hand.",
+    metrics:[["2× PID","one per axis"],["Kalman","velocity estimate"]],
+    tags:"PID control · Kalman filter · vision tracking",
     notes:{
       overview:"<b>Bench credibility:</b> designed, built, wired, and tuned by hand.",
-      robotics:"<b>Robotics:</b> perception-to-actuation latency is the whole game here. Track, predict, point, in real time on physical hardware.",
-      embedded:"<b>Embedded:</b> built from the bench up — sensors calibrated, signals conditioned, actuators driven on a microcontroller-class budget.",
-      control:"<b>Control:</b> the purest control project on this page. A live tracking loop where filter tuning and loop rate decide whether the target stays locked.",
-      ai:"<b>AI:</b> the predictive-targeting extension is an estimation problem — modelling target motion to lead the actuator.",
+      robotics:"<b>Robotics:</b> perception-to-actuation in a single loop. Detect, estimate, point, and keep pointing while the target moves.",
+      embedded:"<b>Embedded:</b> built from the bench up — camera in, two motors out, the whole loop closed on a Raspberry Pi.",
+      control:"<b>Control:</b> the purest control project on this page. Two PID loops and a Kalman filter, tuned until a moving target stays inside the box.",
+      ai:"<b>AI:</b> a pretrained hand/drone detector feeds the loop, and the Kalman filter turns its noisy boxes into a velocity estimate the controller can lead with.",
       software:"<b>Software:</b> real-time code where a missed deadline is a missed target. Latency budgets over feature counts."
     }},
   fpga:{
     title:"Assistive Robot (FPGA)", kind:"University build · Verilog",
     link:null, linkNote:"University build · report on request",
-    desc:"A Bluetooth-controlled assistive robot built on an FPGA in Verilog, following and responding to dynamic commands, with multiple sensors integrated into closed-loop control for autonomous operation.",
-    metrics:[["FPGA","Verilog logic"],["BT","command link"]],
-    tags:"Verilog · FPGA · closed-loop control",
+    desc:"\"RoboDog\": a companion robot for people whose allergies or disabilities rule out a real dog, built on an Altera DE2-115 with the sensing and control written in Verilog rather than firmware. A camera subsystem runs edge detection for line-following and green-object tracking, a microphone subsystem runs an FFT to find the beat and dance to it, an ultrasonic sensor stops the chassis inside 20 cm, and an IR remote outranks all of it as a hardware emergency stop. Commands arrive over Bluetooth, a four-state FSM decides which subsystem owns the wheels, and drive values leave over UART. Five-person build, demonstrated on real hardware.",
+    metrics:[["DE2-115","all in Verilog"],["5 subsystems","1 arbiter"]],
+    tags:"Verilog · FPGA · real-time sensor arbitration",
     notes:{
       overview:"<b>Hardware range:</b> below the microcontroller — gateware, timing, and digital design.",
-      robotics:"<b>Robotics:</b> a complete robot (comms, sensing, control, actuation) implemented at the hardware-description level.",
-      embedded:"<b>Embedded:</b> the deepest layer of the stack. HDL, sensor interfacing, and control logic in fabric rather than firmware.",
-      control:"<b>Control:</b> closed-loop control implemented in hardware, where the loop is gates and registers rather than a scheduler.",
+      robotics:"<b>Robotics:</b> a complete robot — camera, microphone, ultrasonic, IR, and drive commands — with every subsystem living in hardware description.",
+      embedded:"<b>Embedded:</b> the deepest layer of the stack. Timing closure was the real lesson: a 32.763 ns critical-path violation on the BPM counter, fixed by pipelining the offending expression into 6.46 ns of positive slack.",
+      control:"<b>Control:</b> the line-follower and object-tracker close their loops in gates and registers, and a four-state FSM arbitrates which one owns the wheels.",
       ai:"<b>AI:</b> the actuation substrate learned policies eventually have to live on — useful ground truth for sim-to-real thinking.",
       software:"<b>Software:</b> Verilog forces the concurrency discipline that makes multithreaded software feel easy afterwards."
     }},
   turtlebot:{
     title:"Autonomous TurtleBot (ROS2)", kind:"University build · ROS2",
     link:null, linkNote:"University build · report on request",
-    desc:"An autonomous TurtleBot programmed in ROS2 to identify, count, and interact with items via QR codes: sensor fusion and path-finding on a standard research platform.",
-    metrics:[["ROS2","nav stack"],["QR","task logic"]],
-    tags:"ROS2 · sensor fusion · path planning",
+    desc:"A TurtleBot3 that runs a small supermarket on its own: a PID wall-follower on the laser scan maps the aisles, Nav2 drives it to a shelf, and a camera reads QR codes to pull each item's identity, price, and position into a central inventory server. I owned the operator side — an ImGui/ImPlot control panel with live battery plotting, cart and checkout, QR refresh, and a revenue/profit tab — plus the charging behaviour behind it, wired to the rest of the robot through ROS 2 action servers. Five-person team, real hardware.",
+    metrics:[["ROS 2","action servers"],["QR","live inventory"]],
+    tags:"ROS 2 · Nav2 · C++ · ImGui",
     notes:{
       overview:"<b>Platform fluency:</b> the industry-standard robotics middleware, used for a complete task pipeline.",
-      robotics:"<b>Robotics:</b> ROS2 nodes, topics, and the fusion/planning stack every robotics team expects you to already speak.",
-      embedded:"<b>Embedded:</b> working against real sensors and actuators through ROS2's hardware interfaces.",
-      control:"<b>Control:</b> path-finding and motion built on fused, imperfect sensor data — planning under uncertainty.",
-      ai:"<b>AI:</b> perception-driven task logic (detect, decide, act), the classical autonomy loop RL policies aim to replace.",
-      software:"<b>Software:</b> distributed pub/sub architecture in practice. Nodes, message contracts, and debugging across process boundaries."
+      robotics:"<b>Robotics:</b> ROS 2 nodes, topics, and long-running action servers — the middleware every robotics team expects you to already speak.",
+      embedded:"<b>Embedded:</b> real hardware rather than a simulator. Laser scan, camera, and battery state on a physical TurtleBot3.",
+      control:"<b>Control:</b> a PID wall-follower on raw laser scan mapped the aisles that Nav2 then planned through.",
+      ai:"<b>AI:</b> perception-driven task logic — read a QR code, update the world model, decide where to go next. The classical autonomy loop RL policies aim to replace.",
+      software:"<b>Software:</b> distributed pub/sub and long-running action servers, with a C++ GUI as the operator front end. Message contracts and debugging across process boundaries."
     }},
   ant61:{
-    title:"Satellite Refueling Latch (ANT61)", kind:"Industry project · CAD",
-    link:null, linkNote:"Client project · details on request",
-    desc:"A prototype latching mechanism for mechanical autonomous satellite refueling, designed in Fusion360 for space-robotics company ANT61.",
-    metrics:[["Fusion360","mechanism design"]],
+    title:"Satellite Refueling Latch (ANT61)", kind:"Team hackathon · CAD",
+    link:null, linkNote:"Two-day hackathon · CAD on request",
+    desc:"A sliding latch for autonomous satellite refuelling: push the probe in and it clicks home, so a servicing spacecraft can capture its target with nobody in the loop to retry a bad approach. Designed in Fusion360 and presented to space-robotics company ANT61 as a full CAD assembly, built with a team over a two-day hackathon in 2024. It's a concept study, not a qualified flight part — no FEA sits behind it — but it's where the CAD work had to answer to a real company's problem instead of a marking rubric.",
+    metrics:[["Fusion360","full CAD assembly"],["2 days","team hackathon"]],
     tags:"CAD · mechanism design · space",
     notes:{
-      overview:"<b>Mechanical range:</b> proof the CAD skills extend to real client mechanism design.",
-      robotics:"<b>Robotics:</b> end-effector-adjacent mechanism design under space constraints — tolerance, actuation, and reliability with no service calls.",
+      overview:"<b>Mechanical range:</b> proof the CAD skills reach past coursework into mechanism design.",
+      robotics:"<b>Robotics:</b> end-effector-adjacent mechanism design — a passive capture that has to seat reliably first time, with no operator to retry it.",
       embedded:"<b>Embedded:</b> the mechanical half of electromechanical, what the firmware ultimately moves.",
-      control:"<b>Control:</b> autonomous docking and latching is a precision alignment problem, so the mechanism design is shaped by control feasibility.",
+      control:"<b>Control:</b> autonomous docking is a precision-alignment problem, so the latch geometry absorbs error the controller would otherwise have to.",
       ai:"<b>AI:</b> space robotics context that pairs with the rover thesis — autonomy where teleoperation isn't an option.",
       software:"<b>Software:</b> CAD-to-constraint thinking that keeps simulation models honest."
     }}
 };
 
 const SKILLS = [
-  {id:"embedded", title:"Firmware & electronics", items:["C / C++ · Arduino","FPGA · Verilog / SystemVerilog","Raspberry Pi · microcontrollers","Sensor integration & calibration","Power wiring & junction boxes","Assembly"]},
-  {id:"robotics", title:"Robotics & simulation", items:["ROS2","Isaac Sim / Isaac Lab","Sensor fusion & path planning","HIL simulation","CAD (Fusion/SW)","Mechanism design"]},
-  {id:"control", title:"Control & signals", items:["Advanced control systems","Signal processing & filtering","State estimation","GNC fundamentals","MATLAB","Radar & antenna coursework"]},
-  {id:"ai", title:"AI & computer vision", items:["RL (PPO)","skrl · PyTorch","Computer vision · MediaPipe","LLM integration (OpenAI)","Evaluation pipelines","AI-native / agentic workflows"]},
-  {id:"software", title:"Software engineering", items:["Python / TS","React · Next.js · Flask","Postgres · Supabase · Redis","Stripe · Twilio integration","pytest · Vitest · Playwright · CI","git · GitHub · profiling"]},
-  {id:"transfer", title:"Working style", items:["Test-driven & methodical","Documents thoroughly","Led teams to delivery","Client-facing comms","Self-taught: ROS2, FPGA, Isaac","Adaptable across the stack"]}
+  {id:"embedded", title:"Firmware & electronics", items:["C / C++ · Arduino","FPGA · Verilog / SystemVerilog","Raspberry Pi · microcontrollers","Sensor integration & calibration","Power wiring & junction boxes","Assembly"],
+    details:{
+      "C / C++ · Arduino":"C++ across the TurtleBot's ROS 2 nodes and its ImGui control panel; C on the Arduino Nano 33 IoT carrying the RoboDog's Bluetooth link, and on ALBON's prototype before it moved to a Raspberry Pi.",
+      "FPGA · Verilog / SystemVerilog":"The RoboDog's logic on an Altera DE2-115: camera edge detection, an FFT beat detector, ultrasonic and IR safety interlocks, and the FSM arbitrating between them — all gates and registers, not firmware.",
+      "Raspberry Pi · microcontrollers":"Migrated ALBON's prototype control system from a microcontroller to a Raspberry Pi for faster real-time data processing over a 14-month industry role, and run the tracking rig's vision, filtering, and both PID loops on one.",
+      "Sensor integration & calibration":"Integrated sensor arrays into ALBON's prototype, and wired the RoboDog's camera, microphone, ultrasonic, and IR inputs into a single arbitrated control path on the FPGA.",
+      "Power wiring & junction boxes":"Engineered ALBON's electrical junction box to cut power consumption and keep the prototype's hardware running reliably in the field.",
+      "Assembly":"Coursework-level rather than a shipped project, but it's the layer that shapes how I reason about firmware close to the metal."
+    }},
+  {id:"robotics", title:"Robotics & simulation", items:["ROS2","Isaac Sim / Isaac Lab","Sensor fusion & path planning","HIL simulation","CAD (Fusion/SW)","Mechanism design"],
+    details:{
+      "ROS2":"The TurtleBot's operator stack: I built its ImGui control panel and charging behaviour as ROS 2 nodes, talking to the team's navigation and inventory servers over topics and action servers.",
+      "Isaac Sim / Isaac Lab":"The training environment for the whole rover thesis: PPO policies trained across 64 parallel simulated rovers on Mars terrain in NVIDIA Isaac Sim / Isaac Lab.",
+      "Sensor fusion & path planning":"The A* global planner that guides the rover thesis's learned policy, and the Kalman filter that fuses the tracking rig's noisy detections with a motion model so the mount keeps pointing when the target leaves frame.",
+      "HIL simulation":"Coursework territory rather than a rig I've built; the closest I've come in practice is closing the loop on control logic inside the Isaac Sim pipeline.",
+      "CAD (Fusion/SW)":"Designed the ANT61 satellite-refuelling latch in Fusion360 as a full assembly, built with a team over a two-day hackathon and presented to the company.",
+      "Mechanism design":"The ANT61 latch: a sliding capture that clicks home when the probe is pushed in, so autonomous docking doesn't hinge on an operator getting the approach right."
+    }},
+  {id:"control", title:"Control & signals", items:["Advanced control systems","Signal processing & filtering","State estimation","GNC fundamentals","MATLAB","Radar & antenna coursework"],
+    details:{
+      "Advanced control systems":"Coursework applied directly on the tracking rig: two PID loops, one per axis, tuned against a Kalman velocity estimate until a moving target stays inside the box.",
+      "Signal processing & filtering":"The FFT beat detector in the RoboDog's microphone subsystem, the Kalman filter on the tracking rig, and the two-stage One Euro + EMA filter that keeps Conjure's 60 Hz gesture pipeline stable.",
+      "State estimation":"The Kalman filter on the tracking rig, estimating target velocity so the mount keeps leading a target that has left the frame; and in the thesis, the pose and progress terms the rover's reward and termination logic depend on.",
+      "GNC fundamentals":"The guidance-navigation-control split shows up literally in the thesis: A* for guidance, a learned PPO policy for navigation, and low-level control evaluated end-to-end.",
+      "MATLAB":"My modelling and analysis tool through control and signals coursework. Not tied to a repo on this page, but it's where a controller goes before it touches hardware.",
+      "Radar & antenna coursework":"Covered at Sydney as coursework theory. I haven't applied it in a shipped project yet, so I list it as background rather than experience."
+    }},
+  {id:"ai", title:"AI & computer vision", items:["RL (PPO)","skrl · PyTorch","Computer vision · MediaPipe","LLM integration (OpenAI)","Evaluation pipelines","AI-native / agentic workflows"],
+    details:{
+      "RL (PPO)":"The algorithm behind the rover thesis: PPO policies trained via skrl across 64 parallel Isaac Sim rovers, chosen after VRAM limits ruled out SAC/TD3.",
+      "skrl · PyTorch":"Wrote the skrl training configs and PyTorch reward/termination logic for the thesis, including the SAC/TD3 configs prepared alongside the PPO setup used for final results.",
+      "Computer vision · MediaPipe":"MediaPipe hand/face landmark models wrapped in a tested inference pipeline: nine gestures classified with temporal hysteresis, running at 60 FPS.",
+      "LLM integration (OpenAI)":"The GPT-4o-mini conversation engine behind Tradie Texts, which qualifies leads over SMS with moderation, structured extraction, and emergency detection.",
+      "Evaluation pipelines":"Built the custom evaluation pipeline for the rover thesis: result CSVs across training distances, not just training-curve screenshots.",
+      "AI-native / agentic workflows":"My repos ship with CI, deterministic tests, and CLAUDE.md context files, so agentic tools can work in them directly."
+    }},
+  {id:"software", title:"Software engineering", items:["Python / TS","React · Next.js · Flask","Postgres · Supabase · Redis","Stripe · Twilio integration","pytest · Vitest · Playwright · CI","git · GitHub · profiling"],
+    details:{
+      "Python / TS":"Python across the rover thesis and Conjure; TypeScript across Tradie Texts's Next.js codebase and the crowdfunding platform's React frontend.",
+      "React · Next.js · Flask":"Next.js 15 powers Tradie Texts; a Flask REST API plus a React 19 + Vite frontend power the crowdfunding platform.",
+      "Postgres · Supabase · Redis":"Supabase Postgres with row-level security plus Upstash Redis for idempotency and rate limiting on Tradie Texts; Supabase Postgres and image storage on the crowdfunding platform.",
+      "Stripe · Twilio integration":"Twilio call handling and Stripe usage-based billing on Tradie Texts; an idempotent Stripe Elements payment flow (create, confirm, credit) on the crowdfunding platform.",
+      "pytest · Vitest · Playwright · CI":"276 CI tests and Playwright e2e coverage on Tradie Texts; a pytest + Vitest CI pipeline across the crowdfunding platform's Flask and React halves.",
+      "git · GitHub · profiling":"Git/GitHub workflow across the three public repos here (Conjure, conjure-sdk, the rover thesis); profiling took Conjure's render path from 162 ms down to 2.8 ms a frame."
+    }},
+  {id:"transfer", title:"Working style", items:["Test-driven & methodical","Documents thoroughly","Led teams to delivery","Client-facing comms","Self-taught: ROS2, FPGA, Isaac","Adaptable across the stack"],
+    details:{
+      "Test-driven & methodical":"Tradie Texts shipped with 276 CI tests, a threat model, and incident runbooks before launch; Conjure ships with a pytest suite and CI.",
+      "Documents thoroughly":"Incident runbooks and security docs for Tradie Texts, a contributor guide for Conjure, and CLAUDE.md context files across my repos.",
+      "Led teams to delivery":"Led the crowdfunding platform's engineering as a two-person build with Karim Tuikin, from spec through to a live Stripe payment flow.",
+      "Client-facing comms":"Presented the satellite-latch design to ANT61 at the end of a two-day hackathon, and worked with Escape The Room's clients on delivered puzzle installations during an internship.",
+      "Self-taught: ROS2, FPGA, Isaac":"I picked up each of these stacks because a project demanded it — ROS2 for the TurtleBot, Verilog for the assistive robot, Isaac Sim for the thesis — well past what the coursework covered.",
+      "Adaptable across the stack":"I move from board-level firmware to control loops to a production SaaS stack without needing a specialist handoff at any layer."
+    }}
 ];
 
 const EXPERIENCE = [
