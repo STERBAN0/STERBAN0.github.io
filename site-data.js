@@ -189,11 +189,11 @@ const SKILLS = [
       "Power wiring & junction boxes":"Engineered ALBON's electrical junction box to cut power consumption and keep the prototype's hardware running reliably in the field.",
       "Assembly":"Coursework-level rather than a shipped project, but it's the layer that shapes how I reason about firmware close to the metal."
     }},
-  {id:"robotics", title:"Robotics & simulation", items:["ROS2","Isaac Sim / Isaac Lab","Sensor fusion & path planning","HIL simulation","CAD (Fusion/SW)","Mechanism design"],
+  {id:"robotics", title:"Robotics & simulation", items:["ROS2","Isaac Sim / Isaac Lab","State estimation & path planning","HIL simulation","CAD (Fusion/SW)","Mechanism design"],
     details:{
       "ROS2":"The TurtleBot's operator stack: I built its ImGui control panel and charging behaviour as ROS 2 nodes, talking to the team's navigation and inventory servers over topics and action servers.",
       "Isaac Sim / Isaac Lab":"The training environment for the whole rover thesis: PPO policies trained across 64 parallel simulated rovers on Mars terrain in NVIDIA Isaac Sim / Isaac Lab.",
-      "Sensor fusion & path planning":"The A* global planner that guides the rover thesis's learned policy, and the Kalman filter that fuses the tracking rig's noisy detections with a motion model so the mount keeps pointing when the target leaves frame.",
+      "State estimation & path planning":"The A* global planner that guides the rover thesis's learned policy, and the Kalman filter that fuses the tracking rig's noisy detections with a motion model so the mount keeps pointing when the target leaves frame.",
       "HIL simulation":"Coursework territory rather than a rig I've built; the closest I've come in practice is closing the loop on control logic inside the Isaac Sim pipeline.",
       "CAD (Fusion/SW)":"Designed the ANT61 satellite-refuelling latch in Fusion360 as a full assembly, built with a team over a two-day hackathon and presented to the company.",
       "Mechanism design":"The ANT61 latch: a sliding capture that clicks home when the probe is pushed in, so autonomous docking doesn't hinge on an operator getting the approach right."
