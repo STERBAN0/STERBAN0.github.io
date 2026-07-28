@@ -296,7 +296,7 @@ section{padding:40px 0 48px;scroll-margin-top:70px}
 
 /* ============ project carousel ============ */
 .proj-carousel{position:relative}
-.proj-viewport{overflow:hidden;border-radius:var(--radius)}
+.proj-viewport{overflow:hidden;border-radius:var(--radius);touch-action:pan-y}
 .projects{display:flex;transition:transform .5s var(--ease-out)}
 .proj-controls{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:16px}
 .proj-arrow{
@@ -328,6 +328,25 @@ section{padding:40px 0 48px;scroll-margin-top:70px}
 .p-note b{font-weight:600}
 .p-desc{font-size:15.5px;color:var(--ink-soft)}
 .p-desc .credit{display:block;margin-top:6px;font-size:13.5px;color:var(--dim);font-style:italic}
+/* mobile-only description clamp + "Show more" toggle (see updateDescToggles):
+   clamped to ~5 lines so the flex row no longer stretches every card to the
+   height of the longest description. The toggle itself is display:none by
+   default and only switches on for the mobile+unclipped-false case below, so
+   desktop is untouched no matter what the JS measurement does. */
+.p-desc-toggle{
+  display:none;appearance:none;background:none;border:none;cursor:pointer;padding:0;
+  align-self:flex-start;font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;
+  color:var(--mask);border-bottom:1px solid transparent;transition:border-color .2s;
+}
+@media(max-width:640px){
+  .p-desc{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:5;overflow:hidden}
+  .p-desc.expanded{display:block;-webkit-line-clamp:unset;overflow:visible}
+  .p-desc-toggle:not([hidden]){display:inline-block}
+  .p-desc-toggle:hover{border-bottom-color:var(--mask)}
+  /* arrows aren't needed once swipe works; play/pause + counter stay put
+     (play/pause is the WCAG 2.2.2 control for this auto-moving content) */
+  #proj-prev,#proj-next{display:none}
+}
 .p-metrics{display:flex;flex-wrap:wrap;gap:16px;margin-top:2px}
 .metric{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--dim);font-variant-numeric:tabular-nums}
 .metric b{color:var(--copper);font-weight:600;font-size:13px}
@@ -342,7 +361,10 @@ section{padding:40px 0 48px;scroll-margin-top:70px}
 .xp{display:flex;flex-direction:column}
 .xp-row{
   display:grid;grid-template-columns:190px 1fr;gap:20px;
-  padding:20px 0;border-bottom:1px solid var(--rule);
+  /* left-pad to 17px (3px .sec-head border + 14px .sec-head padding) so rows
+     line up under the "Field history" heading text instead of sitting flush
+     with the section's own left edge -- same inset at every breakpoint */
+  padding:20px 0 20px 17px;border-bottom:1px solid var(--rule);
 }
 @media(max-width:640px){.xp-row{grid-template-columns:1fr;gap:6px}}
 .xp-when{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--dim);padding-top:4px}
@@ -375,16 +397,12 @@ section{padding:40px 0 48px;scroll-margin-top:70px}
 }
 .skill-group li:last-child{border-bottom:none}
 .skill-group li .ic{color:var(--dim)}
-.skills.single{grid-template-columns:1fr;max-width:420px;margin:0 auto}
-.skill-dots{display:flex;gap:8px;justify-content:center;margin-top:18px}
-.skill-dots:empty{display:none}
-.skill-dot{
-  width:9px;height:9px;padding:0;border-radius:50%;flex:none;
-  background:var(--rule);border:1px solid var(--rule);cursor:pointer;
-  transition:background .3s var(--ease-out),border-color .3s var(--ease-out),transform .2s var(--ease-out);
-}
-@media(hover:hover){.skill-dot:hover{border-color:var(--mask)}}
-.skill-dot.active{background:var(--mask);border-color:var(--mask);transform:scale(1.15)}
+/* mode-specific single-group view: one card per skill item (see
+   buildSkillItemEl / renderSkillsSingle) rather than one box with a plain
+   list -- reuses .skill-group/.lit for the same spotlighted look, just with
+   the h4 carrying an item label instead of a group title. */
+.skill-item-card h4{text-transform:none;letter-spacing:0;font-size:14.5px;display:flex;align-items:center;gap:8px}
+.skill-item-desc{font-size:13.5px;line-height:1.5;color:var(--ink-soft)}
 
 /* ============ education + footer ============ */
 .edu{border:1px solid var(--rule);border-radius:var(--radius);background:var(--card);padding:22px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:baseline}
@@ -458,7 +476,7 @@ footer{background:var(--card);margin-top:32px;box-shadow:0 -1px 0 var(--rule)}
       <span class="sec-note" id="proj-note"></span>
     </div>
     <div class="proj-carousel" id="proj-carousel" role="region" aria-roledescription="carousel" aria-label="Featured applications">
-      <div class="proj-viewport">
+      <div class="proj-viewport" id="proj-viewport">
         <div class="projects" id="projects"></div>
       </div>
       <div class="proj-controls">
@@ -485,7 +503,6 @@ footer{background:var(--card);margin-top:32px;box-shadow:0 -1px 0 var(--rule)}
   <section aria-labelledby="sk-h">
     <div class="sec-head"><h3 id="sk-h">Technical skills</h3><span class="sec-note" id="sk-note"></span></div>
     <div class="skills" id="skills"></div>
-    <div class="skill-dots" id="skill-dots"></div>
   </section>
 
   <section aria-labelledby="edu-h">
@@ -573,12 +590,12 @@ const BRAND_ICONS = {
 const ICON_FOR = {
   "Hands-on builds":"tool","Embedded C/C++":"chip","Python / TS":"code","ROS2":"ros",
   "Isaac Sim / RL":"cube","Full-stack SaaS":"product","Test-driven":"check",
-  "Sensor fusion":"radar","Path planning":"route","Isaac Sim":"cube","Closed-loop control":"waveform",
+  "ROS 2":"ros","Nav2":"route","Sensor fusion":"radar","Path planning":"route","Isaac Sim":"cube","Closed-loop control":"waveform",
   "CAD (Fusion/SW)":"drafting","C/C++":"code","Arduino":"arduino","FPGA / Verilog":"gate","Raspberry Pi":"raspberrypi",
   "Sensor arrays":"radar","Power & wiring":"wiring","Bench debugging":"probe",
-  "Advanced control":"waveform","Signal filtering":"filter","Sensor calibration":"radar",
+  "Advanced control":"waveform","Signal filtering":"filter","Sensor calibration":"radar","PID + Kalman":"tuning",
   "State estimation":"estimate","A* + RL policy":"route","MATLAB":"matrix",
-  "RL":"rlloop","Isaac Sim / Isaac Lab":"cube","SAC / PPO (skrl)":"tuning","Computer vision":"eye",
+  "RL":"rlloop","Isaac Sim / Isaac Lab":"cube","PPO (skrl)":"tuning","Computer vision":"eye",
   "LLMs in production":"openai","Evaluation pipelines":"pipeline","AI-native workflow":"agentic",
   "Python":"python","TypeScript":"typescript","React · Next.js":"layers","Flask":"flask",
   "Postgres · Supabase":"database","pytest · Vitest · CI":"check","Performance profiling":"gauge",
@@ -587,7 +604,7 @@ const ICON_FOR = {
   "Sensor fusion & path planning":"radar","HIL simulation":"hil","Mechanism design":"mechanism",
   "Advanced control systems":"waveform","Signal processing & filtering":"filter",
   "GNC fundamentals":"compass","Radar & antenna coursework":"radar",
-  "RL (SAC/PPO)":"rlloop","skrl · PyTorch":"pytorch","Computer vision · MediaPipe":"eye",
+  "RL (PPO)":"rlloop","skrl · PyTorch":"pytorch","Computer vision · MediaPipe":"eye",
   "LLM integration (OpenAI)":"openai","AI-native / agentic workflows":"agentic",
   "React · Next.js · Flask":"layers","Postgres · Supabase · Redis":"database",
   "pytest · Vitest · Playwright · CI":"check","Test-driven & methodical":"check",
@@ -611,7 +628,6 @@ const projEl = document.getElementById("projects");
 const projNote = document.getElementById("proj-note");
 const projCounterEl = document.getElementById("proj-counter");
 const skillsEl = document.getElementById("skills");
-const skillDotsEl = document.getElementById("skill-dots");
 const skNoteEl = document.getElementById("sk-note");
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const hoverCapable = window.matchMedia("(hover:hover)");
@@ -628,6 +644,14 @@ let projResumeTimer = null;
    before restarting the timer — only the play/pause button itself is allowed
    to flip it and start/stop autoplay unconditionally */
 let projManuallyPaused = false;
+/* true while a touch is down on the carousel without (yet) completing a
+   swipe. Set by the touch handlers below; gates autoplay-start the same way
+   projManuallyPaused does, but is a separate flag because only the
+   play/pause button is allowed to own projManuallyPaused itself. */
+let projTapPaused = false;
+/* true while a card's description is expanded via "Show more" -- the user
+   is reading, so autoplay must not advance underneath them */
+let projDescExpanded = false;
 
 /* ---------- skills spotlight state ---------- */
 const SKILL_CYCLE_MS = 3200; /* interval between spotlight advances in overview mode */
@@ -737,6 +761,52 @@ projPlayPauseBtn.addEventListener("click", onProjPlayPauseClick);
 projCarouselEl.addEventListener("mouseenter", onProjMouseEnter);
 projCarouselEl.addEventListener("mouseleave", onProjMouseLeave);
 
+/* ---------- projects carousel touch (mobile swipe + tap-to-pause) ----------
+   Swipe left/right on the viewport steps the carousel so the (mobile-hidden)
+   arrow buttons aren't needed. A bare tap/press pauses autoplay immediately
+   and -- unlike an arrow click -- stays paused with no auto-resume timer
+   until a completed swipe hands control back to maybeResumeAutoplay(). Only
+   a horizontal-dominant drag is treated as a swipe candidate, and only a
+   confirmed horizontal drag calls preventDefault, so vertical page scrolling
+   is never hijacked. */
+const SWIPE_THRESHOLD_PX = 40;
+const projViewportEl = document.getElementById("proj-viewport");
+let touchStartX = 0, touchStartY = 0, touchDeltaX = 0, touchDeltaY = 0, touchTracking = false;
+function onProjTouchStart(e){
+  if(e.touches.length !== 1) return;
+  touchTracking = true;
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+  touchDeltaX = 0; touchDeltaY = 0;
+  clearProjResumeTimer();
+  stopProjAutoplay();
+  projTapPaused = true;
+  syncProjPlayPauseUI();
+}
+function onProjTouchMove(e){
+  if(!touchTracking || e.touches.length !== 1) return;
+  touchDeltaX = e.touches[0].clientX - touchStartX;
+  touchDeltaY = e.touches[0].clientY - touchStartY;
+  if(Math.abs(touchDeltaX) > Math.abs(touchDeltaY) && Math.abs(touchDeltaX) > 10 && e.cancelable){
+    e.preventDefault(); /* confirmed horizontal drag -- stop the page rubber-banding sideways under it */
+  }
+}
+function onProjTouchEnd(){
+  if(!touchTracking) return;
+  touchTracking = false;
+  const isSwipe = Math.abs(touchDeltaX) > SWIPE_THRESHOLD_PX && Math.abs(touchDeltaX) > Math.abs(touchDeltaY);
+  if(isSwipe){
+    projTapPaused = false; /* a completed swipe hands autoplay back to the normal resume flow */
+    stepProj(touchDeltaX < 0 ? 1 : -1);
+  }
+  /* else: a plain tap or a sub-threshold drag -- stays paused (projTapPaused remains true) */
+}
+function onProjTouchCancel(){ touchTracking = false; }
+projViewportEl.addEventListener("touchstart", onProjTouchStart, {passive:true});
+projViewportEl.addEventListener("touchmove", onProjTouchMove, {passive:false});
+projViewportEl.addEventListener("touchend", onProjTouchEnd, {passive:true});
+projViewportEl.addEventListener("touchcancel", onProjTouchCancel, {passive:true});
+
 /* ---------- projects carousel ---------- */
 function renderProjCards(id, order){
   projEl.innerHTML = "";
@@ -750,12 +820,61 @@ function renderProjCards(id, order){
       <div class="p-top"><div class="p-title">${p.title}</div><div class="p-kind">${p.kind}</div></div>
       <div class="p-note">${p.notes[id]||p.notes.overview}</div>
       <p class="p-desc">${p.desc}</p>
+      <button type="button" class="p-desc-toggle" aria-expanded="false" hidden>Show more</button>
       <div class="p-metrics">${p.metrics.map(([v,l])=>`<span class="metric"><b>${v}</b> ${l}</span>`).join("")}</div>
       <div class="p-foot"><span class="p-tags">${p.tags}</span>${p.link?`<a class="p-link" href="${p.link}" target="_blank" rel="noopener noreferrer">View source <span class="arr">↗</span></a>`:`<a class="p-link" href="mailto:rakan132546@gmail.com?subject=${encodeURIComponent("Re: "+p.title)}">${p.linkNote||"Details on request"} <span class="arr">→</span></a>`}</div>`;
+    card.querySelector(".p-desc-toggle").addEventListener("click", onDescToggleClick);
     projEl.appendChild(card);
   });
+  updateDescToggles();
 }
+/* ---------- mobile description "Show more" (line-clamp is CSS-only, see
+   .p-desc @max-width:640px) ---------- */
+function onDescToggleClick(e){
+  const btn = e.currentTarget;
+  const desc = btn.previousElementSibling;
+  if(!desc) return;
+  const expand = btn.getAttribute("aria-expanded") !== "true";
+  desc.classList.toggle("expanded", expand);
+  btn.setAttribute("aria-expanded", expand ? "true" : "false");
+  btn.textContent = expand ? "Show less" : "Show more";
+  projDescExpanded = expand;
+  clearProjResumeTimer();
+  if(expand) stopProjAutoplay();
+  else maybeResumeAutoplay();
+  syncProjPlayPauseUI();
+}
+function collapseAllDescs(){
+  projEl.querySelectorAll(".p-desc.expanded").forEach(d=>d.classList.remove("expanded"));
+  projEl.querySelectorAll('.p-desc-toggle[aria-expanded="true"]').forEach(btn=>{
+    btn.setAttribute("aria-expanded","false");
+    btn.textContent = "Show more";
+  });
+  projDescExpanded = false;
+}
+/* shows the "Show more" toggle only on cards whose description is actually
+   clipped (scrollHeight > clientHeight) -- true only under the mobile
+   line-clamp, so this naturally stays a no-op on desktop. Re-run on resize
+   (debounced, see bottom of file) since crossing the 640px breakpoint
+   changes whether any card is clipped at all. */
+function updateDescToggles(){
+  projEl.querySelectorAll(".pcard").forEach(card=>{
+    const desc = card.querySelector(".p-desc");
+    const btn = card.querySelector(".p-desc-toggle");
+    if(!desc || !btn || desc.classList.contains("expanded")) return;
+    btn.hidden = !(desc.scrollHeight > desc.clientHeight + 1);
+  });
+}
+function debounce(fn, waitMs){
+  let t;
+  return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args), waitMs); };
+}
+const debouncedUpdateDescToggles = debounce(updateDescToggles, 150);
 function updateProjPosition(animate=true){
+  /* any slide change (manual, autoplay, or the initial mount) drops a
+     card's expanded description back to clamped, per the spec that
+     expansion resets whenever the carousel moves */
+  collapseAllDescs();
   /* suppress the CSS transition for a hard reset (mode switch) so the new
      mode's slide 1 doesn't visibly slide in from wherever the old carousel
      was parked */
@@ -783,6 +902,12 @@ function startProjAutoplay(intervalMs){
     updateProjPosition();
   }, intervalMs);
 }
+/* single gate for every "should autoplay actually resume now" decision --
+   manual pause (button), tap pause (touch), and an expanded description all
+   have to be clear before the carousel is allowed to move again */
+function maybeResumeAutoplay(){
+  if(!projManuallyPaused && !projTapPaused && !projDescExpanded) startProjAutoplay(PROJ_AUTOPLAY_MS);
+}
 function stepProj(dir){
   if(!projOrder.length) return;
   projIndex = (projIndex + dir + projOrder.length) % projOrder.length;
@@ -792,7 +917,7 @@ function stepProj(dir){
   syncProjPlayPauseUI();
   if(!reducedMotion.matches){
     projResumeTimer = setTimeout(()=>{
-      if(!projManuallyPaused) startProjAutoplay(PROJ_AUTOPLAY_MS);
+      maybeResumeAutoplay();
       syncProjPlayPauseUI();
     }, PROJ_RESUME_DELAY_MS);
   }
@@ -808,7 +933,7 @@ function onProjMouseEnter(){
 function onProjMouseLeave(){
   if(!hoverCapable.matches || reducedMotion.matches) return;
   clearProjResumeTimer();
-  if(!projManuallyPaused) startProjAutoplay(PROJ_AUTOPLAY_MS);
+  maybeResumeAutoplay();
   syncProjPlayPauseUI();
 }
 /* ---------- projects play/pause button ----------
@@ -824,8 +949,10 @@ function syncProjPlayPauseUI(){
   projPlayIcon.toggleAttribute("hidden", isPlaying);
 }
 function onProjPlayPauseClick(){
-  /* the one control allowed to override projManuallyPaused unconditionally */
+  /* the one control allowed to override projManuallyPaused (and any
+     lingering tap-pause) unconditionally */
   projManuallyPaused = !projManuallyPaused;
+  projTapPaused = false;
   clearProjResumeTimer();
   if(projManuallyPaused) stopProjAutoplay();
   else startProjAutoplay(PROJ_AUTOPLAY_MS);
@@ -836,9 +963,12 @@ function initProjCarousel(id, order){
   stopProjAutoplay();
   projOrder = order;
   projIndex = 0;
-  /* a pause on one mode's carousel shouldn't silently carry over and confuse
-     the user after they switch to a different mode */
+  /* a pause (manual, tap, or an expanded description) on one mode's carousel
+     shouldn't silently carry over and confuse the user after they switch to
+     a different mode */
   projManuallyPaused = false;
+  projTapPaused = false;
+  projDescExpanded = false;
   renderProjCards(id, order);
   updateProjPosition(false);
   startProjAutoplay(PROJ_AUTOPLAY_MS);
@@ -852,12 +982,22 @@ function buildSkillGroupEl(g, lit){
   d.innerHTML = `<h4>${g.title}</h4><ul>${g.items.map(i=>`<li>${icon(i)}<span>${i}</span></li>`).join("")}</ul>`;
   return d;
 }
+/* one card per skill item for mode-specific views (renderSkillsSingle) --
+   details is an optional {itemLabel: description} map from site-data.js.
+   Coded defensively: g.details may be absent entirely, or missing an entry
+   for a given item, in either case the card just renders the label. */
+function buildSkillItemEl(item, description){
+  const d = document.createElement("div");
+  d.className = "skill-group lit skill-item-card";
+  const body = description ? `<p class="skill-item-desc">${description}</p>` : "";
+  d.innerHTML = `<h4>${icon(item)}<span>${item}</span></h4>${body}`;
+  return d;
+}
 function stopSkillCycle(){
   if(skillCycleTimer){ clearInterval(skillCycleTimer); skillCycleTimer=null; }
 }
 function applySkillLit(index){
   skillsEl.querySelectorAll(".skill-group").forEach((g,idx)=>g.classList.toggle("lit", idx===index));
-  skillDotsEl.querySelectorAll(".skill-dot").forEach((d,idx)=>d.classList.toggle("active", idx===index));
 }
 function startSkillCycle(){
   stopSkillCycle();
@@ -883,37 +1023,21 @@ function renderEducation(){
   el.innerHTML = `<div><b>${EDUCATION.degree}</b><br>${EDUCATION.school} · ${EDUCATION.when}</div>
     <div class="mono">${EDUCATION.detail}</div>`;
 }
-function renderSkillDots(){
-  skillDotsEl.innerHTML = "";
-  SKILLS.forEach((g,idx)=>{
-    const dot = document.createElement("button");
-    dot.type = "button";
-    dot.className = "skill-dot"+(idx===0?" active":"");
-    dot.setAttribute("aria-label","Highlight "+g.title);
-    dot.addEventListener("click",()=>{
-      skillCycleIndex = idx;
-      applySkillLit(idx);
-      startSkillCycle();
-    });
-    skillDotsEl.appendChild(dot);
-  });
-}
 function renderSkillsOverview(){
   skillsEl.className = "skills";
   skillsEl.innerHTML = "";
   skillCycleIndex = 0;
   SKILLS.forEach((g,idx)=>skillsEl.appendChild(buildSkillGroupEl(g, idx===0)));
-  renderSkillDots();
   startSkillCycle();
   skNoteEl.textContent = "";
 }
 function renderSkillsSingle(groupId){
-  skillDotsEl.innerHTML = "";
-  skillsEl.className = "skills single";
+  skillsEl.className = "skills";
   skillsEl.innerHTML = "";
   const g = SKILLS.find(s=>s.id===groupId) || SKILLS[0];
-  skillsEl.appendChild(buildSkillGroupEl(g, true));
-  skNoteEl.textContent = "Only the group relevant to this mode is shown.";
+  const details = g.details || {};
+  g.items.forEach(item=>skillsEl.appendChild(buildSkillItemEl(item, details[item])));
+  skNoteEl.textContent = g.title;
 }
 function renderSkills(id, m){
   stopSkillCycle();
@@ -953,7 +1077,17 @@ function setMode(id, updateHash){
   positionUnderline();
   const activeTab=document.getElementById("tab-"+id);
   if(activeTab.scrollIntoView) activeTab.scrollIntoView({block:"nearest",inline:"nearest"});
-  if(updateHash) history.replaceState(null,"","#"+id);
+  if(updateHash){
+    history.replaceState(null,"","#"+id);
+    /* real mode switches (tab click, mobile dropdown, arrow-key nav -- all of
+       which pass updateHash=true) scroll the mode content under the sticky
+       selector into view. The initial load / deep-link hash restore passes
+       updateHash=false and deliberately skips this so landing on e.g.
+       #software doesn't yank the page. */
+    const selectorH = selector.getBoundingClientRect().height;
+    const briefTop = briefEl.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo({top: Math.max(0, briefTop - selectorH), behavior: reducedMotion.matches ? "auto" : "smooth"});
+  }
   void briefEl.offsetWidth;
 }
 
@@ -1016,7 +1150,8 @@ document.querySelectorAll(".reveal").forEach(el=>revealIO.observe(el));
 const initial = location.hash.replace("#","");
 setMode(MODES[initial] ? initial : "overview", false);
 window.addEventListener("resize",positionUnderline);
-if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=>{ positionUnderline(); updateScrollFade(); });
+window.addEventListener("resize",debouncedUpdateDescToggles);
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=>{ positionUnderline(); updateScrollFade(); updateDescToggles(); });
 </script>
 </body>
 </html>
