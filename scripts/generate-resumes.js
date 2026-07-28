@@ -72,6 +72,32 @@ const PROFILES = [
     skillGroups: ["embedded", "robotics", "control"]
   },
   {
+    file: "Rakan_Eyad_Resume_Control.pdf",
+    title: "Control Systems & GNC Engineer",
+    summary: "Mechatronic engineering graduate (Honours, University of Sydney) focused on control systems and GNC. Honours thesis coupled an A* global planner to a PPO local policy for planetary-rover navigation in NVIDIA Isaac Sim (78/100, Distinction). Built a two-axis vision tracking rig running one PID loop per axis against a Kalman velocity estimate, and spent 14 months at ALBON integrating and re-architecting a prototype control system.",
+    projectKeys: ["tracking", "rover", "fpga", "conjure"],
+    skillGroups: ["control", "robotics", "embedded"],
+    bullets: {
+      tracking: [
+        "Designed, built, wired, and tuned a two-axis vision tracking rig end to end: a closed-loop pointing system holding a moving hand or drone inside a bounding box at the centre of frame, with no off-the-shelf motion controller.",
+        "Ran one PID loop per motor against a Kalman filter estimating target velocity, so the mount keeps leading the target through detection dropouts instead of losing lock."
+      ],
+      rover: [
+        "Honours thesis (78/100, Distinction): a hybrid guidance-and-control architecture coupling an A* global planner to a PPO local policy through a pure-pursuit waypoint interface, trained in NVIDIA Isaac Sim across 64 parallel rovers on Martian terrain.",
+        "Hybrid held 99.5% success at the 10 m training distance against a standalone learned policy's 79.5%, and 90% at 50 m where the standalone collapsed to 2%.",
+        "Authored the A* command term, terrain importer, skrl training configs, reward and termination tuning, and the evaluation pipeline; built on the open-source RLRoverLab codebase."
+      ],
+      fpga: [
+        "Implemented closed-loop control directly in FPGA fabric on an Altera DE2-115: a camera line-follower and object tracker driving wheel commands, with ultrasonic and IR safety interlocks arbitrated by a four-state FSM (team of 5).",
+        "Closed timing by pipelining the critical path, turning a 32.763 ns violation into 6.46 ns of positive slack; all tasks demonstrated on physical hardware."
+      ],
+      conjure: [
+        "Built a real-time vision pipeline classifying 9 hand/face gestures from MediaPipe landmarks, stabilised by a two-stage One Euro + EMA filter with temporal hysteresis to hold a steady output at 60 FPS.",
+        "Profiled and optimized the render path from 162 ms to 2.8 ms per frame (58x speed-up) through allocation discipline."
+      ]
+    }
+  },
+  {
     file: "Rakan_Eyad_Resume_AI_Software.pdf",
     title: "AI & Software Engineer",
     summary: "Mechatronic engineering graduate with software engineering and applied AI experience. Trained reinforcement-learning agents in NVIDIA Isaac Sim for planetary rover navigation, built a real-time computer vision engine and shipped it as an installable SDK, and built a production micro-SaaS with an LLM-based conversation engine, telephony, and billing.",
@@ -159,7 +185,10 @@ function renderResume(profile) {
     doc.font("Helvetica").fontSize(9.5).fillColor(DIM_COLOR).text(`  —  ${p.kind}`);
     doc.moveDown(0.1);
     doc.font("Helvetica").fontSize(10).fillColor(TEXT_COLOR);
-    (PROJECT_BULLETS[key] || []).forEach(b => bulletLine(doc, b));
+    /* a profile may reframe a shared project for its audience (e.g. the
+       control variant leads the thesis with its GNC architecture) */
+    const bullets = (profile.bullets && profile.bullets[key]) || PROJECT_BULLETS[key] || [];
+    bullets.forEach(b => bulletLine(doc, b));
     if (i < profile.projectKeys.length - 1) doc.moveDown(0.1);
   });
 
