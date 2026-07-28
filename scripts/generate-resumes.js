@@ -40,17 +40,19 @@ const PROJECT_BULLETS = {
     "Implemented an idempotent Stripe Elements payment flow end-to-end and resolved N+1 queries, upload validation, and CI across both stacks."
   ],
   tracking: [
-    "Designed and built a self-contained laser targeting system that autonomously locks onto and tracks moving targets in real time.",
-    "Tuned sensor calibration and signal filtering for precise, low-latency actuation; extended the system toward predictive targeting from target velocity and trajectory."
+    "Designed and built a two-axis vision tracking rig on a Raspberry Pi that holds a moving hand or drone centred in frame, acquiring targets with a pretrained detector.",
+    "Implemented one PID loop per axis with a Kalman filter estimating target velocity, so the mount keeps leading the target through frame dropouts."
   ],
   fpga: [
-    "Designed a Bluetooth-controlled assistive robot on an FPGA in Verilog, integrating multiple sensors into closed-loop control for autonomous operation."
+    "Built 'RoboDog', a Bluetooth-commanded companion robot, entirely in Verilog on an Altera DE2-115: camera line-following, FFT beat detection, and ultrasonic/IR safety interlocks arbitrated by a four-state FSM (team of 5).",
+    "Closed timing by pipelining the critical path, turning a 32.763 ns violation into 6.46 ns of positive slack; demonstrated all tasks on physical hardware."
   ],
   turtlebot: [
-    "Programmed an autonomous TurtleBot in ROS2 to identify, count, and interact with items via QR codes, combining sensor fusion with path planning."
+    "Built the operator stack for an autonomous retail TurtleBot3 in ROS 2 and C++: an ImGui control panel with live battery plotting, cart/checkout, and revenue reporting, plus the charging behaviour behind it (team of 5).",
+    "Integrated it with the team's Nav2 navigation and QR-driven inventory server over ROS 2 topics and action servers."
   ],
   ant61: [
-    "Designed a prototype satellite-refuelling latch mechanism in Fusion360 for space-robotics company ANT61."
+    "Designed a sliding satellite-refuelling latch in Fusion360 as a full CAD assembly and presented it to space-robotics company ANT61; built with a team over a two-day hackathon."
   ]
 };
 
@@ -65,7 +67,7 @@ const PROFILES = [
   {
     file: "Rakan_Eyad_Resume_Hardware.pdf",
     title: "Robotics & Embedded Systems Engineer",
-    summary: "Mechatronic engineering graduate with hands-on experience in robotics, embedded systems, and control. Built an FPGA-driven assistive robot, programmed a ROS2 TurtleBot, built a self-contained laser tracking system, and migrated an industrial prototype from a microcontroller to a Raspberry Pi.",
+    summary: "Mechatronic engineering graduate with hands-on experience in robotics, embedded systems, and control. Built an FPGA-driven companion robot in Verilog, shipped the operator stack for a ROS 2 TurtleBot, built a two-axis vision tracking rig on a Raspberry Pi, and migrated an industrial prototype from a microcontroller to a Raspberry Pi.",
     projectKeys: ["tracking", "fpga", "turtlebot", "rover"],
     skillGroups: ["embedded", "robotics", "control"]
   },
