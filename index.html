@@ -949,13 +949,27 @@ function syncProjPlayPauseUI(){
   projPlayIcon.toggleAttribute("hidden", isPlaying);
 }
 function onProjPlayPauseClick(){
-  /* the one control allowed to override projManuallyPaused (and any
-     lingering tap-pause) unconditionally */
-  projManuallyPaused = !projManuallyPaused;
-  projTapPaused = false;
+  /* Decide from what is actually running, not from a blind toggle of
+     projManuallyPaused. A tap/swipe, a hover, an expanded description and an
+     arrow click all stop autoplay WITHOUT setting projManuallyPaused, so
+     toggling it blindly desynced the flag from the button: after a swipe the
+     carousel was stopped with the flag still false, and the first press of
+     Play only flipped it to true (pausing something already paused). It took
+     a second press to get moving. Reading projAutoplayTimer -- the same
+     source of truth syncProjPlayPauseUI() uses -- keeps one press = one
+     state change from every pause path. */
+  const isPlaying = projAutoplayTimer !== null;
   clearProjResumeTimer();
-  if(projManuallyPaused) stopProjAutoplay();
-  else startProjAutoplay(PROJ_AUTOPLAY_MS);
+  if(isPlaying){
+    projManuallyPaused = true;
+    stopProjAutoplay();
+  }else{
+    /* an explicit Play clears every pause reason the button owns and starts
+       regardless of projDescExpanded -- pressing play means "go" */
+    projManuallyPaused = false;
+    projTapPaused = false;
+    startProjAutoplay(PROJ_AUTOPLAY_MS);
+  }
   syncProjPlayPauseUI();
 }
 function initProjCarousel(id, order){
