@@ -249,7 +249,7 @@ const EDUCATION = {
   degree:"B.E. (Honours), Mechatronic Engineering",
   school:"University of Sydney",
   when:"2022 — 2026",
-  detail:"EWAM (Engineering Weighted Average Mark) 76% — Distinction"
+  detail:"Graduated with First Class Honours"
 };
 
 return { MODES, PROJECTS, SKILLS, EXPERIENCE, EDUCATION };
