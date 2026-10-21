@@ -36,7 +36,7 @@ const MODES = {
   control:{ n:"04", label:"Control / GNC", eyebrow:"Mode 04 — Control systems & GNC",
     headline:"Loops closed. Targets tracked.",
     lede:"Control theory is where I started: a self-built rig that keeps a moving target pinned in frame, with two PID loops driving the mount and a Kalman filter estimating the target's velocity so it keeps leading when the target drops out of view. My thesis pairs a classical global planner with a learned local policy, which is GNC thinking applied to modern tools.",
-    chips:["Advanced control","PID + Kalman","Signal filtering","State estimation","A* + RL policy","MATLAB"],
+    chips:["Advanced control","PID + Kalman","Signal filtering","State estimation","A* + RL policy","MATLAB + Simulink"],
     note:"Sorted for control & GNC roles",
     order:["tracking","rover","turtlebot","fpga","conjure","sdk","ant61"],
     skills:["control"]},
@@ -198,13 +198,13 @@ const SKILLS = [
       "CAD (Fusion/SW)":"Designed the ANT61 satellite-refuelling latch in Fusion360 as a full assembly, built with a team over a two-day hackathon and presented to the company.",
       "Mechanism design":"The ANT61 latch: a sliding capture that clicks home when the probe is pushed in, so autonomous docking doesn't hinge on an operator getting the approach right."
     }},
-  {id:"control", title:"Control & signals", items:["Advanced control systems","Signal processing & filtering","State estimation","GNC fundamentals","MATLAB","Radar & antenna coursework"],
+  {id:"control", title:"Control & signals", items:["Advanced control systems","Signal processing & filtering","State estimation","GNC fundamentals","MATLAB & Simulink (coursework)","Radar & antenna coursework"],
     details:{
       "Advanced control systems":"Coursework applied directly on the tracking rig: two PID loops, one per axis, tuned against a Kalman velocity estimate until a moving target stays inside the box.",
       "Signal processing & filtering":"The FFT beat detector in the RoboDog's microphone subsystem, the Kalman filter on the tracking rig, and the two-stage One Euro + EMA filter that keeps Conjure's 60 Hz gesture pipeline stable.",
       "State estimation":"The Kalman filter on the tracking rig, estimating target velocity so the mount keeps leading a target that has left the frame; and in the thesis, the pose and progress terms the rover's reward and termination logic depend on.",
       "GNC fundamentals":"The guidance-navigation-control split shows up literally in the thesis: A* for guidance, a learned PPO policy for navigation, and low-level control evaluated end-to-end.",
-      "MATLAB":"My modelling and analysis tool through control and signals coursework. Not tied to a repo on this page, but it's where a controller goes before it touches hardware.",
+      "MATLAB & Simulink (coursework)":"My modelling and analysis tools through control and signals coursework, where I designed PID controllers and other advanced control systems in Simulink. Not tied to a repo on this page, but it's where a controller goes before it touches hardware.",
       "Radar & antenna coursework":"Covered at Sydney as coursework theory. I haven't applied it in a shipped project yet, so I list it as background rather than experience."
     }},
   {id:"ai", title:"AI & computer vision", items:["RL (PPO)","skrl · PyTorch","Computer vision · MediaPipe","LLM integration (OpenAI)","Evaluation pipelines","AI-native / agentic workflows"],
