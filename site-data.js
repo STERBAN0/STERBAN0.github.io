@@ -138,13 +138,13 @@ const PROJECTS = {
   fpga:{
     title:"Assistive Robot (FPGA)", kind:"University build · Verilog",
     link:null, linkNote:"University build · report on request",
-    desc:"\"RoboDog\": a companion robot for people whose allergies or disabilities rule out a real dog, built on an Altera DE2-115 with the sensing and control written in Verilog rather than firmware. A camera subsystem runs edge detection for line-following and green-object tracking, a microphone subsystem runs an FFT to find the beat and dance to it, an ultrasonic sensor stops the chassis inside 20 cm, and an IR remote outranks all of it as a hardware emergency stop. Commands arrive over Bluetooth, a four-state FSM decides which subsystem owns the wheels, and drive values leave over UART. Five-person build, demonstrated on real hardware.",
-    metrics:[["DE2-115","all in Verilog"],["5 subsystems","1 arbiter"]],
+    desc:"\"RoboDog\": a companion robot for people whose allergies or disabilities rule out a real dog, built on an Altera DE2-115 with the sensing and control written in Verilog and tested with SystemVerilog. A camera subsystem runs edge detection for line-following and green-object tracking, a microphone subsystem runs an FFT to find the beat and dance to it, an ultrasonic sensor stops the chassis inside 20 cm, and an IR remote outranks all of it as a hardware emergency stop. Commands arrive over Bluetooth through an Arduino Nano 33 IoT, a four-state FSM decides which subsystem owns the wheels, and drive values leave over UART. Five-person build, tested closed-loop on the physical robot.",
+    metrics:[["DE2-115","Verilog FPGA"],["5 subsystems","1 arbiter"]],
     tags:"Verilog · FPGA · real-time sensor arbitration",
     notes:{
       overview:"<b>Hardware range:</b> below the microcontroller — gateware, timing, and digital design.",
-      robotics:"<b>Robotics:</b> a complete robot — camera, microphone, ultrasonic, IR, and drive commands — with every subsystem living in hardware description.",
-      embedded:"<b>Embedded:</b> the deepest layer of the stack. Timing closure was the real lesson: a 32.763 ns critical-path violation on the BPM counter, fixed by pipelining the offending expression into 6.46 ns of positive slack.",
+      robotics:"<b>Robotics:</b> a complete robot — camera, microphone, ultrasonic, IR, and drive commands — with the sensing and control living in hardware description.",
+      embedded:"<b>Embedded:</b> the deepest layer of the stack. Timing closure was the project's hardest lesson: a 32.763 ns critical-path violation on the BPM counter, which the team fixed by pipelining the offending expression into 6.46 ns of positive slack.",
       control:"<b>Control:</b> the line-follower and object-tracker close their loops in gates and registers, and a four-state FSM arbitrates which one owns the wheels.",
       ai:"<b>AI:</b> the actuation substrate learned policies eventually have to live on — useful ground truth for sim-to-real thinking.",
       software:"<b>Software:</b> Verilog forces the concurrency discipline that makes multithreaded software feel easy afterwards."
@@ -183,18 +183,18 @@ const SKILLS = [
   {id:"embedded", title:"Firmware & electronics", items:["C / C++ · Arduino","FPGA · Verilog / SystemVerilog","Raspberry Pi · microcontrollers","Sensor integration & calibration","Power wiring & junction boxes","Assembly"],
     details:{
       "C / C++ · Arduino":"C++ across the TurtleBot's ROS 2 nodes and its ImGui control panel; C on the Arduino Nano 33 IoT carrying the RoboDog's Bluetooth link, and on ALBON's prototype before it moved to a Raspberry Pi.",
-      "FPGA · Verilog / SystemVerilog":"The RoboDog's logic on an Altera DE2-115: camera edge detection, an FFT beat detector, ultrasonic and IR safety interlocks, and the FSM arbitrating between them — all gates and registers, not firmware.",
+      "FPGA · Verilog / SystemVerilog":"The RoboDog's logic on an Altera DE2-115, built by a team of five: camera edge detection, an FFT beat detector, ultrasonic and IR stops, and the FSM arbitrating between them, written in Verilog with SystemVerilog for testing. The same board carried my FPGA coursework: several projects, quizzes and weekly coding tasks.",
       "Raspberry Pi · microcontrollers":"Migrated ALBON's prototype control system from a microcontroller to a Raspberry Pi for faster real-time data processing over a 14-month industry role, and run the tracking rig's vision, filtering, and both PID loops on one.",
-      "Sensor integration & calibration":"Integrated sensor arrays into ALBON's prototype, and wired the RoboDog's camera, microphone, ultrasonic, and IR inputs into a single arbitrated control path on the FPGA.",
+      "Sensor integration & calibration":"Integrated sensor arrays into ALBON's prototype, and helped wire the RoboDog's camera, microphone, ultrasonic, and IR inputs into a single arbitrated control path on the FPGA (team of five). I calibrated the sensors on every build, and it never came right on the first pass.",
       "Power wiring & junction boxes":"Engineered ALBON's electrical junction box to cut power consumption and keep the prototype's hardware running reliably in the field.",
       "Assembly":"Coursework-level rather than a shipped project, but it's the layer that shapes how I reason about firmware close to the metal."
     }},
-  {id:"robotics", title:"Robotics & simulation", items:["ROS2","Isaac Sim / Isaac Lab","State estimation & path planning","HIL simulation","CAD (Fusion/SW)","Mechanism design"],
+  {id:"robotics", title:"Robotics & simulation", items:["ROS2","Isaac Sim / Isaac Lab","State estimation & path planning","Hardware testing","CAD (Fusion/SW)","Mechanism design"],
     details:{
       "ROS2":"The TurtleBot's operator stack: I built its ImGui control panel and charging behaviour as ROS 2 nodes, talking to the team's navigation and inventory servers over topics and action servers.",
       "Isaac Sim / Isaac Lab":"The training environment for the whole rover thesis: PPO policies trained across 64 parallel simulated rovers on Mars terrain in NVIDIA Isaac Sim / Isaac Lab.",
       "State estimation & path planning":"The A* global planner that guides the rover thesis's learned policy, and the Kalman filter that fuses the tracking rig's noisy detections with a motion model so the mount keeps pointing when the target leaves frame.",
-      "HIL simulation":"Coursework territory rather than a rig I've built; the closest I've come in practice is closing the loop on control logic inside the Isaac Sim pipeline.",
+      "Hardware testing":"Closed-loop testing on real hardware with no simulated plant: the tracking rig's camera and motors, and the RoboDog, a small car my team of five fitted with up to five sensors and drove from the FPGA. Hardware-in-the-loop, against a simulated plant, is a step I haven't taken yet.",
       "CAD (Fusion/SW)":"Designed the ANT61 satellite-refuelling latch in Fusion360 as a full assembly, built with a team over a two-day hackathon and presented to the company.",
       "Mechanism design":"The ANT61 latch: a sliding capture that clicks home when the probe is pushed in, so autonomous docking doesn't hinge on an operator getting the approach right."
     }},

@@ -44,8 +44,8 @@ const PROJECT_BULLETS = {
     "Implemented one PID loop per axis with a Kalman filter estimating target velocity, so the mount keeps leading the target through frame dropouts."
   ],
   fpga: [
-    "Built 'RoboDog', a Bluetooth-commanded companion robot, entirely in Verilog on an Altera DE2-115: camera line-following, FFT beat detection, and ultrasonic/IR safety interlocks arbitrated by a four-state FSM (team of 5).",
-    "Closed timing by pipelining the critical path, turning a 32.763 ns violation into 6.46 ns of positive slack; demonstrated all tasks on physical hardware."
+    "Helped build 'RoboDog', a Bluetooth-commanded companion robot on an Altera DE2-115, in Verilog with SystemVerilog for testing: camera line-following, FFT beat detection, and ultrasonic/IR stops arbitrated by a four-state FSM (team of 5).",
+    "Tested closed-loop on the physical robot, a small car fitted with up to five sensors; the team closed timing by pipelining the critical path, turning a 32.763 ns violation into 6.46 ns of slack."
   ],
   turtlebot: [
     "Built the operator stack for an autonomous retail TurtleBot3 in ROS 2 and C++: an ImGui control panel with live battery plotting, cart/checkout, and revenue reporting, plus the charging behaviour behind it (team of 5).",
@@ -88,8 +88,8 @@ const PROFILES = [
         "Authored the A* command term, terrain importer, skrl training configs, reward and termination tuning, and the evaluation pipeline; built on the open-source RLRoverLab codebase."
       ],
       fpga: [
-        "Implemented closed-loop control directly in FPGA fabric on an Altera DE2-115: a camera line-follower and object tracker driving wheel commands, with ultrasonic and IR safety interlocks arbitrated by a four-state FSM (team of 5).",
-        "Closed timing by pipelining the critical path, turning a 32.763 ns violation into 6.46 ns of positive slack; all tasks demonstrated on physical hardware."
+        "Helped build closed-loop control in FPGA fabric on an Altera DE2-115: a camera line-follower and object tracker driving wheel commands, with ultrasonic and IR stops arbitrated by a four-state FSM (team of 5).",
+        "Tested the loop on the physical robot with up to five sensors and no simulated plant; the team closed timing by pipelining the critical path, turning a 32.763 ns violation into 6.46 ns of slack."
       ],
       conjure: [
         "Built a real-time vision pipeline classifying 9 hand/face gestures from MediaPipe landmarks, stabilised by a two-stage One Euro + EMA filter with temporal hysteresis to hold a steady output at 60 FPS.",
